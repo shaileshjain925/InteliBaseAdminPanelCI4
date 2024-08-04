@@ -1,0 +1,53 @@
+
+
+.bg-login-overlay {
+    opacity: .6;
+    background: #e7f7dd;
+}
+
+.bg-login h5,
+.bg-login p {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.form-label {
+    color: #4CAF50;
+    font-weight: 600;
+    padding-left: 5px;
+}
+
+.form-control {
+    border-radius: 30px;
+    padding: 5px 15px;
+    border: 1px solid lightgray;
+}
+.form-check input{
+    border: 1px solid lightgray;
+}
+
+.login_btn {
+    background: #4CAF50;
+    color: #ffff;
+    font-weight: bold;
+    width: 100%;
+    border-radius: 30px;
+    margin-top: 15px;
+}
+
+.login_btn:hover {
+    border: 1px solid #4CAF50;
+    color: #4CAF50;
+}
+
+.account-pages .logo-admin {
+    width: 90px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.account-pages .logo-admin img {
+    width: 65%;
+}
