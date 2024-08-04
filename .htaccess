@@ -1,0 +1,15 @@
+# .htaccess file for redirecting to public folder
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Redirect to public folder
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+
+    # Handle index.php in the public folder
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} !^/public/index\.php
+    RewriteRule ^(.*)$ public/index.php/$1 [L]
+</IfModule>
