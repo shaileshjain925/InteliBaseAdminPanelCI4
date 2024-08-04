@@ -55,21 +55,15 @@ if ($event === 'push') {
     // Generate a unique branch name with current date and time
     $branchName = date('YmdHis') . '-ServerUpload';
 
-    // Define the commands
+    // Define commands
     $commands = [
         "cd $deployDir && git config user.email '$userEmail' 2>&1", // Set user email
         "cd $deployDir && git config user.name '$userName' 2>&1", // Set user name
         "cd $deployDir && git checkout -b $branchName 2>&1", // Create and switch to the new branch
         "cd $deployDir && git add . 2>&1", // Add changes
-        "cd $deployDir && git commit -m 'Server changes before update' 2>&1", // Commit changes
-        "cd $deployDir && git push origin $branchName 2>&1", // Push the new branch to GitHub
-        "cd $deployDir && git checkout $master_branch 2>&1", // Switch back to the master branch
-        "cd $deployDir && git pull origin $master_branch 2>&1", // Pull the latest changes from GitHub
-        "cd $deployDir && git merge $branchName 2>&1", // Merge server changes into master
-        "cd $deployDir && git push origin $master_branch 2>&1" // Push the updated master branch to GitHub
     ];
 
-    // Execute the deployment commands
+    // Execute initial commands
     foreach ($commands as $command) {
         $output = [];
         $returnCode = null;
@@ -81,6 +75,87 @@ if ($event === 'push') {
             echo 'Deployment failed: ' . implode("\n", $output);
             exit;
         }
+    }
+
+    // Check for uncommitted changes
+    $checkChangesCommand = "cd $deployDir && git status --porcelain";
+    exec($checkChangesCommand, $statusOutput, $statusReturnCode);
+
+    if (empty($statusOutput)) {
+        // No changes to commit
+        // Clean up branch
+        $cleanupCommands = [
+            "cd $deployDir && git checkout $master_branch 2>&1", // Switch back to master branch
+            "cd $deployDir && git branch -D $branchName 2>&1" // Delete the temporary branch
+        ];
+
+        foreach ($cleanupCommands as $command) {
+            $output = [];
+            $returnCode = null;
+            exec($command, $output, $returnCode);
+
+            // Check for errors during cleanup
+            if ($returnCode !== 0) {
+                http_response_code(500);
+                echo 'Cleanup failed: ' . implode("\n", $output);
+                exit;
+            }
+        }
+
+        http_response_code(200);
+        echo 'No changes to commit. Deployment skipped.';
+        exit;
+    }
+
+    // Commit changes
+    $commitCommand = "cd $deployDir && git commit -m 'Server changes before update' 2>&1";
+    exec($commitCommand, $commitOutput, $commitReturnCode);
+
+    if ($commitReturnCode !== 0) {
+        http_response_code(500);
+        echo 'Commit failed: ' . implode("\n", $commitOutput);
+        exit;
+    }
+
+    // Push the new branch
+    $pushCommand = "cd $deployDir && git push origin $branchName 2>&1";
+    exec($pushCommand, $pushOutput, $pushReturnCode);
+
+    if ($pushReturnCode !== 0) {
+        http_response_code(500);
+        echo 'Push to origin failed: ' . implode("\n", $pushOutput);
+        exit;
+    }
+
+    // Merge changes into master
+    $mergeCommands = [
+        "cd $deployDir && git checkout $master_branch 2>&1", // Switch back to master branch
+        "cd $deployDir && git pull origin $master_branch 2>&1", // Pull the latest changes from GitHub
+        "cd $deployDir && git merge $branchName 2>&1", // Merge server changes into master
+        "cd $deployDir && git push origin $master_branch 2>&1" // Push the updated master branch to GitHub
+    ];
+
+    foreach ($mergeCommands as $command) {
+        $output = [];
+        $returnCode = null;
+        exec($command, $output, $returnCode);
+
+        // Check for errors during execution
+        if ($returnCode !== 0) {
+            http_response_code(500);
+            echo 'Deployment failed: ' . implode("\n", $output);
+            exit;
+        }
+    }
+
+    // Cleanup: Delete the temporary branch
+    $cleanupBranchCommand = "cd $deployDir && git branch -D $branchName 2>&1";
+    exec($cleanupBranchCommand, $cleanupBranchOutput, $cleanupBranchReturnCode);
+
+    if ($cleanupBranchReturnCode !== 0) {
+        http_response_code(500);
+        echo 'Branch cleanup failed: ' . implode("\n", $cleanupBranchOutput);
+        exit;
     }
 
     // Return success response
