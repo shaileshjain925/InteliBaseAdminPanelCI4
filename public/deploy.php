@@ -2,8 +2,8 @@
 // Set your GitHub secret here
 define("WEB_HOOK_SECRET_KEY", "b8a96b4a-2c69-11ef-a56d-b8aeedb590fb");
 $deployDir = '/home/yf88lwcuzbfc/public_html/ths.ind.in';
-$userEmail = 'shaileshjain925@gmail.com'; // Set this to your email
-$userName = 'Shailesh Jain'; // Set this to your name
+$userEmail = 'your-email@example.com'; // Set this to your email
+$userName = 'Your Name'; // Set this to your name
 
 // Get headers and payload
 $headers = getallheaders();
