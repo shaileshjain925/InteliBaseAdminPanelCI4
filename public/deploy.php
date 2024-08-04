@@ -47,7 +47,7 @@ if ($event === 'push') {
 
     // Check if the push is to the master branch
     if ($current_branch !== $master_branch) {
-        http_response_code(200);
+        http_response_code(422);
         echo 'Only master branch pushes trigger deployment';
         exit;
     }
