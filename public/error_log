@@ -11,3 +11,7 @@ Stack trace:
 [04-Aug-2024 18:56:53 UTC] PHP Warning:  Undefined array key "ref" in /home/yf88lwcuzbfc/public_html/ths.ind.in/public/deploy.php on line 10
 [04-Aug-2024 19:00:25 UTC] PHP Warning:  Undefined array key "ref" in /home/yf88lwcuzbfc/public_html/ths.ind.in/public/deploy.php on line 13
 [04-Aug-2024 19:17:15 UTC] PHP Warning:  Undefined array key "ref" in /home/yf88lwcuzbfc/public_html/ths.ind.in/public/deploy.php on line 43
+[04-Aug-2024 19:26:36 UTC] PHP Warning:  Undefined array key "hook" in /home/yf88lwcuzbfc/public_html/ths.ind.in/public/deploy.php on line 35
+[04-Aug-2024 19:26:36 UTC] PHP Warning:  Trying to access array offset on value of type null in /home/yf88lwcuzbfc/public_html/ths.ind.in/public/deploy.php on line 35
+[04-Aug-2024 19:30:08 UTC] PHP Warning:  Undefined array key "hook" in /home/yf88lwcuzbfc/public_html/ths.ind.in/public/deploy.php on line 35
+[04-Aug-2024 19:30:08 UTC] PHP Warning:  Trying to access array offset on value of type null in /home/yf88lwcuzbfc/public_html/ths.ind.in/public/deploy.php on line 35
