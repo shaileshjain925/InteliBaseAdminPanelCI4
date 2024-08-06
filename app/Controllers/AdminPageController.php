@@ -4,21 +4,61 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Traits\CommonTraits;
-use ApiResponseStatusCode;
+use UserType;
 
 class AdminPageController extends BaseController
 {
     use CommonTraits;
 
+    public function setSession($user_type = 'super_admin')
+    {
+        session()->set('user_type', $user_type);
+        return redirect()->route('default_dashboard');
+    }
+    protected function checkUserType($user_type = null): bool
+    {
+        if (!empty($user_type)) {
+            $result = (isset($_SESSION['user_type']) && $_SESSION['user_type'] == $user_type) ? true : false;
+        } else {
+            $result =  (isset($_SESSION['user_type']) && !empty($_SESSION['user_type'])) ? true : false;
+        }
+        return $result;
+    }
+    protected function getUserType(): string|null
+    {
+        $result = (isset($_SESSION['user_type']) && !empty($_SESSION['user_type'])) ? $_SESSION['user_type'] : null;
+        return $result;
+    }
+    protected function UserTypeInList($user_type_array)
+    {
+        return in_array($this->getUserType(), $user_type_array);
+    }
     public function default_dashboard()
     {
-        $user_role = 'admin';
-        switch ($user_role) {
-            case 'admin':
+        if (!$this->checkUserType()) {
+            $this->setSession();
+        }
+        switch ($this->getUserType()) {
+            case UserType::SuperAdmin->value:
+                return $this->super_admin_dashboard_page();
+                break;
+            case UserType::Admin->value:
                 return $this->admin_dashboard_page();
                 break;
-            case 'dummy':
-                return $this->dummy_dashboard_page();
+            case UserType::SalesManager->value:
+                return $this->sales_dashboard_page();
+                break;
+            case UserType::SalesExecutive->value:
+                return $this->sales_dashboard_page();
+                break;
+            case UserType::Purchase->value:
+                return $this->purchase_dashboard_page();
+                break;
+            case UserType::Finance->value:
+                return $this->finance_dashboard_page();
+                break;
+            case UserType::CRM->value:
+                return $this->crm_dashboard_page();
                 break;
         }
     }
@@ -37,6 +77,14 @@ class AdminPageController extends BaseController
         return redirect()->route('login_page')->with('success', 'Logout Successfully');
     }
 
+    public function super_admin_dashboard_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Super Admin Dashboard';
+        $theme_data['_page_title'] = 'Super Admin Admin Dashboard';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/admin_dashboard';
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
     public function admin_dashboard_page()
     {
         $theme_data = $this->admin_panel_common_data();
@@ -45,12 +93,36 @@ class AdminPageController extends BaseController
         $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/admin_dashboard';
         return view('AdminPanelNew/partials/main', $theme_data);
     }
-    public function dummy_dashboard_page()
+    public function sales_dashboard_page()
     {
         $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Dummy Dashboard';
-        $theme_data['_page_title'] = 'Dummy Dashboard';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/dummy_dashboard';
+        $theme_data['_meta_title'] = 'Sales Dashboard';
+        $theme_data['_page_title'] = 'Sales Dashboard';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/admin_dashboard';
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function purchase_dashboard_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Purchase Dashboard';
+        $theme_data['_page_title'] = 'Purchase Dashboard';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/admin_dashboard';
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function finance_dashboard_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Finance Dashboard';
+        $theme_data['_page_title'] = 'Finance Dashboard';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/admin_dashboard';
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function crm_dashboard_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'CRM Dashboard';
+        $theme_data['_page_title'] = 'CRM Dashboard';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/admin_dashboard';
         return view('AdminPanelNew/partials/main', $theme_data);
     }
     public function dummy_list_page()
@@ -126,16 +198,74 @@ class AdminPageController extends BaseController
                 "visibility" => true,
                 "menus" => [
                     [
+                        "title" => "Super Admin",
+                        "url" => base_url(route_to('super_admin_dashboard_page')),
+                        "badge_count" => 0,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value
+                            ]
+                        ),
+                    ],
+                    [
                         "title" => "Admin",
                         "url" => base_url(route_to('admin_dashboard_page')),
                         "badge_count" => 0,
-                        "visibility" => true,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value,
+                                UserType::Admin->value,
+                            ]
+                        ),
                     ],
                     [
-                        "title" => "Lead",
-                        "url" => base_url(),
+                        "title" => "Sales",
+                        "url" => base_url(route_to('sales_dashboard_page')),
                         "badge_count" => 0,
-                        "visibility" => true,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value,
+                                UserType::Admin->value,
+                                UserType::SalesManager->value,
+                                UserType::SalesExecutive->value,
+                            ]
+                        ),
+                    ],
+                    [
+                        "title" => "Purchase",
+                        "url" => base_url(route_to('purchase_dashboard_page')),
+                        "badge_count" => 0,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value,
+                                UserType::Admin->value,
+                                UserType::Purchase->value
+                            ]
+                        ),
+                    ],
+                    [
+                        "title" => "Finance",
+                        "url" => base_url(route_to('finance_dashboard_page')),
+                        "badge_count" => 0,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value,
+                                UserType::Admin->value,
+                                UserType::Finance->value
+                            ]
+                        ),
+                    ],
+                    [
+                        "title" => "CRM",
+                        "url" => base_url(route_to('crm_dashboard_page')),
+                        "badge_count" => 0,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value,
+                                UserType::Admin->value,
+                                UserType::CRM->value
+                            ]
+                        ),
                     ],
                 ]
             ],
@@ -148,7 +278,7 @@ class AdminPageController extends BaseController
                     [
                         "title" => "Dummy List",
                         "url" => base_url(route_to('dummy_list_page')),
-                        "badge_count" => 122,
+                        "badge_count" => 0,
                         "visibility" => true,
                     ],
                     [
@@ -169,6 +299,305 @@ class AdminPageController extends BaseController
                                 "visibility" => true,
                             ],
                         ]
+                    ],
+                ]
+            ],
+            [
+                "module_title" => "Staff Management",
+                "module_name" => "Staff Management",
+                "module_icon" => "mdi mdi-account-supervisor-outline",
+                "visibility" => $this->UserTypeInList(
+                    [
+                        UserType::SuperAdmin->value,
+                        UserType::Admin->value,
+                        UserType::SalesManager->value,
+                    ]
+                ),
+                "menus" => [
+                    [
+                        "title" => "Super Admin",
+                        "url" => base_url(route_to('dummy_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value,
+                            ]
+                        ),
+                    ],
+                    [
+                        "title" => "Admin",
+                        "url" => base_url(route_to('dummy_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value,
+                                UserType::Admin->value,
+                            ]
+                        ),
+                    ],
+                    [
+                        "title" => "Sales Manager",
+                        "url" => base_url(route_to('dummy_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value,
+                                UserType::Admin->value,
+                            ]
+                        ),
+                    ],
+                    [
+                        "title" => "Sales Executive",
+                        "url" => base_url(route_to('dummy_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value,
+                                UserType::Admin->value,
+                                UserType::SalesManager->value,
+                            ]
+                        ),
+                    ],
+                    [
+                        "title" => "Purchase",
+                        "url" => base_url(route_to('dummy_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value,
+                                UserType::Admin->value,
+                            ]
+                        ),
+                    ],
+                    [
+                        "title" => "Finance",
+                        "url" => base_url(route_to('dummy_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value,
+                                UserType::Admin->value,
+                            ]
+                        ),
+                    ],
+                    [
+                        "title" => "CRM",
+                        "url" => base_url(route_to('dummy_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value,
+                                UserType::Admin->value,
+                            ]
+                        ),
+                    ],
+                ]
+            ],
+            [
+                "module_title" => "Sales",
+                "module_name" => "Sales",
+                "module_icon" => "mdi mdi-account-supervisor-outline",
+                "visibility" => $this->UserTypeInList(
+                    [
+                        UserType::SuperAdmin->value,
+                        UserType::Admin->value,
+                        UserType::SalesManager->value,
+                        UserType::SalesExecutive->value,
+                        UserType::Purchase->value,
+                        UserType::CRM->value,
+                    ]
+                ),
+                "menus" => [
+                    [
+                        "title" => "Customer",
+                        "url" => base_url(route_to('dummy_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value,
+                                UserType::Admin->value,
+                                UserType::SalesManager->value,
+                                UserType::SalesExecutive->value,
+                                UserType::CRM->value,
+                            ]
+                        ),
+                    ],
+                    [
+                        "title" => "Sales Enquiry",
+                        "url" => base_url(route_to('dummy_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value,
+                                UserType::Admin->value,
+                                UserType::SalesManager->value,
+                                UserType::SalesExecutive->value,
+                                UserType::Purchase->value,
+                            ]
+                        ),
+                    ],
+                    [
+                        "title" => "Sales Quotation",
+                        "url" => base_url(route_to('dummy_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value,
+                                UserType::Admin->value,
+                                UserType::SalesManager->value,
+                                UserType::SalesExecutive->value,
+                            ]
+                        ),
+                    ],
+                    [
+                        "title" => "Sales Order",
+                        "url" => base_url(route_to('dummy_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value,
+                                UserType::Admin->value,
+                                UserType::SalesManager->value,
+                                UserType::SalesExecutive->value,
+                                UserType::CRM->value,
+                            ]
+                        ),
+                    ],
+                ]
+            ],
+            [
+                "module_title" => "Purchase",
+                "module_name" => "Purchase",
+                "module_icon" => "mdi mdi-account-supervisor-outline",
+                "visibility" => $this->UserTypeInList(
+                    [
+                        UserType::SuperAdmin->value,
+                        UserType::Admin->value,
+                        UserType::Purchase->value,
+                    ]
+                ),
+                "menus" => [
+                    [
+                        "title" => "Vendor",
+                        "url" => base_url(route_to('dummy_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value,
+                                UserType::Admin->value,
+                                UserType::Purchase->value,
+                            ]
+                        ),
+                    ],
+                    [
+                        "title" => "Purchase Enquiry",
+                        "url" => base_url(route_to('dummy_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value,
+                                UserType::Admin->value,
+                                UserType::Purchase->value,
+                            ]
+                        ),
+                    ],
+                    [
+                        "title" => "Purchase Quotation",
+                        "url" => base_url(route_to('dummy_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value,
+                                UserType::Admin->value,
+                                UserType::Purchase->value,
+                            ]
+                        ),
+                    ],
+                ]
+            ],
+            [
+                "module_title" => "Inventory",
+                "module_name" => "Inventory",
+                "module_icon" => "mdi mdi-account-supervisor-outline",
+                "visibility" => $this->UserTypeInList(
+                    [
+                        UserType::SuperAdmin->value,
+                        UserType::Admin->value,
+                        UserType::Purchase->value,
+                    ]
+                ),
+                "menus" => [
+                    [
+                        "title" => "Category",
+                        "url" => base_url(route_to('dummy_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value,
+                                UserType::Admin->value,
+                                UserType::Purchase->value,
+                            ]
+                        ),
+                    ],
+                    [
+                        "title" => "Group",
+                        "url" => base_url(route_to('dummy_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value,
+                                UserType::Admin->value,
+                                UserType::Purchase->value,
+                            ]
+                        ),
+                    ],
+                    [
+                        "title" => "Brand",
+                        "url" => base_url(route_to('dummy_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value,
+                                UserType::Admin->value,
+                                UserType::Purchase->value,
+                            ]
+                        ),
+                    ],
+                    [
+                        "title" => "HSN",
+                        "url" => base_url(route_to('dummy_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value,
+                                UserType::Admin->value,
+                                UserType::Purchase->value,
+                            ]
+                        ),
+                    ],
+                    [
+                        "title" => "Product",
+                        "url" => base_url(route_to('dummy_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value,
+                                UserType::Admin->value,
+                                UserType::Purchase->value,
+                            ]
+                        ),
+                    ],
+                    [
+                        "title" => "Price List",
+                        "url" => base_url(route_to('dummy_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => $this->UserTypeInList(
+                            [
+                                UserType::SuperAdmin->value,
+                                UserType::Admin->value,
+                                UserType::Purchase->value,
+                            ]
+                        ),
                     ],
                 ]
             ],

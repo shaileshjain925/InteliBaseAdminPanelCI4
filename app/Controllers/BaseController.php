@@ -10,6 +10,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use App\Traits\CommonTraits;
 use ApiResponseStatusCode;
+use UserType;
 use App\Models\FunctionModel;
 use Exception;
 

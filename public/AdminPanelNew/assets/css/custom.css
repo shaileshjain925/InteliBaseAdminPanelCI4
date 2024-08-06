@@ -10,7 +10,7 @@
     --custom_themme_color:#d52027 ;
     --white_color:#fff;
     --light_gray_color:#6d6c6c;
-    --icon_themme_color:#f76e59;
+    --icon_theme_color_1:#f76e59;
     --body_background:#f6ffe04f;
   }
   body{
@@ -67,8 +67,8 @@
 .pl-200{
     padding-left: 255px;
 }
-.icon_themme_color {
-    color:var(--icon_themme_color) !important;
+.icon_theme_color_1 {
+    color:var(--icon_theme_color_1) !important;
 }
 .light_gray_color{
     color: var(--light_gray_color);

@@ -2,7 +2,6 @@
     <div class="navbar-header">
         <div class="container-fluid">
             <div class="float-end">
-
                 <div class="dropdown d-inline-block d-lg-none ms-2">
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0 d-none" aria-labelledby="page-header-search-dropdown">
 
@@ -26,8 +25,26 @@
                         <i class="mdi mdi-fullscreen"></i>
                     </button>
                 </div>
+                <div class="dropdown d-none d-lg-inline-block ms-1">
+                    <div>
+                        <select name="user_type" id="user_type" class="form-select" onchange="setSession(event)">
+                            <option value="<?= UserType::SuperAdmin->value ?>" <?= (isset($_SESSION['user_type']) && $_SESSION['user_type'] == UserType::SuperAdmin->value) ? "selected" : "" ?>>Super Admin</option>
+                            <option value="<?= UserType::Admin->value ?>" <?= (isset($_SESSION['user_type']) && $_SESSION['user_type'] == UserType::Admin->value) ? "selected" : "" ?>>Admin</option>
+                            <option value="<?= UserType::SalesManager->value ?>" <?= (isset($_SESSION['user_type']) && $_SESSION['user_type'] == UserType::SalesManager->value) ? "selected" : "" ?>>Sales Manager</option>
+                            <option value="<?= UserType::SalesExecutive->value ?>" <?= (isset($_SESSION['user_type']) && $_SESSION['user_type'] == UserType::SalesExecutive->value) ? "selected" : "" ?>>Sales Executive</option>
+                            <option value="<?= UserType::Purchase->value ?>" <?= (isset($_SESSION['user_type']) && $_SESSION['user_type'] == UserType::Purchase->value) ? "selected" : "" ?>>Purchase</option>
+                            <option value="<?= UserType::Finance->value ?>" <?= (isset($_SESSION['user_type']) && $_SESSION['user_type'] == UserType::Finance->value) ? "selected" : "" ?>>Finance</option>
+                            <option value="<?= UserType::CRM->value ?>" <?= (isset($_SESSION['user_type']) && $_SESSION['user_type'] == UserType::CRM->value) ? "selected" : "" ?>>CRM</option>
+                        </select>
+                    </div>
+                    <script>
+                        function setSession(event) {
+                            window.location.href = `<?= base_url(route_to('setSession')) ?>/${event.target.value}`;
+                        }
+                    </script>
+                </div>
 
-                <div class="dropdown d-inline-block d-none">
+                <div class="dropdown d-inline-block">
                     <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="mdi mdi-bell-outline"></i>
                         <span class="badge rounded-pill bg-danger ">3</span>
@@ -137,22 +154,18 @@
                 </div>
 
                 <div class="dropdown d-inline-block">
-
-                    <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                        <i class="mdi mdi-settings-outline"></i>
-                    </button>
+                    <?php if (isset($_SESSION['user_type']) && ($_SESSION['user_type'] == UserType::SuperAdmin->value || $_SESSION['user_type'] == UserType::Admin->value)) : ?>
+                        <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                            <i class="mdi mdi-settings-outline"></i>
+                        </button>
+                    <?php endif; ?>
                 </div>
 
             </div>
             <div>
-                <!-- LOGO -->
-
-
                 <button type="button" class="btn btn-sm px-3 font-size-16 header-item toggle-btn waves-effect" id="vertical-menu-btn">
                     <i class="fa fa-fw fa-bars"></i>
                 </button>
-
-
             </div>
         </div>
     </div>
