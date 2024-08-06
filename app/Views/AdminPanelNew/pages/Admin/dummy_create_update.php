@@ -22,7 +22,7 @@
                   <div class="mb-3 col-md-4">
                       <label class="form-label">Mobile Number</label>
                       <p class="new_form_p">Please add dummy Mobile Number</p>
-                      <input type="number" class="form-control" required placeholder="" />
+                      <input type="text" class="form-control" required placeholder="" />
                   </div>
                   <div class="mb-3 col-md-6">
                       <label class="form-label">Date</label>
