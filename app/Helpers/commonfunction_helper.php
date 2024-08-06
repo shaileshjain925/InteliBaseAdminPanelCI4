@@ -22,6 +22,16 @@ enum ApiResponseStatusCode: int
     // Validation Failed
   case VALIDATION_FAILED = 422;
 }
+enum UserType: string
+{
+  case SuperAdmin = 'super_admin';
+  case Admin = 'admin';
+  case SalesManager = 'sales_manager';
+  case SalesExecutive = 'sales_executive';
+  case Purchase = 'purchase';
+  case Finance = 'finance';
+  case CRM = 'crm';
+}
 
 function getEnumAsArray($enumType)
 {
