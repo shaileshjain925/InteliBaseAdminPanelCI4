@@ -4,18 +4,14 @@
             <div class="float-end">
 
                 <div class="dropdown d-inline-block d-lg-none ms-2">
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0 d-none"
-                        aria-labelledby="page-header-search-dropdown">
-
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0 d-none" aria-labelledby="page-header-search-dropdown">
 
                         <form class="p-3">
                             <div class="m-0">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="<?= lang('Files.Search') ?>"
-                                        aria-label="Recipient's username">
+                                    <input type="text" class="form-control" placeholder="<?= lang('Files.Search') ?>" aria-label="Recipient's username">
                                     <div class="input-group-append">
-                                        <button class="btn btn-primary" type="submit"><i
-                                                class="mdi mdi-magnify"></i></button>
+                                        <button class="btn btn-primary" type="submit"><i class="mdi mdi-magnify"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -23,21 +19,20 @@
                     </div>
                 </div>
 
+
+
                 <div class="dropdown d-none d-lg-inline-block ms-1">
                     <button type="button" class="btn header-item noti-icon waves-effect" data-toggle="fullscreen">
                         <i class="mdi mdi-fullscreen"></i>
                     </button>
                 </div>
 
-                <div class="dropdown d-inline-block">
-                    <button type="button" class="btn header-item noti-icon waves-effect"
-                        id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false">
+                <div class="dropdown d-inline-block d-none">
+                    <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="mdi mdi-bell-outline"></i>
                         <span class="badge rounded-pill bg-danger ">3</span>
                     </button>
-                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
-                        aria-labelledby="page-header-notifications-dropdown">
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown">
                         <div class="p-3">
                             <div class="row align-items-center">
                                 <div class="col">
@@ -69,8 +64,7 @@
                             </a>
                             <a href="" class="text-reset notification-item">
                                 <div class="d-flex align-items-start">
-                                    <img src="<?= base_url('AdminPanelnew/assets/images/users/user.jpg') ?>"
-                                        class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                    <img src="<?= base_url($_assets_path . 'assets/images/users/avatar-3.jpg') ?>" class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                     <div class="flex-1">
                                         <h6 class="mt-0 mb-1">James Lemire</h6>
                                         <div class="font-size-12 text-muted">
@@ -103,8 +97,7 @@
 
                             <a href="" class="text-reset notification-item">
                                 <div class="d-flex align-items-start">
-                                    <img src="<?= base_url('AdminPanelNew/assets/images/users/user.jpg') ?>"
-                                        class="me-3 rounded-circle avatar-xs" alt="user-pic">
+                                    <img src="<?= base_url($_assets_path . 'assets/images/users/avatar-4.jpg') ?>" class="me-3 rounded-circle avatar-xs" alt="user-pic">
                                     <div class="flex-1">
                                         <h6 class="mt-0 mb-1">Salena Layfield</h6>
                                         <div class="font-size-12 text-muted">
@@ -125,22 +118,19 @@
                     </div>
                 </div>
                 <div class="dropdown d-inline-block">
-                    <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
-                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img class="rounded-circle header-profile-user"
-                            src="<?= (isset($_user_image_url) && !empty($_user_image_url)) ? base_url($_user_image_url) : ""; ?>">
+                    <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img class="rounded-circle header-profile-user" src="<?= (isset($_user_image_url) && !empty($_user_image_url)) ? base_url($_user_image_url) : ""; ?>">
                         <span class="d-none d-xl-inline-block ms-1"><?= @$_user_name ?></span>
                         <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                     </button>
-                    <div class="dropdown-menu dropdown-menu-end px-2">
+                    <div class="dropdown-menu dropdown-menu-end">
                         <!-- item-->
 
                         <i class="bx bx-user font-size-16 align-middle me-1"></i>
                         <?= $_user_name ?> Profile
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item text-danger p-0" href="<?= base_url(route_to('logout')) ?>"><i
-                                class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i>
+                        <a class="dropdown-item text-danger" href="<?= base_url(route_to('logout')) ?>"><i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i>
                             <?= lang('Files.Logout') ?>
                         </a>
                     </div>
@@ -148,49 +138,17 @@
 
                 <div class="dropdown d-inline-block">
 
-                    <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect"
-                        data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                    <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
                         <i class="mdi mdi-settings-outline"></i>
                     </button>
                 </div>
 
-                <div class="login_user_type d-inline-block">
-                    <label for="">Login By</label>
-                    <select class="form-control py-1" name="" id="" onchange="changeSession(event)">
-                        <option value="" disabled>Select Login By</option>
-                        <option value="admin"
-                            <?= (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'admin') ? "selected" : "" ?>>
-                            Admin</option>
-                        <option value="manager"
-                            <?= (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'manager') ? "selected" : "" ?>>
-                            Manager</option>
-                        <option value="sales_executive"
-                            <?= (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'sales_executive') ? "selected" : "" ?>>
-                            Sales Executive</option>
-                        <option value="site_engineer"
-                            <?= (isset($_SESSION['user_type']) && $_SESSION['user_type'] == 'site_engineer') ? "selected" : "" ?>>
-                            Site Engineer</option>
-                    </select>
-                </div>
-                <script>
-                function changeSession(event) {
-                    $.ajax({
-                        type: "GET",
-                        url: "<?=base_url('setSession')?>/" + event.target.value,
-                        success: function(response) {
-                            console.log(response);
-                            location.reload();
-                        }
-                    });
-                }
-                </script>
             </div>
             <div>
                 <!-- LOGO -->
 
 
-                <button type="button" class="btn btn-sm px-3 font-size-16 header-item toggle-btn waves-effect"
-                    id="vertical-menu-btn">
+                <button type="button" class="btn btn-sm px-3 font-size-16 header-item toggle-btn waves-effect" id="vertical-menu-btn">
                     <i class="fa fa-fw fa-bars"></i>
                 </button>
 

@@ -42,9 +42,7 @@
 <!-- slider js -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
-
 <script src='https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.15.2/js/selectize.min.js' integrity='sha512-IOebNkvA/HZjMM7MxL0NYeLYEalloZ8ckak+NDtOViP7oiYzG5vn6WVXyrJDiJPhl4yRdmNAG49iuLmhkUdVsQ==' crossorigin='anonymous'></script>
-
 <!-- Firebase Messaging Notification -->
 <script src="<?= base_url('firebase-app.js') ?>"></script>
 <script type="module" src="https://www.gstatic.com/firebasejs/8.2.2/firebase-app.js"></script>
@@ -81,8 +79,7 @@
     }
 
 
-    function uploadImage(file_input_id, for_param, input_field_for_image, img_div_id, is_crop = false, crop_x_ratio = null,
-        crop_y_ratio = null) {
+    function uploadImage(file_input_id, for_param, input_field_for_image, img_div_id, is_crop = false, crop_x_ratio = null, crop_y_ratio = null) {
         // Get the file input element
         var fileInput = document.getElementById(file_input_id);
 
@@ -104,8 +101,7 @@
                         // Show SweetAlert2 popup with the image
                         Swal.fire({
                             title: 'Crop Image',
-                            html: '<div class="img-fluid"><img id="cropImage" src="' + e.target.result +
-                                '"></div>',
+                            html: '<div class="img-fluid"><img id="cropImage" src="' + e.target.result + '"></div>',
                             showCancelButton: true,
                             confirmButtonText: 'Crop & Upload',
                             cancelButtonText: 'Cancel',
@@ -116,8 +112,7 @@
                             didOpen: () => {
                                 var image = document.getElementById('cropImage');
                                 cropper = new Cropper(image, {
-                                    aspectRatio: crop_x_ratio && crop_y_ratio ?
-                                        crop_x_ratio / crop_y_ratio : NaN,
+                                    aspectRatio: crop_x_ratio && crop_y_ratio ? crop_x_ratio / crop_y_ratio : NaN,
                                     viewMode: 0,
                                 });
                             },
@@ -125,16 +120,14 @@
                                 return new Promise((resolve) => {
                                     var canvas = cropper.getCroppedCanvas();
                                     if (!canvas) {
-                                        Swal.showValidationMessage(
-                                            'Could not crop image. Please try again.');
+                                        Swal.showValidationMessage('Could not crop image. Please try again.');
                                         return;
                                     }
                                     canvas.toBlob((blob) => {
                                         // Convert cropped canvas to blob (file object)
-                                        const file = new File([blob],
-                                            'croppedImage.jpeg', {
-                                                type: 'image/jpeg'
-                                            });
+                                        const file = new File([blob], 'croppedImage.jpeg', {
+                                            type: 'image/jpeg'
+                                        });
                                         formData.delete('file');
                                         formData.append('file', file);
                                         // Make AJAX request
@@ -146,44 +139,21 @@
                                             contentType: false,
                                             success: function(response) {
                                                 // Upon success, update the input field and image display
-                                                if (response.status ==
-                                                    200) {
-                                                    toastr.success(
-                                                        response
-                                                        .message);
-                                                    response = JSON
-                                                        .parse(response
-                                                            .data);
-                                                    $('#' +
-                                                            input_field_for_image
-                                                        )
-                                                        .val(response
-                                                            .image_path
-                                                        ); // Assuming your API returns image_url
-                                                    $('#' + img_div_id)
-                                                        .attr('src',
-                                                            response
-                                                            .image_path_url
-                                                        );
+                                                if (response.status == 200) {
+                                                    toastr.success(response.message);
+                                                    response = JSON.parse(response.data);
+                                                    $('#' + input_field_for_image).val(response.image_path); // Assuming your API returns image_url
+                                                    $('#' + img_div_id).attr('src', response.image_path_url);
                                                     resolve();
                                                 } else {
-                                                    toastr.error(
-                                                        response
-                                                        .message);
-                                                    Swal.showValidationMessage(
-                                                        response
-                                                        .message);
+                                                    toastr.error(response.message);
+                                                    Swal.showValidationMessage(response.message);
                                                 }
                                             },
-                                            error: function(xhr, status,
-                                                error) {
+                                            error: function(xhr, status, error) {
                                                 // Handle errors here
-                                                console.error(
-                                                    'Error uploading image:',
-                                                    error);
-                                                Swal.showValidationMessage(
-                                                    'Error uploading image. Please try again.'
-                                                );
+                                                console.error('Error uploading image:', error);
+                                                Swal.showValidationMessage('Error uploading image. Please try again.');
                                             }
                                         });
                                     }, 'image/jpeg');
@@ -209,8 +179,7 @@
                                 if (response.status == 200) {
                                     toastr.success(response.message);
                                     response = JSON.parse(response.data);
-                                    $('#' + input_field_for_image).val(response
-                                        .image_path); // Assuming your API returns image_url
+                                    $('#' + input_field_for_image).val(response.image_path); // Assuming your API returns image_url
                                     $('#' + img_div_id).attr('src', response.image_path_url);
                                 } else {
                                     toastr.error(response.message);
@@ -220,8 +189,7 @@
                             error: function(xhr, status, error) {
                                 // Handle errors here
                                 console.error('Error uploading image:', error);
-                                Swal.showValidationMessage(
-                                    'Error uploading image. Please try again.');
+                                Swal.showValidationMessage('Error uploading image. Please try again.');
                             }
                         });
                     }

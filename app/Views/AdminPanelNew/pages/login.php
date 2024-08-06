@@ -18,15 +18,13 @@
     <!-- custom  css-->
     <link href="AdminPanelNew/assets/css/custom.css" id="app-style" rel="stylesheet" type="text/css" />
     <link href="AdminPanelNew/assets/css/login.css" id="app-style" rel="stylesheet" type="text/css" />
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css'
-        integrity='sha512-6S2HWzVFxruDlZxI3sXOZZ4/eJ8AcxkQH1+JjSe/ONCEqR9L4Ysq5JdT5ipqtzU7WHalNwzwBv+iE51gNHJNqQ=='
-        crossorigin='anonymous' />
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css' integrity='sha512-6S2HWzVFxruDlZxI3sXOZZ4/eJ8AcxkQH1+JjSe/ONCEqR9L4Ysq5JdT5ipqtzU7WHalNwzwBv+iE51gNHJNqQ==' crossorigin='anonymous' />
 
 </head>
 <style>
-.bg-login {
-    background: url('<?= base_url('AdminPanelNew/assets/images/crop2.jpg') ?>');
-}
+    .bg-login {
+        background: url('<?= base_url('AdminPanelNew/assets/images/crop2.jpg') ?>');
+    }
 </style>
 
 <body>
@@ -39,10 +37,9 @@
                             <div class="bg-login-overlay"></div>
                             <div class="position-relative">
                                 <h5 class="font-size-20">Welcome Back !</h5>
-                                <p class="mb-0">Sign in to continue to Outdoor Admin Software</p>
+                                <p class="mb-0">Sign in to continue to Sawariya Kisan App</p>
                                 <a href="/" class="logo logo-admin mt-4">
-                                    <img src="<?= base_url('AdminPanelNew/assets/images/brillsense.svg') ?>"
-                                        alt="logo-sm-dark">
+                                    <img src="<?= base_url('AdminPanelNew/assets/images/logo.png') ?>" alt="logo-sm-dark">
                                 </a>
                             </div>
                         </div>
@@ -54,31 +51,26 @@
                                 <div class="success-message-box d-none">
                                     <p id="success-message"></p>
                                 </div>
-                                <form id="form" enctype="multipart/form-data" class="form-horizontal"
-                                    action="<?= base_url() ?>" method="post">
+                                <form id="form" enctype="multipart/form-data" class="form-horizontal" action="<?= base_url() ?>" method="post">
                                     <div class="mb-3">
                                         <label class="form-label" for="username">Username</label>
-                                        <input type="text" class="form-control" id="username" name="username"
-                                            placeholder="Enter username">
+                                        <input type="text" class="form-control" id="username" name="username" placeholder="Enter username">
                                     </div>
 
                                     <div class="mb-3">
                                         <label class="form-label" for="password">Password</label>
-                                        <input type="password" class="form-control" id="password" name="password"
-                                            placeholder="Enter password">
+                                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter password">
                                     </div>
 
                                     <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="remember_me"
-                                            name="remember_me">
+                                        <input type="checkbox" class="form-check-input" id="remember_me" name="remember_me">
                                         <label class="form-check-label" for="customControlInline">Remember
                                             me</label>
                                     </div>
 
                                     <div class="mt-3">
                                         <a href="<?= base_url(route_to('default_dashboard')) ?>">
-                                            <button class="btn login_btn waves-effect waves-light" type="button">Log
-                                                In</button>
+                                            <button class="btn login_btn waves-effect waves-light" type="button">Log In</button>
                                         </a>
                                     </div>
                                 </form>
@@ -98,25 +90,23 @@
     <script src="AdminPanelNew/assets/libs/node-waves/waves.min.js"></script>
     <script src="AdminPanelNew/assets/libs/jquery-sparkline/jquery.sparkline.min.js"></script>
     <script src="AdminPanelNew/assets/js/app.js"></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js'
-        integrity='sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ=='
-        crossorigin='anonymous'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js' integrity='sha512-lbwH47l/tPXJYG9AcFNoJaTMhGvYWhVM9YI43CT+uteTRRaiLCui8snIgyAN8XWgNjNhCqlAUdzZptso6OCoFQ==' crossorigin='anonymous'></script>
     <script src="AdminPanelNew/assets/js/common.js"></script>
 
     <script>
-    function successCallback(response) {
-        console.log(response);
-        if (response.status == 201 || response.status == 200) {
-            setTimeout(() => {
-                // Dashboard Url
-                window.location.href = "<?= base_url() ?>";
-            }, 2000);
+        function successCallback(response) {
+            console.log(response);
+            if (response.status == 201 || response.status == 200) {
+                setTimeout(() => {
+                    // Dashboard Url
+                    window.location.href = "<?= base_url() ?>";
+                }, 2000);
+            }
         }
-    }
 
-    function errorCallback(response) {
-        console.log(response);
-    }
+        function errorCallback(response) {
+            console.log(response);
+        }
     </script>
 
 </body>
