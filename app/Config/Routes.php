@@ -3,7 +3,6 @@
 namespace Config;
 
 use CodeIgniter\Router\RouteCollection;
-use MenuActionType as MAT;
 // Load custom helpers
 helper("commonfunction_helper");
 helper('array');

@@ -1,46 +1,9 @@
 <?php
 
-use CodeIgniter\Database\Config;
-use CodeIgniter\HTTP\Request;
 use CodeIgniter\HTTP\RequestInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use CodeIgniter\HTTP\IncomingRequest;
 
-enum MediaModuleType: string
-{
-  case Coupan = "Coupan";
-  case Customer = "Customer";
-  case User = "User";
-  case ProductBrand = "ProductBrand";
-  case ProductCategoryType = "ProductCategoryType";
-  case ProductCategory = "ProductCategory";
-  case Product = "Product";
-  case ProductVariant = "ProductVariant";
-  case Offer = "Offer";
-  case Gallery = "Gallery";
-  case Banner = "Banner";
-  case HomePageSliderBar = "HomePageSliderBar";
-  case CompanyLogo = "CompanyLogo";
-  case Sidebar = "Sidebar";
-}
-
-enum HttpRequest: string
-{
-  case GET = 'GET';
-  case POST = 'POST';
-  case PUT = 'PUT';
-  case DELETE = 'DELETE';
-  case PATCH = 'PATCH';
-}
-enum MenuActionType: string
-{
-  case View = 'is_view';
-  case Create = 'is_created';
-  case Update = 'is_updated';
-  case Delete = 'is_deleted';
-  case Export = 'is_export';
-  case Import = 'is_import';
-}
 enum ApiResponseStatusCode: int
 {
     // Success codes
@@ -59,59 +22,7 @@ enum ApiResponseStatusCode: int
     // Validation Failed
   case VALIDATION_FAILED = 422;
 }
-enum FormMethod: string
-{
-  case GET = 'get';
-  case POST = 'post';
-}
-enum FormEncType: string
-{
-  case FormUrlEncoded = "application/x-www-form-urlencoded";
-  case FormMultiPart = "multipart/form-data";
-  case FormPlainText = "text/plain";
-}
-enum InputType: string
-{
-  case text = "text";
-  case textarea = "textarea";
-  case password = "password";
-  case email = "email";
-  case username = "username";
-  case number = "number";
-  case currency = "currency";
-  case url = "url";
-  case search = "search";
 
-  case date = "date";
-  case datetime = "datetime-local";
-  case month = "month";
-  case week = "week";
-
-  case select = "select";
-  case multiselect = "multiselect";
-
-  case radio = "radio";
-  case checkbox = "checkbox";
-
-  case time = "time";
-  case hour = "hour";
-  case minute = "minute";
-  case second = "second";
-  case file = "file";
-  case color = "color";
-  case hidden = "hidden";
-  case list = "list";
-  case datalist = "datalist";
-}
-enum UserType: string
-{
-  case Admin = "admin";
-  case Purchase = "purchase";
-  case Finance = "finance";
-  case Order = "order";
-  case Delivery = "delivery";
-  case Stock = "stock";
-}
 function getEnumAsArray($enumType)
 {
   $enumArray = [];
@@ -124,58 +35,6 @@ function getEnumAsArray($enumType)
   }
 
   return $enumArray;
-}
-function getMySqlColumnTypes(): array
-{
-  return array(
-    'INT' => 'INT',
-    'VARCHAR' => 'VARCHAR',
-    'TEXT' => 'TEXT',
-    'DATE' => 'DATE',
-    'Numeric' => array(
-      'TINYINT' => 'TINYINT',
-      'SMALLINT' => 'SMALLINT',
-      'MEDIUMINT' => 'MEDIUMINT',
-      'INT' => 'INT',
-      'BIGINT' => 'BIGINT'
-    ),
-    'Date and time' => array(
-      'DATE' => 'DATE',
-      'DATETIME' => 'DATETIME',
-      'TIMESTAMP' => 'TIMESTAMP',
-      'TIME' => 'TIME',
-      'YEAR' => 'YEAR'
-    ),
-    'String' => array(
-      'CHAR' => 'CHAR',
-      'VARCHAR' => 'VARCHAR',
-      'TINYTEXT' => 'TINYTEXT',
-      'TEXT' => 'TEXT',
-      'MEDIUMTEXT' => 'MEDIUMTEXT',
-      'LONGTEXT' => 'LONGTEXT',
-      'BINARY' => 'BINARY',
-      'VARBINARY' => 'VARBINARY',
-      'TINYBLOB' => 'TINYBLOB',
-      'BLOB' => 'BLOB',
-      'MEDIUMBLOB' => 'MEDIUMBLOB',
-      'LONGBLOB' => 'LONGBLOB',
-      'ENUM' => 'ENUM',
-      'SET' => 'SET'
-    ),
-    'Spatial' => array(
-      'GEOMETRY' => 'GEOMETRY',
-      'POINT' => 'POINT',
-      'LINESTRING' => 'LINESTRING',
-      'POLYGON' => 'POLYGON',
-      'MULTIPOINT' => 'MULTIPOINT',
-      'MULTILINESTRING' => 'MULTILINESTRING',
-      'MULTIPOLYGON' => 'MULTIPOLYGON',
-      'GEOMETRYCOLLECTION' => 'GEOMETRYCOLLECTION'
-    ),
-    'JSON' => array(
-      'JSON' => 'JSON'
-    )
-  );
 }
 
 if (!function_exists('getExcelDataInArrayHeaderKeyWise')) {
@@ -215,6 +74,7 @@ if (!function_exists('getExcelDataInArrayHeaderKeyWise')) {
     return $result;
   }
 }
+
 if (!function_exists('createFolder')) {
   function createFolder(string $folderPath): bool
   {
@@ -238,6 +98,7 @@ if (!function_exists('createFolder')) {
     }
   }
 }
+
 if (!function_exists('uploadFile')) {
   function uploadFile($fileObject, $uploadPath): array
   {
@@ -363,7 +224,7 @@ if (!function_exists('deleteFile')) {
     }
   }
 }
-// ---------------------------------Select Options End--------------------------------------
+
 if (!function_exists('getRequestInfo')) {
   /**
    * Parses the request object and returns an array of request info.
@@ -371,30 +232,6 @@ if (!function_exists('getRequestInfo')) {
    * @param object $request The request object to parse.
    * @return array An array containing the request method and data format.
    */
-  // function getRequestInfo(object $request): array
-  // {
-  //   $getRequestMethod = '';
-  //   $getRequestMethod =  ($request->getMethod() === 'get') ? 'GET' : (($request->getMethod() === 'post') ? 'POST' : (($request->getMethod() === 'put') ? 'PUT' : (($request->getMethod() === 'delete') ? 'DELETE' : (($request->isAJAX()) ? 'AJAX' : (($request->getMethod() === 'head') ? 'HEAD' : (($request->getMethod() === 'patch') ? 'PATCH' : (($request->getMethod() === 'options') ? 'OPTIONS' : 'OTHER')))))));
-  //   $getRequestDataFormat = 'FORM';
-
-  //   $contentType = $request->getHeader('Accept');
-
-  //   if ($contentType !== null) {
-  //     if (stripos($contentType, 'application/json') !== false) {
-  //       $getRequestDataFormat = 'JSON';
-  //     } elseif (stripos($contentType, 'application/xml') !== false || stripos($contentType, 'text/xml') !== false) {
-  //       $getRequestDataFormat = 'FORM';
-  //     } elseif (stripos($contentType, 'text/html') !== false) {
-  //       $getRequestDataFormat = 'HTML';
-  //     } else {
-  //       $getRequestDataFormat = '';
-  //     }
-  //   } else {
-  //     // Handle the case where $contentType is null
-  //     $getRequestDataFormat = '';
-  //   }
-  //   return ['requestMethod' => $getRequestMethod, 'requestDataFormat' => $getRequestDataFormat];
-  // }
   function getRequestInfo(RequestInterface $request): array
   {
     $RM = strtolower($request->getMethod());
@@ -418,6 +255,7 @@ if (!function_exists('getRequestInfo')) {
     return ['requestMethod' => $getRequestMethod, 'requestDataFormat' => $getRequestDataFormat];
   }
 }
+
 if (!function_exists('getFiles')) {
   function getFiles()
   {
@@ -566,6 +404,7 @@ if (!function_exists('generateUUID')) {
     return $result->uuid;
   }
 }
+
 if (!function_exists('dataTypeConvert')) {
   /**
    * Converts the given data to the specified data format.
@@ -607,6 +446,7 @@ if (!function_exists('dataTypeConvert')) {
     }
   }
 }
+
 if (!function_exists('load_asset')) {
 
   /**
@@ -634,6 +474,7 @@ if (!function_exists('load_asset')) {
     }
   }
 }
+
 if (!function_exists('load_img')) {
   function load_img(?string $load_img)
   {
@@ -655,6 +496,7 @@ if (!function_exists('load_img')) {
     }
   }
 }
+
 if (!function_exists('check_variable')) {
   /**
    * Check if a variable exists and optionally check if it is an array and if a specific array key exists.
@@ -694,6 +536,7 @@ if (!function_exists('check_variable')) {
     }
   }
 }
+
 /**
  * Formats the common response based on the request format.
  *
@@ -715,6 +558,7 @@ if (!function_exists('formatCommonResponse')) {
     ];
   }
 }
+
 /**
  * Formats the API response based on the request format.
  *
@@ -766,6 +610,7 @@ if (!function_exists('formatApiResponse')) {
     }
   }
 }
+
 if (!function_exists('formatApiAutoResponse')) {
   /**
    * Formats the API response automatically based on the request format.
@@ -810,6 +655,7 @@ if (!function_exists('generateDocumentNum')) {
     return $documentNumber;
   }
 }
+
 if (!function_exists('getFinancialAliasByDate')) {
   /**
    * Get the financial period alias based on the provided date (which starts from April and ends in March).
@@ -845,6 +691,7 @@ if (!function_exists('getFinancialAliasByDate')) {
     return $financialAlias;
   }
 }
+
 if (!function_exists('isIndexBasedArray')) {
   function isIndexBasedArray(array $arr): bool
   {
@@ -852,6 +699,7 @@ if (!function_exists('isIndexBasedArray')) {
     return array_keys($arr) === range(0, count($arr) - 1);
   }
 }
+
 if (!function_exists('isKeyBasedArray')) {
   function isKeyBasedArray(array $arr): bool
   {
@@ -859,6 +707,7 @@ if (!function_exists('isKeyBasedArray')) {
     return !isIndexBasedArray($arr);
   }
 }
+
 if (!function_exists('getCustomDatabaseConnection')) {
   function getCustomDatabaseConnection($api_token): array
   {
@@ -890,6 +739,7 @@ if (!function_exists('getCustomDatabaseConnection')) {
     }
   }
 }
+
 if (!function_exists('getCompanyDatabaseRecord')) {
   function getCompanyDatabaseRecord($api_token)
   {
@@ -987,22 +837,7 @@ if (!function_exists('getCompanyDatabaseRecord')) {
     // ] : [];
   }
 }
-if (!function_exists('CheckRoleWiseMenuAccess')) {
-  function CheckRoleWiseMenuAccess(int $role_id, int $menu_id, MenuActionType $action_type): bool
-  {
-    $RoleMenuAccessRightsModel = model('RoleMenuAccessRightsModel');
-    $result = $RoleMenuAccessRightsModel->select($action_type->value)->where('role_id', $role_id)->where('menu_id', $menu_id)->first();
-    if (empty($result)) {
-      return true;
-    } else {
-      if ($result[$action_type->value] == '1') {
-        return true;
-      } else {
-        return false;
-      }
-    }
-  }
-}
+
 if (!function_exists('checkJwtTokenDecode')) {
   function checkJwtTokenDecode(string $token, string $jwtKey, string $enc_type = 'HS256')
   {
@@ -1013,6 +848,7 @@ if (!function_exists('checkJwtTokenDecode')) {
     }
   }
 }
+
 if (!function_exists('getThumbnailImagePath')) {
   function getThumbnailImagePath($originalImagePath)
   {

@@ -100,12 +100,6 @@ function stopLoader() {
     loader.parentNode.removeChild(loader);
   }
 }
-var arrowRight = function (cell, formatterParams, onRendered) {
-  return "<i class='fa-lg fa-arrow-circle-o-right' style='color:blue' title='Delete User'></i>";
-};
-var arrowDown = function (cell, formatterParams, onRendered) {
-  return "<i class='fa-lg fa-arrow-circle-down' style='color:blue' title='Delete User'></i>";
-};
 
 /**
  * Recursively updates object keys from a source key name to a destination key name
@@ -436,6 +430,7 @@ ${modalContent}
   $("body").append(modalHtml);
   $("#" + modalId).modal("show");
 }
+
 function destroyModal(modalId) {
   $("#" + modalId).modal("hide");
 
@@ -444,6 +439,7 @@ function destroyModal(modalId) {
   });
   $("#" + modalId).remove();
 }
+
 function openModal(modalId) {
   $("#" + modalId).modal("show");
 }
@@ -553,66 +549,6 @@ function resetFormData(formId) {
 function escapeBrackets(inputString) {
   return inputString.replace(/\[/g, "\\[").replace(/\]/g, "\\]");
 }
-// function initializeSelectize(
-//   selectId,
-//   options = {},
-//   apiUrl = "",
-//   apiData = {},
-//   valueField = "id",
-//   keyField = "name",
-//   defaultSelectedValue = null
-// ) {
-//   // Initialize Selectize
-//   var $select = $("#" + selectId).selectize(options);
-
-//   // Load data from API if apiUrl is provided
-//   if (apiUrl !== "") {
-//     $.ajax({
-//       url: apiUrl,
-//       type: "POST",
-//       data: apiData, // Additional data to send with the request
-//       dataType: "json",
-//       success: function (response) {
-//         if (response.status == 200) {
-//           var data = JSON.parse(response.data);
-//           // Populate Selectize dropdown with data from API
-//           $.each(data, function (index, item) {
-//             $select[0].selectize.addOption({
-//               value: item[valueField],
-//               text: item[keyField],
-//             });
-//           });
-
-//           // Set default selected value if provided
-//           if (defaultSelectedValue !== null) {
-//             $select[0].selectize.setValue(defaultSelectedValue);
-//           }
-//         }
-//       },
-//       error: function (xhr, status, error) {
-//         console.error("Error fetching data from API:", error);
-//       },
-//     });
-//   }
-
-//   // Return an object with methods
-//   return {
-//     onchange: function (callback) {
-//       $select.on("change", function () {
-//         var selectedValue = $select[0].selectize.getValue();
-//         callback(selectedValue);
-//       });
-//     },
-//     clearOptions: function () {
-//       return new Promise(function (resolve) {
-//         var selectize = $select[0].selectize;
-//         selectize.clear();
-//         selectize.clearOptions();
-//         resolve();
-//       });
-//     },
-//   };
-// }
 
 function initializeSelectize(
   selectId,
@@ -835,7 +771,7 @@ function DataTableInitialized(
           var dataTable = $("#" + table_id).DataTable();
           // Clear existing data and add new data
           dataTable.clear().rows.add(data.rowData).draw();
-          if (typeof dataTableSuccessCallBack === "function") {
+          if (typeof afterTableViewCallbackFunction === "function") {
             afterTableViewCallbackFunction(data);
           }
         })
@@ -858,7 +794,7 @@ function DataTableInitialized(
             dom: "Bfrtip", // Add the Buttons extension elements
             buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
             initComplete: function () {
-              if (typeof dataTableSuccessCallBack === "function") {
+              if (typeof afterTableViewCallbackFunction === "function") {
                 afterTableViewCallbackFunction(data);
               }
             },
@@ -894,7 +830,7 @@ function DataTableApiCall(
   method = "POST",
   parameter = {},
   dataTableSuccessCallBack,
-  headers = {}
+  headers = {},
 ) {
   return new Promise(function (resolve, reject) {
     $.ajax({
@@ -945,6 +881,7 @@ $(".ckeditor-active").each(function () {
     $("#" + textareaId).val(CKEDITOR.instances[textareaId].getData());
   });
 });
+
 function enlargeImage(event, primaryImg = null) {
   if (primaryImg == null) {
     var imgSrc = event.target.src; // Get the source of the clicked image
@@ -965,6 +902,7 @@ function enlargeImage(event, primaryImg = null) {
     },
   });
 }
+
 function getThumbnailImagePath(originalImagePath) {
   // Split the path into components
   let pathComponents = originalImagePath.split("/");
