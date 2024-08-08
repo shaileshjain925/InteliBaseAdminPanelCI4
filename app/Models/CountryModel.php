@@ -85,4 +85,9 @@ class CountryModel extends FunctionModel
     protected $afterDelete    = [];
     protected $messageAlias = "Country";
     protected $excludeTrimFields = [];
+
+    public function __construct($joinRequired = true)
+    {
+        parent::__construct();
+    }
 }

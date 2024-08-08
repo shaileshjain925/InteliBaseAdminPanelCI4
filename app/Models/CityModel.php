@@ -65,9 +65,11 @@ class CityModel extends FunctionModel
     protected $messageAlias = "City";
     protected $excludeTrimFields = [];
 
-    public function __construct()
+    public function __construct($joinRequired = true)
     {
         parent::__construct();
-        $this->addParentJoin('state_id', $this->get_state_model(), 'left', ['state_name', 'state_code']);
+        if($joinRequired){
+            $this->addParentJoin('state_id', $this->get_state_model(), 'left', ['state_name', 'state_code']);
+        }
     }
 }

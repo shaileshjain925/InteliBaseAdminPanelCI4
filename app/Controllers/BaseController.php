@@ -10,7 +10,6 @@ use CodeIgniter\HTTP\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use App\Traits\CommonTraits;
 use ApiResponseStatusCode;
-use UserType;
 use App\Models\FunctionModel;
 use Exception;
 
@@ -138,18 +137,3 @@ abstract class BaseController extends Controller
         }
     }
 }
-    // protected function previous_path()
-    // {
-    //     // Fetch the previous path
-    //     $previousPath = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
-
-    //     // Fetch the current path
-    //     $currentPath = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-
-    //     // Check if the previous path is not the same as the current path
-    //     if ($previousPath && $previousPath !== $currentPath) {
-    //         return $previousPath;
-    //     } else {
-    //         return base_url(route_to('default_dashboard'));
-    //     }
-    // }

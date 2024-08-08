@@ -13,6 +13,7 @@ class AdminApiController extends BaseController
     {
         return $this->response->setStatusCode(Response::HTTP_OK);
     }
+
     // country ---------------------------------------------------------------------------------------------------------
     /**
      * {"country_id":"required"}
@@ -129,6 +130,99 @@ class AdminApiController extends BaseController
         return $this->api_delete($this->get_city_model());
     }
 
+
+    // city -------------------------------------------------------------------------------------------------------
+    /** */
+    public function designation_get_api()
+    {
+        return $this->api_get($this->get_designation_model());
+    }
+    /** */
+    public function designation_list_api()
+    {
+        return $this->api_list($this->get_city_model());
+    }
+    /** */
+    public function designation_create_api()
+    {
+        return $this->api_create($this->get_designation_model(false));
+    }
+    /** */
+    public function designation_update_api()
+    {
+        return $this->api_update($this->get_city_model(false));
+    }
+    /** */
+    public function designation_delete_api()
+    {
+        return $this->api_delete($this->get_city_model(false));
+    }
+
+    // city -------------------------------------------------------------------------------------------------------
+    /** */
+    public function user_get_api()
+    {
+        return $this->api_get($this->get_user_model());
+    }
+    /** */
+    public function user_list_api()
+    {
+        return $this->api_list($this->get_city_model());
+    }
+    /** */
+    public function user_create_api()
+    {
+        return $this->api_create($this->get_user_model(false));
+    }
+    /** */
+    public function user_update_api()
+    {
+        return $this->api_update($this->get_city_model(false));
+    }
+    /** */
+    public function user_delete_api()
+    {
+        return $this->api_delete($this->get_city_model(false));
+    }
+    /**
+     * {"username":"required","password":"required"}
+     */
+    public function login_api()
+    {
+        $data = getRequestData($this->request, 'ARRAY');
+        // Load validation service
+        $validation = \Config\Services::validation();
+        // Define validation rules for 'username', 'password', 'confirm-password', 'otp'
+        $validation->setRules([
+            "username" => "required",
+            "password" => "required"
+        ]);
+        if ($validation->run($data) === false) {
+            // Return validation failed response
+            return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::VALIDATION_FAILED, "Validation Failed", [], $validation->getErrors());
+        }
+        if (isset($data["remember_me"]) && $data["remember_me"] == 'on') {
+            // Set username in cookies for life time
+            setcookie('username', $data['username'], time() + 606024 * 90);
+        } else {
+            // Unset Cookie
+            setcookie('username', '', time() - 3600);
+        }
+
+        $user_data = $this->get_user_model()->checkLogin($data['username'], $data['password']);
+        if ($user_data['status'] != ApiResponseStatusCode::OK) {
+            return formatApiAutoResponse($this->request, $this->response, $user_data);
+        }
+        if ($user_data['data']['is_active'] == 0) {
+            return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::BAD_REQUEST, "Account Is Inactive");
+        }
+        $session_data = $user_data['data'];
+        $session_data['logged_in'] = true;
+        // Session
+        $session = \Config\Services::session();
+        $session->set($session_data);
+        return formatApiAutoResponse($this->request, $this->response, $user_data);
+    }
     protected function FileTypeValidate($fileObject, $allowedFileTypeArray): bool
     {
         $fileType = $fileObject['type'];
@@ -198,7 +292,7 @@ class AdminApiController extends BaseController
         }
         return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::OK, "Image Upload Successfully", $uploadResult);
     }
-    
+
     public function deleteImage()
     {
         $requestedData = getRequestData($this->request, 'ARRAY');
@@ -239,55 +333,5 @@ class AdminApiController extends BaseController
             // log_message('error', 'Image file not found or invalid path: ' . $imagePath);
             return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::NOT_FOUND, "Image file not found");
         }
-    }
-    /**
-     * {"username":"required","password":"required"}
-     */
-    public function login_api()
-    {
-        $data = getRequestData($this->request, 'ARRAY');
-        // Load validation service
-        $validation = \Config\Services::validation();
-        // Define validation rules for 'username', 'password', 'confirm-password', 'otp'
-        $validation->setRules([
-            "username" => "required",
-            "password" => "required"
-        ]);
-        if ($validation->run($data) === false) {
-            // Return validation failed response
-            return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::VALIDATION_FAILED, "Validation Failed", [], $validation->getErrors());
-        }
-        if (isset($data["remember_me"]) && $data["remember_me"] == 'on') {
-            // Set username in cookies for life time
-            setcookie('username', $data['username'], time() + 606024 * 90);
-        } else {
-            // Unset Cookie
-            setcookie('username', '', time() - 3600);
-        }
-
-        $user_data = $this->get_user_model()->checkLogin($data['username'], $data['password']);
-        if ($user_data['status'] != ApiResponseStatusCode::OK) {
-            return formatApiAutoResponse($this->request, $this->response, $user_data);
-        }
-        if ($user_data['data']['is_active'] == 0) {
-            return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::BAD_REQUEST, "Account Is Inactive");
-        }
-        $session_data = [];
-        switch ($user_data['data']['user_type']) {
-            case 'center':
-                $session_data = array_merge($user_data['data'], $this->get_center_model()->find($user_data['data']['reference_id']));
-                break;
-            case 'mr':
-                $session_data = array_merge($user_data['data'], $this->get_mr_model()->find($user_data['data']['reference_id']));
-                break;
-            case 'kisan':
-                $session_data = array_merge($user_data['data'], $this->get_kisan_model()->find($user_data['data']['reference_id']));
-                break;
-        }
-        $session_data['logged_in'] = true;
-        // Session
-        $session = \Config\Services::session();
-        $session->set($session_data);
-        return formatApiAutoResponse($this->request, $this->response, $user_data);
     }
 }

@@ -131,6 +131,7 @@ class AdminPageController extends BaseController
             $theme_data = array_merge($theme_data, ['user_id' => $user_id]);
         }
         $theme_data['user_type'] = UserType::SuperAdmin->value;
+        $theme_data['_form_type'] = 'component';
         $theme_data['_previous_path'] = base_url(route_to($theme_data['user_type'] . '_list_page'));
         return view('AdminPanelNew/partials/main', $theme_data);
     }

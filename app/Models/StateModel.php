@@ -67,9 +67,11 @@ class StateModel extends FunctionModel
     protected $afterDelete    = [];
     protected $messageAlias = "State";
     protected $excludeTrimFields = [];
-    public function __construct()
+    public function __construct($joinRequired = true)
     {
         parent::__construct();
-        $this->addParentJoin('country_id', $this->get_country_model(), 'left', ['country_name', 'phonecode as "country code"']);
+        if ($joinRequired) {
+            $this->addParentJoin('country_id', $this->get_country_model(), 'left', ['country_name', 'phonecode as "country code"']);
+        }
     }
 }

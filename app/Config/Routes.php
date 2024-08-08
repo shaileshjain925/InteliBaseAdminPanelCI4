@@ -1,9 +1,6 @@
 <?php
 
 namespace Config;
-
-use CodeIgniter\Router\RouteCollection;
-use MenuActionType as MAT;
 // Load custom helpers
 helper("commonfunction_helper");
 helper('array');
@@ -99,8 +96,7 @@ if (!in_array($file_extension, $extensions)) {
 
     // Admin Api Controller Start -----------------------------------------------------------------------------
     $routes->group('AdminApi', function ($routes) {
-        $routes->group('NoAuth', function ($routes) {
-        });
+        $routes->group('NoAuth', function ($routes) {});
         $routes->group('Auth', function ($routes) {
             $routes->group('country', function ($routes) {
                 $routes->post("country_get_api", "AdminApiController::country_get_api", ['as' => 'country_get_api']);
@@ -122,6 +118,20 @@ if (!in_array($file_extension, $extensions)) {
                 $routes->post("city_create_api", "AdminApiController::city_create_api", ['as' => 'city_create_api']);
                 $routes->post("city_update_api", "AdminApiController::city_update_api", ['as' => 'city_update_api']);
                 $routes->post("city_delete_api", "AdminApiController::city_delete_api", ['as' => 'city_delete_api']);
+            });
+            $routes->group('designation', function ($routes) {
+                $routes->post("designation_get_api", "AdminApiController::designation_get_api", ['as' => 'designation_get_api']);
+                $routes->post("designation_list_api", "AdminApiController::designation_list_api", ['as' => 'designation_list_api']);
+                $routes->post("designation_create_api", "AdminApiController::designation_create_api", ['as' => 'designation_create_api']);
+                $routes->post("designation_update_api", "AdminApiController::designation_update_api", ['as' => 'designation_update_api']);
+                $routes->post("designation_delete_api", "AdminApiController::designation_delete_api", ['as' => 'designation_delete_api']);
+            });
+            $routes->group('user', function ($routes) {
+                $routes->post("user_get_api", "AdminApiController::user_get_api", ['as' => 'user_get_api']);
+                $routes->post("user_list_api", "AdminApiController::user_list_api", ['as' => 'user_list_api']);
+                $routes->post("user_create_api", "AdminApiController::user_create_api", ['as' => 'user_create_api']);
+                $routes->post("user_update_api", "AdminApiController::user_update_api", ['as' => 'user_update_api']);
+                $routes->post("user_delete_api", "AdminApiController::user_delete_api", ['as' => 'user_delete_api']);
             });
         });
     });

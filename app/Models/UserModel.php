@@ -14,10 +14,23 @@ class UserModel extends FunctionModel
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'user_name', 'reporting_to_user_id', 'designation_id', 'user_email', 'user_mobile', 'user_address', 'user_country_id',
-        'user_state_id', 'user_city_id', 'user_pincode', 'user_aadhaar_card',
-        'user_aadhaar_card_image', 'user_image', 'user_type', 'password',
-        'otp', 'is_active'
+        'user_name',
+        'reporting_to_user_id',
+        'designation_id',
+        'user_email',
+        'user_mobile',
+        'user_address',
+        'user_country_id',
+        'user_state_id',
+        'user_city_id',
+        'user_pincode',
+        'user_aadhaar_card',
+        'user_aadhaar_card_image',
+        'user_image',
+        'user_type',
+        'password',
+        'otp',
+        'is_active'
     ];
 
     protected bool $allowEmptyInserts = false;
@@ -42,7 +55,7 @@ class UserModel extends FunctionModel
         'reporting_to_user_id' => 'permit_empty|is_not_unique[user.user_id]',
         'designation_id' => 'permit_empty|is_not_unique[designation.designation_id]',
         'user_name'           => 'required|max_length[255]',
-        'user_email'          => 'permit_empty|valid_email|max_length[255]',
+        'user_email'          => 'permit_empty|valid_email|max_length[255]|is_unique[user.email,user_id,{user_id}]',
         'user_mobile'         => 'permit_empty|max_length[10]|min_length[10]',
         'user_address'        => 'permit_empty',
         'user_country_id'     => 'required|is_not_unique[country.country_id]',
@@ -58,43 +71,66 @@ class UserModel extends FunctionModel
     ];
 
     protected $validationMessages = [
+        'user_id' => [
+            // No specific validation message required since it's permit_empty
+        ],
+        'reporting_to_user_id' => [
+            'is_not_unique' => 'The selected reporting user does not exist.',
+        ],
+        'designation_id' => [
+            'is_not_unique' => 'The selected designation does not exist.',
+        ],
         'user_name' => [
             'required' => 'Staff name is required.',
-            'max_length' => 'Max Length 255 Character.'
+            'max_length' => 'Staff name cannot exceed 255 characters.'
         ],
         'user_email' => [
-            'valid_email' => 'Please Enter valid email address.',
-            'max_length'  => 'Max Length 255 Character.'
+            'valid_email' => 'Please enter a valid email address.',
+            'max_length'  => 'Email address cannot exceed 255 characters.',
+            'is_unique'   => 'This email is already associated with another user.',
         ],
         'user_mobile' => [
-            'max_length' => 'Max Length 10 Character.',
-            'min_length' => 'Min Length 10 Character.',
+            'max_length' => 'Mobile number must be exactly 10 digits long.',
+            'min_length' => 'Mobile number must be exactly 10 digits long.',
         ],
         'user_country_id' => [
-            'required' => 'Staff country is required.',
+            'required' => 'Country is required.',
+            'is_not_unique' => 'The selected country does not exist.',
         ],
         'user_state_id' => [
-            'required' => 'Staff state is required.',
+            'required' => 'State is required.',
+            'is_not_unique' => 'The selected state does not exist.',
         ],
         'user_city_id' => [
-            'required' => 'Staff city is required.',
-        ],
-        'user_aadhaar_card' => [
-            'max_length' => 'Max Length 12 Character.',
+            'required' => 'City is required.',
+            'is_not_unique' => 'The selected city does not exist.',
         ],
         'user_pincode' => [
-            'required' => 'Staff pincode is required.',
-            'max_length' => 'Max Length 10 Character.'
+            'required' => 'Pincode is required.',
+            'integer' => 'Pincode must be an integer.',
+            'max_length' => 'Pincode cannot exceed 10 characters.',
         ],
-        'user_type' => [
-            'required' => 'Staff type is required.',
-            'in_list'  => 'Staff type must be one of: admin, sales_executive, site_engineer,manager.'
+        'user_aadhaar_card' => [
+            'max_length' => 'Aadhaar card number cannot exceed 12 characters.',
+        ],
+        'user_aadhaar_card_image' => [
+            // No specific validation message required since it's permit_empty
         ],
         'password' => [
             'required' => 'Password is required.',
         ],
-
+        'user_image' => [
+            // No specific validation message required since it's permit_empty
+        ],
+        'user_type' => [
+            'required' => 'Staff type is required.',
+            'in_list'  => 'Staff type must be one of the following: super_admin, admin, sales_manager, sales_executive, purchase, finance, crm.',
+        ],
+        'otp' => [
+            'max_length' => 'OTP cannot exceed 6 characters.',
+        ],
     ];
+
 
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;

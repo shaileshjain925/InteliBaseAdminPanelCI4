@@ -359,7 +359,7 @@ class FunctionModel extends Model
      * @param array $selectField Optional array of fields to select from the referenced table
      * @return void
      */
-    protected function addParentJoin(string $fieldName, object $modelInstance, string $joinMethod = 'left', array $selectField = [], $refTableAlias = null): void
+    protected function addParentJoin(string $fieldName, object $modelInstance, string $joinMethod = 'left', array $selectField = [],string $refTableAlias = null): void
     {
         $this->joins[] = [
             'tableName' => $this->getTable(),

@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use CodeIgniter\Model;
+use App\Models\FunctionModel;
 
-class DesignationModel extends Model
+class DesignationModel extends FunctionModel
 {
     protected $table            = 'designation';
     protected $primaryKey       = 'designation_id';
@@ -46,4 +46,9 @@ class DesignationModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function __construct($joinRequired = true)
+    {
+        parent::__construct();
+    }
 }
