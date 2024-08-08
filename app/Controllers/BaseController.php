@@ -41,7 +41,7 @@ abstract class BaseController extends Controller
      *
      * @var list<string>
      */
-    protected $helpers = ['commonfunction'];
+    protected $helpers = ['commonfunction', 'project'];
 
     /**
      * Be sure to declare properties for any property fetch you initialized.
@@ -137,19 +137,19 @@ abstract class BaseController extends Controller
             return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::BAD_REQUEST, $e->getMessage(), []);
         }
     }
-    protected function previous_path()
-    {
-        // Fetch the previous path
-        $previousPath = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
-
-        // Fetch the current path
-        $currentPath = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-
-        // Check if the previous path is not the same as the current path
-        if ($previousPath && $previousPath !== $currentPath) {
-            return $previousPath;
-        } else {
-            return base_url(route_to('admin_dashboard'));
-        }
-    }
 }
+    // protected function previous_path()
+    // {
+    //     // Fetch the previous path
+    //     $previousPath = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
+
+    //     // Fetch the current path
+    //     $currentPath = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
+    //     // Check if the previous path is not the same as the current path
+    //     if ($previousPath && $previousPath !== $currentPath) {
+    //         return $previousPath;
+    //     } else {
+    //         return base_url(route_to('default_dashboard'));
+    //     }
+    // }

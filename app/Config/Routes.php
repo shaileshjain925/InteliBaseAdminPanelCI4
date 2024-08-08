@@ -27,7 +27,7 @@ if (!in_array($file_extension, $extensions)) {
     // Admin Page Controller Start -----------------------------------------------------------------------------
     $routes->get('/', 'AdminPageController::login_page', ['as' => 'login_page']);
     $routes->get('setSession', 'AdminPageController::setSession/super_admin', ['as' => 'setSession']);
-    $routes->get('setSession/(:any)', 'AdminPageController::setSession/$1');
+    $routes->get('setSession/(:num)', 'AdminPageController::setSession/$1');
     $routes->get('logout', 'AdminPageController::logout', ['as' => 'logout']);
     $routes->group('Admin', function ($routes) {
         $routes->get('', 'AdminPageController::default_dashboard', ['as' => 'default_dashboard']);
@@ -42,7 +42,52 @@ if (!in_array($file_extension, $extensions)) {
         $routes->group('Dummy', function ($routes) {
             $routes->get('List', 'AdminPageController::dummy_list_page', ['as' => 'dummy_list_page']);
             $routes->get('CreateUpdate', 'AdminPageController::dummy_create_update_page', ['as' => 'dummy_create_update_page']);
+            $routes->get('CreateUpdate/(:num)', 'AdminPageController::dummy_create_update_page/$1');
             $routes->post('View', 'AdminPageController::dummy_view_component', ['as' => 'dummy_view_component']);
+        });
+        $routes->group('StaffManagement', function ($routes) {
+            $routes->group('SuperAdmin', function ($routes) {
+                $routes->get('List', 'AdminPageController::super_admin_list_page', ['as' => 'super_admin_list_page']);
+                $routes->get('CreateUpdate', 'AdminPageController::super_admin_create_update_page', ['as' => 'super_admin_create_update_page']);
+                $routes->get('CreateUpdate/(:num)', 'AdminPageController::super_admin_create_update_page/$1');
+                $routes->post('View', 'AdminPageController::super_admin_view_component', ['as' => 'super_admin_view_component']);
+            });
+            $routes->group('Admin', function ($routes) {
+                $routes->get('List', 'AdminPageController::admin_list_page', ['as' => 'admin_list_page']);
+                $routes->get('CreateUpdate', 'AdminPageController::admin_create_update_page', ['as' => 'admin_create_update_page']);
+                $routes->get('CreateUpdate/(:num)', 'AdminPageController::admin_create_update_page/$1');
+                $routes->post('View', 'AdminPageController::admin_view_component', ['as' => 'admin_view_component']);
+            });
+            $routes->group('SalesManager', function ($routes) {
+                $routes->get('List', 'AdminPageController::sales_manager_list_page', ['as' => 'sales_manager_list_page']);
+                $routes->get('CreateUpdate', 'AdminPageController::sales_manager_create_update_page', ['as' => 'sales_manager_create_update_page']);
+                $routes->get('CreateUpdate/(:num)', 'AdminPageController::sales_manager_create_update_page/$1');
+                $routes->post('View', 'AdminPageController::sales_manager_view_component', ['as' => 'sales_manager_view_component']);
+            });
+            $routes->group('SalesExecutive', function ($routes) {
+                $routes->get('List', 'AdminPageController::sales_executive_list_page', ['as' => 'sales_executive_list_page']);
+                $routes->get('CreateUpdate', 'AdminPageController::sales_executive_create_update_page', ['as' => 'sales_executive_create_update_page']);
+                $routes->get('CreateUpdate/(:num)', 'AdminPageController::sales_executive_create_update_page/$1');
+                $routes->post('View', 'AdminPageController::sales_executive_view_component', ['as' => 'sales_executive_view_component']);
+            });
+            $routes->group('Purchase', function ($routes) {
+                $routes->get('List', 'AdminPageController::purchase_list_page', ['as' => 'purchase_list_page']);
+                $routes->get('CreateUpdate', 'AdminPageController::purchase_create_update_page', ['as' => 'purchase_create_update_page']);
+                $routes->get('CreateUpdate/(:num)', 'AdminPageController::purchase_create_update_page/$1');
+                $routes->post('View', 'AdminPageController::purchase_view_component', ['as' => 'purchase_view_component']);
+            });
+            $routes->group('Finance', function ($routes) {
+                $routes->get('List', 'AdminPageController::finance_list_page', ['as' => 'finance_list_page']);
+                $routes->get('CreateUpdate', 'AdminPageController::finance_create_update_page', ['as' => 'finance_create_update_page']);
+                $routes->get('CreateUpdate/(:num)', 'AdminPageController::finance_create_update_page/$1');
+                $routes->post('View', 'AdminPageController::finance_view_component', ['as' => 'finance_view_component']);
+            });
+            $routes->group('CRM', function ($routes) {
+                $routes->get('List', 'AdminPageController::crm_list_page', ['as' => 'crm_list_page']);
+                $routes->get('CreateUpdate', 'AdminPageController::crm_create_update_page', ['as' => 'crm_create_update_page']);
+                $routes->get('CreateUpdate/(:num)', 'AdminPageController::crm_create_update_page/$1');
+                $routes->post('View', 'AdminPageController::crm_view_component', ['as' => 'crm_view_component']);
+            });
         });
         $routes->group('FileUpload', function ($routes) {
             $routes->post('ImageUpload', 'AdminApiController::ImageUpload', ['as' => 'file_upload_image_api']);
@@ -81,5 +126,4 @@ if (!in_array($file_extension, $extensions)) {
         });
     });
     // Admin Api Controller End -----------------------------------------------------------------------------
-
 }

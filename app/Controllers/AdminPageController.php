@@ -15,30 +15,12 @@ class AdminPageController extends BaseController
         session()->set('user_type', $user_type);
         return redirect()->route('default_dashboard');
     }
-    protected function checkUserType($user_type = null): bool
-    {
-        if (!empty($user_type)) {
-            $result = (isset($_SESSION['user_type']) && $_SESSION['user_type'] == $user_type) ? true : false;
-        } else {
-            $result =  (isset($_SESSION['user_type']) && !empty($_SESSION['user_type'])) ? true : false;
-        }
-        return $result;
-    }
-    protected function getUserType(): string|null
-    {
-        $result = (isset($_SESSION['user_type']) && !empty($_SESSION['user_type'])) ? $_SESSION['user_type'] : null;
-        return $result;
-    }
-    protected function UserTypeInList($user_type_array)
-    {
-        return in_array($this->getUserType(), $user_type_array);
-    }
     public function default_dashboard()
     {
-        if (!$this->checkUserType()) {
+        if (!checkUserType()) {
             $this->setSession();
         }
-        switch ($this->getUserType()) {
+        switch (getUserType()) {
             case UserType::SuperAdmin->value:
                 return $this->super_admin_dashboard_page();
                 break;
@@ -82,7 +64,7 @@ class AdminPageController extends BaseController
         $theme_data = $this->admin_panel_common_data();
         $theme_data['_meta_title'] = 'Super Admin Dashboard';
         $theme_data['_page_title'] = 'Super Admin Admin Dashboard';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/admin_dashboard';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/dashboard/super_admin_dashboard';
         return view('AdminPanelNew/partials/main', $theme_data);
     }
     public function admin_dashboard_page()
@@ -90,7 +72,7 @@ class AdminPageController extends BaseController
         $theme_data = $this->admin_panel_common_data();
         $theme_data['_meta_title'] = 'Admin Dashboard';
         $theme_data['_page_title'] = 'Admin Dashboard';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/admin_dashboard';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/dashboard/admin_dashboard';
         return view('AdminPanelNew/partials/main', $theme_data);
     }
     public function sales_dashboard_page()
@@ -98,7 +80,7 @@ class AdminPageController extends BaseController
         $theme_data = $this->admin_panel_common_data();
         $theme_data['_meta_title'] = 'Sales Dashboard';
         $theme_data['_page_title'] = 'Sales Dashboard';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/admin_dashboard';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/dashboard/sales_dashboard';
         return view('AdminPanelNew/partials/main', $theme_data);
     }
     public function purchase_dashboard_page()
@@ -106,7 +88,7 @@ class AdminPageController extends BaseController
         $theme_data = $this->admin_panel_common_data();
         $theme_data['_meta_title'] = 'Purchase Dashboard';
         $theme_data['_page_title'] = 'Purchase Dashboard';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/admin_dashboard';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/dashboard/purchase_dashboard';
         return view('AdminPanelNew/partials/main', $theme_data);
     }
     public function finance_dashboard_page()
@@ -114,7 +96,7 @@ class AdminPageController extends BaseController
         $theme_data = $this->admin_panel_common_data();
         $theme_data['_meta_title'] = 'Finance Dashboard';
         $theme_data['_page_title'] = 'Finance Dashboard';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/admin_dashboard';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/dashboard/finance_dashboard';
         return view('AdminPanelNew/partials/main', $theme_data);
     }
     public function crm_dashboard_page()
@@ -122,35 +104,232 @@ class AdminPageController extends BaseController
         $theme_data = $this->admin_panel_common_data();
         $theme_data['_meta_title'] = 'CRM Dashboard';
         $theme_data['_page_title'] = 'CRM Dashboard';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/admin_dashboard';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/dashboard/crm_dashboard';
         return view('AdminPanelNew/partials/main', $theme_data);
     }
-    public function dummy_list_page()
+    public function super_admin_list_page()
     {
         $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Dummy List';
-        $theme_data['_page_title'] = 'Dummy List';
+        $theme_data['_meta_title'] = 'Super Admin List';
+        $theme_data['_page_title'] = 'Super Admin List';
         $theme_data['_breadcrumb1'] = 'Dashboard';
-        $theme_data['_breadcrumb2'] = 'Dummy List';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/dummy_list';
-
-        $theme_data['_previous_path'] = $this->previous_path();
+        $theme_data['_breadcrumb2'] = 'Super Admin List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_list';
+        $theme_data['_previous_path'] = base_url(route_to('default_dashboard'));
+        $theme_data['user_type'] = UserType::SuperAdmin->value;
         return view('AdminPanelNew/partials/main', $theme_data);
     }
-    public function dummy_create_update_page()
+    public function super_admin_create_update_page($user_id = null)
     {
         $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Dummy Create';
-        $theme_data['_page_title'] = 'Dummy Create';
-        $theme_data['_breadcrumb1'] = 'Dummy List';
-        $theme_data['_breadcrumb2'] = 'Dummy Create';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/dummy_create_update';
-        $theme_data['_previous_path'] = $this->previous_path();
+        $theme_data['_meta_title'] = 'Super Admin ' . CreateUpdateAlias($user_id);
+        $theme_data['_page_title'] = 'Super Admin ' . CreateUpdateAlias($user_id);
+        $theme_data['_breadcrumb1'] = 'Super Admin List';
+        $theme_data['_breadcrumb2'] = 'Super Admin ' . CreateUpdateAlias($user_id);
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_create_update';
+        if (!empty($user_id)) {
+            $theme_data = array_merge($theme_data, ['user_id' => $user_id]);
+        }
+        $theme_data['user_type'] = UserType::SuperAdmin->value;
+        $theme_data['_previous_path'] = base_url(route_to($theme_data['user_type'] . '_list_page'));
         return view('AdminPanelNew/partials/main', $theme_data);
     }
-    public function dummy_view_component()
+    public function super_admin_view_component()
     {
-        return view('AdminPanelNew/components/dummy_view');
+        $theme_data['user_type'] = UserType::SuperAdmin->value;
+        return view('AdminPanelNew/components/staff_management/user_view', $theme_data);
+    }
+    public function admin_list_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Admin List';
+        $theme_data['_page_title'] = 'Admin List';
+        $theme_data['_breadcrumb1'] = 'Dashboard';
+        $theme_data['_breadcrumb2'] = 'Admin List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_list';
+        $theme_data['_previous_path'] = base_url(route_to('default_dashboard'));
+        $theme_data['user_type'] = UserType::Admin->value;
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function admin_create_update_page($user_id = null)
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Admin ' . CreateUpdateAlias($user_id);
+        $theme_data['_page_title'] = 'Admin ' . CreateUpdateAlias($user_id);
+        $theme_data['_breadcrumb1'] = 'Admin List';
+        $theme_data['_breadcrumb2'] = 'Admin ' . CreateUpdateAlias($user_id);
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_create_update';
+        if (!empty($user_id)) {
+            $theme_data = array_merge($theme_data, ['user_id' => $user_id]);
+        }
+        $theme_data['user_type'] = UserType::Admin->value;
+        $theme_data['_previous_path'] = base_url(route_to($theme_data['user_type'] . '_list_page'));
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function admin_view_component()
+    {
+        $theme_data['user_type'] = UserType::Admin->value;
+        return view('AdminPanelNew/components/staff_management/user_view', $theme_data);
+    }
+    public function sales_manager_list_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Sales Manager List';
+        $theme_data['_page_title'] = 'Sales Manager List';
+        $theme_data['_breadcrumb1'] = 'Dashboard';
+        $theme_data['_breadcrumb2'] = 'Sales Manager List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_list';
+        $theme_data['_previous_path'] = base_url(route_to('default_dashboard'));
+        $theme_data['user_type'] = UserType::SalesManager->value;
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function sales_manager_create_update_page($user_id = null)
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Sales Manager ' . CreateUpdateAlias($user_id);
+        $theme_data['_page_title'] = 'Sales Manager ' . CreateUpdateAlias($user_id);
+        $theme_data['_breadcrumb1'] = 'Sales Manager List';
+        $theme_data['_breadcrumb2'] = 'Sales Manager ' . CreateUpdateAlias($user_id);
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_create_update';
+        if (!empty($user_id)) {
+            $theme_data = array_merge($theme_data, ['user_id' => $user_id]);
+        }
+        $theme_data['user_type'] = UserType::SalesManager->value;
+        $theme_data['_previous_path'] = base_url(route_to($theme_data['user_type'] . '_list_page'));
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function sales_manager_view_component()
+    {
+        $theme_data['user_type'] = UserType::SalesManager->value;
+        return view('AdminPanelNew/components/staff_management/user_view', $theme_data);
+    }
+    public function sales_executive_list_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Sales Executive List';
+        $theme_data['_page_title'] = 'Sales Executive List';
+        $theme_data['_breadcrumb1'] = 'Dashboard';
+        $theme_data['_breadcrumb2'] = 'Sales Executive List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_list';
+        $theme_data['_previous_path'] = base_url(route_to('default_dashboard'));
+        $theme_data['user_type'] = UserType::SalesExecutive->value;
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function sales_executive_create_update_page($user_id = null)
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Sales Executive ' . CreateUpdateAlias($user_id);
+        $theme_data['_page_title'] = 'Sales Executive ' . CreateUpdateAlias($user_id);
+        $theme_data['_breadcrumb1'] = 'Sales Executive List';
+        $theme_data['_breadcrumb2'] = 'Sales Executive ' . CreateUpdateAlias($user_id);
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_create_update';
+        if (!empty($user_id)) {
+            $theme_data = array_merge($theme_data, ['user_id' => $user_id]);
+        }
+        $theme_data['user_type'] = UserType::SalesExecutive->value;
+        $theme_data['_previous_path'] = base_url(route_to($theme_data['user_type'] . '_list_page'));
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function sales_executive_view_component()
+    {
+        $theme_data['user_type'] = UserType::SalesExecutive->value;
+        return view('AdminPanelNew/components/staff_management/user_view', $theme_data);
+    }
+    public function purchase_list_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Purchase List';
+        $theme_data['_page_title'] = 'Purchase List';
+        $theme_data['_breadcrumb1'] = 'Dashboard';
+        $theme_data['_breadcrumb2'] = 'Purchase List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_list';
+        $theme_data['_previous_path'] = base_url(route_to('default_dashboard'));
+        $theme_data['user_type'] = UserType::Purchase->value;
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function purchase_create_update_page($user_id = null)
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Purchase ' . CreateUpdateAlias($user_id);
+        $theme_data['_page_title'] = 'Purchase ' . CreateUpdateAlias($user_id);
+        $theme_data['_breadcrumb1'] = 'Purchase List';
+        $theme_data['_breadcrumb2'] = 'Purchase ' . CreateUpdateAlias($user_id);
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_create_update';
+        if (!empty($user_id)) {
+            $theme_data = array_merge($theme_data, ['user_id' => $user_id]);
+        }
+        $theme_data['user_type'] = UserType::Purchase->value;
+        $theme_data['_previous_path'] = base_url(route_to($theme_data['user_type'] . '_list_page'));
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function purchase_view_component()
+    {
+        $theme_data['user_type'] = UserType::Purchase->value;
+        return view('AdminPanelNew/components/staff_management/user_view', $theme_data);
+    }
+    public function finance_list_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Finance List';
+        $theme_data['_page_title'] = 'Finance List';
+        $theme_data['_breadcrumb1'] = 'Dashboard';
+        $theme_data['_breadcrumb2'] = 'Finance List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_list';
+        $theme_data['_previous_path'] = base_url(route_to('default_dashboard'));
+        $theme_data['user_type'] = UserType::Finance->value;
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function finance_create_update_page($user_id = null)
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Finance ' . CreateUpdateAlias($user_id);
+        $theme_data['_page_title'] = 'Finance ' . CreateUpdateAlias($user_id);
+        $theme_data['_breadcrumb1'] = 'Finance List';
+        $theme_data['_breadcrumb2'] = 'Finance ' . CreateUpdateAlias($user_id);
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_create_update';
+        if (!empty($user_id)) {
+            $theme_data = array_merge($theme_data, ['user_id' => $user_id]);
+        }
+        $theme_data['user_type'] = UserType::Finance->value;
+        $theme_data['_previous_path'] = base_url(route_to($theme_data['user_type'] . '_list_page'));
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function finance_view_component()
+    {
+        $theme_data['user_type'] = UserType::Finance->value;
+        return view('AdminPanelNew/components/staff_management/user_view', $theme_data);
+    }
+    public function crm_list_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'CRM List';
+        $theme_data['_page_title'] = 'CRM List';
+        $theme_data['_breadcrumb1'] = 'Dashboard';
+        $theme_data['_breadcrumb2'] = 'CRM List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_list';
+        $theme_data['_previous_path'] = base_url(route_to('default_dashboard'));
+        $theme_data['user_type'] = UserType::CRM->value;
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function crm_create_update_page($user_id = null)
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'CRM ' . CreateUpdateAlias($user_id);
+        $theme_data['_page_title'] = 'CRM ' . CreateUpdateAlias($user_id);
+        $theme_data['_breadcrumb1'] = 'CRM List';
+        $theme_data['_breadcrumb2'] = 'CRM ' . CreateUpdateAlias($user_id);
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_create_update';
+        if (!empty($user_id)) {
+            $theme_data = array_merge($theme_data, ['user_id' => $user_id]);
+        }
+        $theme_data['user_type'] = UserType::CRM->value;
+        $theme_data['_previous_path'] = base_url(route_to($theme_data['user_type'] . '_list_page'));
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function crm_view_component()
+    {
+        $theme_data['user_type'] = UserType::CRM->value;
+        return view('AdminPanelNew/components/staff_management/user_view', $theme_data);
     }
     protected function admin_panel_common_data(): array
     {
@@ -158,7 +337,6 @@ class AdminPageController extends BaseController
         $theme_data['_assets_path'] = 'AdminPanelNew/';
         $theme_data['_theme_path'] = 'AdminPanelNew/';
         $theme_data['_partials_path'] = $theme_data['_theme_path'] . 'partials/';
-
         $theme_data['_meta_title'] = '';
         $theme_data['_page_title'] = '';
         $theme_data['_breadcrumb1'] = '';
@@ -201,7 +379,7 @@ class AdminPageController extends BaseController
                         "title" => "Super Admin",
                         "url" => base_url(route_to('super_admin_dashboard_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value
                             ]
@@ -211,7 +389,7 @@ class AdminPageController extends BaseController
                         "title" => "Admin",
                         "url" => base_url(route_to('admin_dashboard_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value,
                                 UserType::Admin->value,
@@ -222,7 +400,7 @@ class AdminPageController extends BaseController
                         "title" => "Sales",
                         "url" => base_url(route_to('sales_dashboard_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value,
                                 UserType::Admin->value,
@@ -235,7 +413,7 @@ class AdminPageController extends BaseController
                         "title" => "Purchase",
                         "url" => base_url(route_to('purchase_dashboard_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value,
                                 UserType::Admin->value,
@@ -247,7 +425,7 @@ class AdminPageController extends BaseController
                         "title" => "Finance",
                         "url" => base_url(route_to('finance_dashboard_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value,
                                 UserType::Admin->value,
@@ -259,7 +437,7 @@ class AdminPageController extends BaseController
                         "title" => "CRM",
                         "url" => base_url(route_to('crm_dashboard_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value,
                                 UserType::Admin->value,
@@ -270,43 +448,10 @@ class AdminPageController extends BaseController
                 ]
             ],
             [
-                "module_title" => "Module 1",
-                "module_name" => "Module 1",
-                "module_icon" => "mdi mdi-account-supervisor-outline",
-                "visibility" => true,
-                "menus" => [
-                    [
-                        "title" => "Dummy List",
-                        "url" => base_url(route_to('dummy_list_page')),
-                        "badge_count" => 0,
-                        "visibility" => true,
-                    ],
-                    [
-                        "title" => "Menu 2",
-                        "visibility" => true,
-                        "badge_count" => 0,
-                        "sub_menus" => [
-                            [
-                                "title" => "Sub Menu 1",
-                                "url" => base_url(),
-                                "badge_count" => 0,
-                                "visibility" => true,
-                            ],
-                            [
-                                "title" => "Sub Menu 2",
-                                "url" => base_url(),
-                                "badge_count" => 0,
-                                "visibility" => true,
-                            ],
-                        ]
-                    ],
-                ]
-            ],
-            [
                 "module_title" => "Staff Management",
                 "module_name" => "Staff Management",
                 "module_icon" => "mdi mdi-account-supervisor-outline",
-                "visibility" => $this->UserTypeInList(
+                "visibility" => UserTypeInList(
                     [
                         UserType::SuperAdmin->value,
                         UserType::Admin->value,
@@ -316,9 +461,9 @@ class AdminPageController extends BaseController
                 "menus" => [
                     [
                         "title" => "Super Admin",
-                        "url" => base_url(route_to('dummy_list_page')),
+                        "url" => base_url(route_to('super_admin_list_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value,
                             ]
@@ -326,9 +471,9 @@ class AdminPageController extends BaseController
                     ],
                     [
                         "title" => "Admin",
-                        "url" => base_url(route_to('dummy_list_page')),
+                        "url" => base_url(route_to('admin_list_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value,
                                 UserType::Admin->value,
@@ -337,9 +482,9 @@ class AdminPageController extends BaseController
                     ],
                     [
                         "title" => "Sales Manager",
-                        "url" => base_url(route_to('dummy_list_page')),
+                        "url" => base_url(route_to('sales_manager_list_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value,
                                 UserType::Admin->value,
@@ -348,9 +493,9 @@ class AdminPageController extends BaseController
                     ],
                     [
                         "title" => "Sales Executive",
-                        "url" => base_url(route_to('dummy_list_page')),
+                        "url" => base_url(route_to('sales_executive_list_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value,
                                 UserType::Admin->value,
@@ -360,9 +505,9 @@ class AdminPageController extends BaseController
                     ],
                     [
                         "title" => "Purchase",
-                        "url" => base_url(route_to('dummy_list_page')),
+                        "url" => base_url(route_to('purchase_list_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value,
                                 UserType::Admin->value,
@@ -371,9 +516,9 @@ class AdminPageController extends BaseController
                     ],
                     [
                         "title" => "Finance",
-                        "url" => base_url(route_to('dummy_list_page')),
+                        "url" => base_url(route_to('finance_list_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value,
                                 UserType::Admin->value,
@@ -382,9 +527,9 @@ class AdminPageController extends BaseController
                     ],
                     [
                         "title" => "CRM",
-                        "url" => base_url(route_to('dummy_list_page')),
+                        "url" => base_url(route_to('crm_list_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value,
                                 UserType::Admin->value,
@@ -397,7 +542,7 @@ class AdminPageController extends BaseController
                 "module_title" => "Sales",
                 "module_name" => "Sales",
                 "module_icon" => "mdi mdi-account-supervisor-outline",
-                "visibility" => $this->UserTypeInList(
+                "visibility" => UserTypeInList(
                     [
                         UserType::SuperAdmin->value,
                         UserType::Admin->value,
@@ -412,7 +557,7 @@ class AdminPageController extends BaseController
                         "title" => "Customer",
                         "url" => base_url(route_to('dummy_list_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value,
                                 UserType::Admin->value,
@@ -426,7 +571,7 @@ class AdminPageController extends BaseController
                         "title" => "Sales Enquiry",
                         "url" => base_url(route_to('dummy_list_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value,
                                 UserType::Admin->value,
@@ -440,7 +585,7 @@ class AdminPageController extends BaseController
                         "title" => "Sales Quotation",
                         "url" => base_url(route_to('dummy_list_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value,
                                 UserType::Admin->value,
@@ -453,7 +598,7 @@ class AdminPageController extends BaseController
                         "title" => "Sales Order",
                         "url" => base_url(route_to('dummy_list_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value,
                                 UserType::Admin->value,
@@ -469,7 +614,7 @@ class AdminPageController extends BaseController
                 "module_title" => "Purchase",
                 "module_name" => "Purchase",
                 "module_icon" => "mdi mdi-account-supervisor-outline",
-                "visibility" => $this->UserTypeInList(
+                "visibility" => UserTypeInList(
                     [
                         UserType::SuperAdmin->value,
                         UserType::Admin->value,
@@ -481,7 +626,7 @@ class AdminPageController extends BaseController
                         "title" => "Vendor",
                         "url" => base_url(route_to('dummy_list_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value,
                                 UserType::Admin->value,
@@ -493,7 +638,7 @@ class AdminPageController extends BaseController
                         "title" => "Purchase Enquiry",
                         "url" => base_url(route_to('dummy_list_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value,
                                 UserType::Admin->value,
@@ -505,7 +650,7 @@ class AdminPageController extends BaseController
                         "title" => "Purchase Quotation",
                         "url" => base_url(route_to('dummy_list_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value,
                                 UserType::Admin->value,
@@ -519,7 +664,7 @@ class AdminPageController extends BaseController
                 "module_title" => "Inventory",
                 "module_name" => "Inventory",
                 "module_icon" => "mdi mdi-account-supervisor-outline",
-                "visibility" => $this->UserTypeInList(
+                "visibility" => UserTypeInList(
                     [
                         UserType::SuperAdmin->value,
                         UserType::Admin->value,
@@ -531,7 +676,7 @@ class AdminPageController extends BaseController
                         "title" => "Category",
                         "url" => base_url(route_to('dummy_list_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value,
                                 UserType::Admin->value,
@@ -543,7 +688,7 @@ class AdminPageController extends BaseController
                         "title" => "Group",
                         "url" => base_url(route_to('dummy_list_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value,
                                 UserType::Admin->value,
@@ -555,7 +700,7 @@ class AdminPageController extends BaseController
                         "title" => "Brand",
                         "url" => base_url(route_to('dummy_list_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value,
                                 UserType::Admin->value,
@@ -567,7 +712,7 @@ class AdminPageController extends BaseController
                         "title" => "HSN",
                         "url" => base_url(route_to('dummy_list_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value,
                                 UserType::Admin->value,
@@ -579,7 +724,7 @@ class AdminPageController extends BaseController
                         "title" => "Product",
                         "url" => base_url(route_to('dummy_list_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value,
                                 UserType::Admin->value,
@@ -591,7 +736,7 @@ class AdminPageController extends BaseController
                         "title" => "Price List",
                         "url" => base_url(route_to('dummy_list_page')),
                         "badge_count" => 0,
-                        "visibility" => $this->UserTypeInList(
+                        "visibility" => UserTypeInList(
                             [
                                 UserType::SuperAdmin->value,
                                 UserType::Admin->value,

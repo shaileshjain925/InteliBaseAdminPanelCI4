@@ -22,18 +22,11 @@ enum ApiResponseStatusCode: int
     // Validation Failed
   case VALIDATION_FAILED = 422;
 }
-enum UserType: string
-{
-  case SuperAdmin = 'super_admin';
-  case Admin = 'admin';
-  case SalesManager = 'sales_manager';
-  case SalesExecutive = 'sales_executive';
-  case Purchase = 'purchase';
-  case Finance = 'finance';
-  case CRM = 'crm';
-}
-
-function getEnumAsArray($enumType)
+/**
+ * $enumType:EnumName::class
+ * $return null (for both),value,name
+ */
+function getEnumAsArray($enumType, $return = null):array
 {
   $enumArray = [];
 
@@ -41,9 +34,21 @@ function getEnumAsArray($enumType)
   $enumConstants = $reflection->getReflectionConstants();
 
   foreach ($enumConstants as $constant) {
-    $enumArray[$constant->getName()] = $constant->getValue()->value;
+    switch ($return) {
+      case "value":
+        # code...
+        $enumArray[] = $constant->getValue()->value;
+        break;
+      case "name":
+        # code...
+        $enumArray[] = $constant->getName();
+        break;
+      default:
+        # code...
+        $enumArray[$constant->getName()] = $constant->getValue()->value;
+        break;
+    }
   }
-
   return $enumArray;
 }
 
