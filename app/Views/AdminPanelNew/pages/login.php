@@ -51,7 +51,7 @@
                                 <div class="success-message-box d-none">
                                     <p id="success-message"></p>
                                 </div>
-                                <form id="form" enctype="multipart/form-data" class="form-horizontal" action="<?= base_url() ?>" method="post">
+                                <form id="form" enctype="multipart/form-data" class="form-horizontal" action="<?= base_url(route_to('login_api')) ?>" method="post">
                                     <div class="mb-3">
                                         <label class="form-label" for="username">Username</label>
                                         <input type="text" class="form-control" id="username" name="username" placeholder="Enter username">
@@ -69,9 +69,7 @@
                                     </div>
 
                                     <div class="mt-3">
-                                        <a href="<?= base_url(route_to('default_dashboard')) ?>">
-                                            <button class="btn login_btn waves-effect waves-light" type="button">Log In</button>
-                                        </a>
+                                        <button onclick="submitFormWithAjax('form', true, true, successCallback, errorCallback)" class="btn login_btn waves-effect waves-light" type="button">Log In</button>
                                     </div>
                                 </form>
                             </div>
@@ -95,11 +93,10 @@
 
     <script>
         function successCallback(response) {
-            console.log(response);
             if (response.status == 201 || response.status == 200) {
                 setTimeout(() => {
                     // Dashboard Url
-                    window.location.href = "<?= base_url() ?>";
+                    window.location.href = "<?= base_url(route_to('default_dashboard_page')) ?>";
                 }, 2000);
             }
         }

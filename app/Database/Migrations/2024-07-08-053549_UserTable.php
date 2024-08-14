@@ -2,13 +2,16 @@
 
 namespace App\Database\Migrations;
 
+use App\Traits\CommonTraits;
 use CodeIgniter\Database\Migration;
 use UserType;
 
 class UserTable extends Migration
 {
+    use CommonTraits;
     public function up()
     {
+        helper('commonfunction');
         $this->forge->addField([
             'user_id' => [
                 'type' => 'INT',
@@ -88,8 +91,16 @@ class UserTable extends Migration
             ],
             'user_type' => [
                 'type' => 'ENUM',
-                'constraint' => getEnumAsArray(UserType::class, 'value'),
-                'null' => false
+                'constraint' => [
+                    'super_admin',
+                    'admin',
+                    'sales_manager',
+                    'sales_executive',
+                    'purchase',
+                    'finance',
+                    'crm'
+                ],
+                'null' => false,
             ],
             'password' => [
                 'type' => 'VARCHAR',
@@ -113,9 +124,30 @@ class UserTable extends Migration
         $this->forge->addForeignKey('user_country_id', 'country', 'country_id', 'RESTRICT', 'RESTRICT');
         $this->forge->addForeignKey('user_state_id', 'state', 'state_id', 'RESTRICT', 'RESTRICT');
         $this->forge->addForeignKey('user_city_id', 'city', 'city_id', 'RESTRICT', 'RESTRICT');
-        $this->forge->addForeignKey('reporting_to_user_id', 'user', 'user_id', 'RESTRICT', 'RESTRICT');
-        $this->forge->addForeignKey('designation_id', 'designation', 'designation', 'RESTRICT', 'RESTRICT');
+        $this->forge->addForeignKey('designation_id', 'designation', 'designation_id', 'RESTRICT', 'RESTRICT');
         $this->forge->createTable('user', true);
+        $this->forge->addForeignKey('reporting_to_user_id', 'user', 'user_id', 'RESTRICT', 'RESTRICT');
+        $super_admin_data = [
+            'user_name' => 'Shailesh Jain',
+            'designation_id' => 1,
+            'user_email' => 'shaileshjain925@gmail.com',
+            'password' => "7879531944",
+            'user_mobile' => "7879531944",
+            'user_address' => "74 Sai Nath Colony Ujjain",
+            'user_country_id' => 101,
+            'user_state_id' => 4039,
+            'user_city_id' => 134263,
+            'user_pincode' => 456001, // Replace with actual pincode if needed
+            'user_aadhaar_card' => null,
+            'user_aadhaar_card_image' => null,
+            'user_image' => null,
+            'user_type' => 'super_admin', // Assuming SUPER_ADMIN is defined in your UserType class
+            'is_active' => true,
+        ];
+
+        if (empty($this->get_user_model()->first())) {
+            $this->get_user_model()->insert($super_admin_data);
+        }
     }
 
     public function down()

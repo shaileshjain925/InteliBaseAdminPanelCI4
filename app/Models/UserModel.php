@@ -53,10 +53,10 @@ class UserModel extends FunctionModel
     protected $validationRules = [
         'user_id' => 'permit_empty',
         'reporting_to_user_id' => 'permit_empty|is_not_unique[user.user_id]',
-        'designation_id' => 'permit_empty|is_not_unique[designation.designation_id]',
-        'user_name'           => 'required|max_length[255]',
-        'user_email'          => 'permit_empty|valid_email|max_length[255]|is_unique[user.email,user_id,{user_id}]',
-        'user_mobile'         => 'permit_empty|max_length[10]|min_length[10]',
+        'designation_id' => 'required|is_not_unique[designation.designation_id]',
+        'user_name'           => 'required|max_length[255]|is_unique[user.user_name,user_id,{user_id}]',
+        'user_email'          => 'permit_empty|valid_email|max_length[255]|is_unique[user.user_email,user_id,{user_id}]',
+        'user_mobile'         => 'permit_empty|max_length[10]|min_length[10]|is_unique[user.user_mobile,user_id,{user_id}]',
         'user_address'        => 'permit_empty',
         'user_country_id'     => 'required|is_not_unique[country.country_id]',
         'user_state_id'       => 'required|is_not_unique[state.state_id]',
@@ -64,7 +64,7 @@ class UserModel extends FunctionModel
         'user_pincode'        => 'required|integer|max_length[10]',
         'user_aadhaar_card'    => 'permit_empty|max_length[12]',
         'user_aadhaar_card_image' => 'permit_empty|max_length[255]',
-        'password'        => 'required',
+        'password'        => 'permit_empty',
         'user_image'          => 'permit_empty|max_length[255]',
         'user_type'           => "required|in_list[super_admin,admin,sales_manager,sales_executive,purchase,finance,crm]",
         'otp'                 => 'permit_empty|max_length[6]',
@@ -82,16 +82,18 @@ class UserModel extends FunctionModel
         ],
         'user_name' => [
             'required' => 'Staff name is required.',
-            'max_length' => 'Staff name cannot exceed 255 characters.'
+            'max_length' => 'Staff name cannot exceed 255 characters.',
+            'is_unique'   => 'The Staff Name field must contain a unique value.',
         ],
         'user_email' => [
             'valid_email' => 'Please enter a valid email address.',
             'max_length'  => 'Email address cannot exceed 255 characters.',
-            'is_unique'   => 'This email is already associated with another user.',
+            'is_unique'   => 'This email is already associated with another Staff.',
         ],
         'user_mobile' => [
             'max_length' => 'Mobile number must be exactly 10 digits long.',
             'min_length' => 'Mobile number must be exactly 10 digits long.',
+            'is_unique'   => 'This mobile no. is already associated with another Staff.',
         ],
         'user_country_id' => [
             'required' => 'Country is required.',
@@ -137,7 +139,7 @@ class UserModel extends FunctionModel
 
     // Callbacks
     protected $allowCallbacks = true;
-    protected $loginFields = ['user_email', 'user_mobile'];
+    protected $loginFields = ['user_email', 'user_mobile', 'user_name'];
     protected $beforeInsert   = ['hashPassword', 'allTrim'];
     protected $afterInsert    = [];
     protected $beforeUpdate   = ['hashPassword', 'allTrim'];
@@ -154,9 +156,9 @@ class UserModel extends FunctionModel
     {
         parent::__construct();
         if ($joinRequired) {
-            $this->addParentJoin('user_country_id', $this->get_country_model(), 'left', ['country_name as user_country_name']);
-            $this->addParentJoin('user_state_id', $this->get_state_model(), 'left', ['state_name as user_state_name']);
-            $this->addParentJoin('user_city_id', $this->get_city_model(), 'left', ['city_name as user_city_name']);
+            $this->addParentJoin('user_country_id', $this->get_country_model(false), 'left', ['country_name as user_country_name']);
+            $this->addParentJoin('user_state_id', $this->get_state_model(false), 'left', ['state_name as user_state_name']);
+            $this->addParentJoin('user_city_id', $this->get_city_model(false), 'left', ['city_name as user_city_name']);
             $this->addParentJoin('reporting_to_user_id', $this->get_user_model(false), 'left', ['user_name as reporting_to_user_name'], 'reporting_user');
             $this->addParentJoin('designation_id', $this->get_designation_model(), 'left', ['designation_name']);
         }

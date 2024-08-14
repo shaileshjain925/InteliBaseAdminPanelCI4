@@ -277,7 +277,11 @@ class FunctionModel extends Model
     {
         $passwordField = $this->passwordField ?? null;
         if (!empty($passwordField) && array_key_exists($passwordField, $data['data'])) {
-            $data['data'][$passwordField] = password_hash($data['data'][$passwordField], PASSWORD_DEFAULT);
+            if (empty($data['data'][$passwordField])) {
+                unset($data['data'][$passwordField]);
+            } else {
+                $data['data'][$passwordField] = password_hash($data['data'][$passwordField], PASSWORD_DEFAULT);
+            }
         }
         return $data;
     }
@@ -359,12 +363,13 @@ class FunctionModel extends Model
      * @param array $selectField Optional array of fields to select from the referenced table
      * @return void
      */
-    protected function addParentJoin(string $fieldName, object $modelInstance, string $joinMethod = 'left', array $selectField = [],string $refTableAlias = null): void
+    protected function addParentJoin(string $fieldName, object $modelInstance, string $joinMethod = 'left', array $selectField = [], string $refTableAlias = null): void
     {
         $this->joins[] = [
             'tableName' => $this->getTable(),
             'fieldName' => $fieldName,
-            'refTableName' => $modelInstance->getTable().(!empty($refTableAlias))?" as $refTableAlias":"",
+            'refTableName' => $modelInstance->getTable(),
+            'refTableAlias' => (!empty($refTableAlias)) ? $refTableAlias : $modelInstance->getTable(),
             'refFieldName' => $modelInstance->getPrimaryKey(),
             'joinMethod' => $joinMethod,
             'selectField' => $selectField,
@@ -435,16 +440,16 @@ class FunctionModel extends Model
     private function applyJoin(array $join): void
     {
         if (empty($join['selectField'])) {
-            $this->select($join['refTableName'] . ".*");
+            $this->select($join['refTableAlias'] . ".*");
         } else {
             foreach ($join['selectField'] as $field) {
-                $this->select($join['refTableName'] . "." . $field);
+                $this->select($join['refTableAlias'] . "." . $field);
             }
         }
 
         $this->join(
-            $join['refTableName'],
-            $join['tableName'] . "." . $join['fieldName'] . "=" . $join['refTableName'] . "." . $join['refFieldName'],
+            $join['refTableName'] . " as " . $join['refTableAlias'],
+            $join['tableName'] . "." . $join['fieldName'] . "=" . $join['refTableAlias'] . "." . $join['refFieldName'],
             $join['joinMethod']
         );
     }

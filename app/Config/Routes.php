@@ -26,8 +26,9 @@ if (!in_array($file_extension, $extensions)) {
     $routes->get('setSession', 'AdminPageController::setSession/super_admin', ['as' => 'setSession']);
     $routes->get('setSession/(:num)', 'AdminPageController::setSession/$1');
     $routes->get('logout', 'AdminPageController::logout', ['as' => 'logout']);
-    $routes->group('Admin', function ($routes) {
-        $routes->get('', 'AdminPageController::default_dashboard', ['as' => 'default_dashboard']);
+    $routes->group('Admin', ['filter' => 'AdminAuth'], function ($routes) {
+        $routes->get('LoginByOther/(:any)', 'AdminPageController::LoginByOther/$1', ['as' => 'LoginByOther']);
+        $routes->get('', 'AdminPageController::default_dashboard_page', ['as' => 'default_dashboard_page']);
         $routes->group('Dashboard', function ($routes) {
             $routes->get('SuperAdmin', 'AdminPageController::super_admin_dashboard_page', ['as' => 'super_admin_dashboard_page']);
             $routes->get('Admin', 'AdminPageController::admin_dashboard_page', ['as' => 'admin_dashboard_page']);
@@ -96,8 +97,10 @@ if (!in_array($file_extension, $extensions)) {
 
     // Admin Api Controller Start -----------------------------------------------------------------------------
     $routes->group('AdminApi', function ($routes) {
-        $routes->group('NoAuth', function ($routes) {});
-        $routes->group('Auth', function ($routes) {
+        $routes->group('NoAuth', function ($routes) {
+            $routes->post("login_api", "AdminApiController::login_api", ['as' => 'login_api']);
+        });
+        $routes->group('Auth', ['filter' => 'AdminApiAuth'], function ($routes) {
             $routes->group('country', function ($routes) {
                 $routes->post("country_get_api", "AdminApiController::country_get_api", ['as' => 'country_get_api']);
                 $routes->post("country_list_api", "AdminApiController::country_list_api", ['as' => 'country_list_api']);

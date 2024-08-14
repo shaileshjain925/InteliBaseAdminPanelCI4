@@ -23,34 +23,36 @@ enum ApiResponseStatusCode: int
   case VALIDATION_FAILED = 422;
 }
 /**
- * $enumType:EnumName::class
- * $return null (for both),value,name
+ * Convert an Enum to an array.
+ *
+ * @param string $enumType The Enum class name.
+ * @param string|null $return Can be 'value', 'name', or null for both.
+ * @return array The array representation of the Enum.
  */
-function getEnumAsArray($enumType, $return = null):array
+function getEnumAsArray(string $enumType, ?string $return = null): array
 {
   $enumArray = [];
 
-  $reflection = new ReflectionClass($enumType);
-  $enumConstants = $reflection->getReflectionConstants();
+  // Get all cases of the Enum
+  $enumCases = $enumType::cases();
 
-  foreach ($enumConstants as $constant) {
+  foreach ($enumCases as $case) {
     switch ($return) {
-      case "value":
-        # code...
-        $enumArray[] = $constant->getValue()->value;
+      case 'value':
+        $enumArray[] = $case->value; // Only value
         break;
-      case "name":
-        # code...
-        $enumArray[] = $constant->getName();
+      case 'name':
+        $enumArray[] = $case->name; // Only name
         break;
       default:
-        # code...
-        $enumArray[$constant->getName()] = $constant->getValue()->value;
+        $enumArray[$case->name] = $case->value; // Both name as key, value as value
         break;
     }
   }
+
   return $enumArray;
 }
+
 
 if (!function_exists('getExcelDataInArrayHeaderKeyWise')) {
   /**
@@ -187,7 +189,7 @@ if (!function_exists('uploadImageWithThumbnail')) {
     $filename = uniqid('img_') . '_' . time();
 
     // Original image path
-    $originalPath = $uploadPath . '/' . $filename . '.' . pathinfo($fileObject['name'], PATHINFO_EXTENSION);
+    $originalPath = $uploadPath . '/' . $filename . '-original-.' . pathinfo($fileObject['name'], PATHINFO_EXTENSION);
 
     // Move uploaded file to destination
     if (!move_uploaded_file($fileObject['tmp_name'], $originalPath)) {
