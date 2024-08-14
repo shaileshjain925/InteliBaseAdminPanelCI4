@@ -91,6 +91,11 @@
                 visible: false,
             },
             {
+                title: "Staff Code",
+                data: "user_code",
+                visible: true,
+            },
+            {
                 title: "Image",
                 data: "user_image",
                 visible: false,

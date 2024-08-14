@@ -17,6 +17,7 @@ class UserModel extends FunctionModel
         'user_name',
         'reporting_to_user_id',
         'designation_id',
+        'user_code',
         'user_email',
         'user_mobile',
         'user_address',
@@ -55,6 +56,7 @@ class UserModel extends FunctionModel
         'reporting_to_user_id' => 'permit_empty|is_not_unique[user.user_id]',
         'designation_id' => 'required|is_not_unique[designation.designation_id]',
         'user_name'           => 'required|max_length[255]|is_unique[user.user_name,user_id,{user_id}]',
+        'user_code'          => 'required|max_length[255]|is_unique[user.user_code,user_id,{user_id}]',
         'user_email'          => 'permit_empty|valid_email|max_length[255]|is_unique[user.user_email,user_id,{user_id}]',
         'user_mobile'         => 'permit_empty|max_length[10]|min_length[10]|is_unique[user.user_mobile,user_id,{user_id}]',
         'user_address'        => 'permit_empty',
@@ -84,6 +86,10 @@ class UserModel extends FunctionModel
             'required' => 'Staff name is required.',
             'max_length' => 'Staff name cannot exceed 255 characters.',
             'is_unique'   => 'The Staff Name field must contain a unique value.',
+        ],
+        'user_email' => [
+            'max_length'  => 'Email address cannot exceed 255 characters.',
+            'is_unique'   => 'This Staff Code is already associated with another Staff.',
         ],
         'user_email' => [
             'valid_email' => 'Please enter a valid email address.',
@@ -139,7 +145,7 @@ class UserModel extends FunctionModel
 
     // Callbacks
     protected $allowCallbacks = true;
-    protected $loginFields = ['user_email', 'user_mobile', 'user_name'];
+    protected $loginFields = ['user_code'];
     protected $beforeInsert   = ['hashPassword', 'allTrim'];
     protected $afterInsert    = [];
     protected $beforeUpdate   = ['hashPassword', 'allTrim'];
