@@ -16,14 +16,19 @@
             <input type="hidden" name="user_aadhaar_card_image" id="user_aadhaar_card_image" value="<?= @$user_aadhaar_card_image ?>">
             <input type="hidden" name="user_image" id="user_image" value="<?= @$user_image ?>">
             <div class="row">
-                <div class="mb-3 col-md-4">
+                <div class="mb-3 col-md-3">
                     <label class="mb-2 form-label">Name</label>
                     <input type="text" class="form-control" name="user_name" value="<?= @$user_name ?>" placeholder="" />
                     <span class="error-message" id="error-user_name"></span>
                 </div>
+                <div class="mb-3 col-md-3">
+                    <label class="mb-2 form-label">Code</label>
+                    <input type="text" class="form-control" name="user_code" value="<?= @$user_code ?>" placeholder="" />
+                    <span class="error-message" id="error-user_code"></span>
+                </div>
 
                 <!-- User Image -->
-                <div class="mb-3 col-md-4 ">
+                <div class="mb-3 col-md-3">
                     <img class="image-fluid" style="height:auto; width:100px" id="user_image_display" onclick="enlargeImage(event)" src="<?= (isset($user_image) && !empty($user_image)) ? base_url($user_image) : "" ?>">
                     <?php if (isset($user_image) && !empty($user_image)) : ?>
                         <button type="button" class="btn btn-danger ms-2" onclick="deleteImage('user_image', 'user_image_display')"><i class="bx bx-trash-alt"></i></button>
@@ -33,7 +38,7 @@
                     <span class="error-message" id="error-user_image"></span>
                 </div>
                 <!-- user_aadhaar_card_image -->
-                <div class="mb-3 col-md-4 ">
+                <div class="mb-3 col-md-3">
                     <img class="image-fluid" style="height:auto; width:100px" id="user_aadhaar_card_image_display" onclick="enlargeImage(event)" src="<?= (isset($user_aadhaar_card_image) && !empty($user_aadhaar_card_image)) ? base_url($user_aadhaar_card_image) : "" ?>">
                     <?php if (isset($user_aadhaar_card_image) && !empty($user_aadhaar_card_image)) : ?>
                         <button type="button" class="btn btn-danger ms-2" onclick="deleteImage('user_aadhaar_card_image', 'user_aadhaar_card_image_display')"><i class="bx bx-trash-alt"></i></button>
