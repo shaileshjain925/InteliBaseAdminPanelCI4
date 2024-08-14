@@ -105,7 +105,7 @@ class AdminPageController extends BaseController
         $theme_data = $this->admin_panel_common_data();
         $theme_data['_meta_title'] = 'Super Admin Dashboard';
         $theme_data['_page_title'] = 'Super Admin Admin Dashboard';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/dashboard/super_admin_dashboard';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Dashboard/super_admin_dashboard';
         return view('AdminPanelNew/partials/main', $theme_data);
     }
     public function admin_dashboard_page()
@@ -113,7 +113,7 @@ class AdminPageController extends BaseController
         $theme_data = $this->admin_panel_common_data();
         $theme_data['_meta_title'] = 'Admin Dashboard';
         $theme_data['_page_title'] = 'Admin Dashboard';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/dashboard/admin_dashboard';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Dashboard/admin_dashboard';
         return view('AdminPanelNew/partials/main', $theme_data);
     }
     public function sales_dashboard_page()
@@ -121,7 +121,7 @@ class AdminPageController extends BaseController
         $theme_data = $this->admin_panel_common_data();
         $theme_data['_meta_title'] = 'Sales Dashboard';
         $theme_data['_page_title'] = 'Sales Dashboard';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/dashboard/sales_dashboard';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Dashboard/sales_dashboard';
         return view('AdminPanelNew/partials/main', $theme_data);
     }
     public function purchase_dashboard_page()
@@ -129,7 +129,7 @@ class AdminPageController extends BaseController
         $theme_data = $this->admin_panel_common_data();
         $theme_data['_meta_title'] = 'Purchase Dashboard';
         $theme_data['_page_title'] = 'Purchase Dashboard';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/dashboard/purchase_dashboard';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Dashboard/purchase_dashboard';
         return view('AdminPanelNew/partials/main', $theme_data);
     }
     public function finance_dashboard_page()
@@ -137,7 +137,7 @@ class AdminPageController extends BaseController
         $theme_data = $this->admin_panel_common_data();
         $theme_data['_meta_title'] = 'Finance Dashboard';
         $theme_data['_page_title'] = 'Finance Dashboard';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/dashboard/finance_dashboard';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Dashboard/finance_dashboard';
         return view('AdminPanelNew/partials/main', $theme_data);
     }
     public function crm_dashboard_page()
@@ -145,7 +145,7 @@ class AdminPageController extends BaseController
         $theme_data = $this->admin_panel_common_data();
         $theme_data['_meta_title'] = 'CRM Dashboard';
         $theme_data['_page_title'] = 'CRM Dashboard';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/dashboard/crm_dashboard';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Dashboard/crm_dashboard';
         return view('AdminPanelNew/partials/main', $theme_data);
     }
     public function super_admin_list_page()
