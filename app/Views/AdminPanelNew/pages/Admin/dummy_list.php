@@ -6,7 +6,7 @@
     <div class="card">
         <div class="card-body p-2">
             <div class="d-flex justify-content-end align-items-center mb-2">
-                <a href="<?= base_url(route_to('default_dashboard')) ?>"><i class="fas fa-home home_icn me-3"></i></a>
+                <a href="<?= base_url(route_to('default_dashboard_page')) ?>"><i class="fas fa-home home_icn me-3"></i></a>
                 <img onclick="fetchData()" src="<?php echo base_url('AdminPanelNew/assets/images/refresh.png') ?>" height="20" class="me-3">
                 <a href="<?= @$_previous_path ?>">
                     <button class="btn export_btn me-3" type="button"><i class="fas fa-backward"></i></button>

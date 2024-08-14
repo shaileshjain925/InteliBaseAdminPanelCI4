@@ -882,26 +882,30 @@ $(".ckeditor-active").each(function () {
   });
 });
 
-function enlargeImage(event, primaryImg = null) {
-  if (primaryImg == null) {
-    var imgSrc = event.target.src; // Get the source of the clicked image
-  } else {
-    var imgSrc = primaryImg; // Get the source of the clicked image
-  }
 
-  // Use SweetAlert to display the image in a modal
+function enlargeImage(event, primaryImg = null) {
+  // Determine the source of the image to be displayed
+  var imgSrc = primaryImg == null ? event.target.src : primaryImg;
+
+  // Use SweetAlert to display the image in a modal with a download button
   Swal.fire({
-    imageUrl: imgSrc,
-    imageAlt: "Enlarged Image",
+    html: `
+      <div style="text-align: center;">
+        <img src="${imgSrc}" alt="Enlarged Image" style="max-width: 100%; height: auto;" />
+        <br>
+        <a href="${imgSrc}" download="image.jpg" class="swal2-download-link" style="margin-top: 10px; display: inline-block;">
+          <button class="swal2-confirm swal2-styled" style="background-color: #3085d6; border: none; color: white; padding: 10px 20px; font-size: 16px; cursor: pointer;">Download Image</button>
+        </a>
+      </div>
+    `,
     showCloseButton: true,
     showConfirmButton: false,
-    imageWidth: "auto",
-    imageHeight: "auto",
     customClass: {
       image: "swal2-image-enlarge", // Custom class for additional styling if needed
     },
   });
 }
+
 
 function getThumbnailImagePath(originalImagePath) {
   // Split the path into components

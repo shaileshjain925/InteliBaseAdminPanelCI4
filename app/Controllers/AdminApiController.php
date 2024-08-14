@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\Response;
 use ApiResponseStatusCode;
+use UserType;
 
 class AdminApiController extends BaseController
 {
@@ -140,7 +141,7 @@ class AdminApiController extends BaseController
     /** */
     public function designation_list_api()
     {
-        return $this->api_list($this->get_city_model());
+        return $this->api_list($this->get_designation_model());
     }
     /** */
     public function designation_create_api()
@@ -150,15 +151,15 @@ class AdminApiController extends BaseController
     /** */
     public function designation_update_api()
     {
-        return $this->api_update($this->get_city_model(false));
+        return $this->api_update($this->get_designation_model(false));
     }
     /** */
     public function designation_delete_api()
     {
-        return $this->api_delete($this->get_city_model(false));
+        return $this->api_delete($this->get_designation_model(false));
     }
 
-    // city -------------------------------------------------------------------------------------------------------
+    // user -------------------------------------------------------------------------------------------------------
     /** */
     public function user_get_api()
     {
@@ -167,7 +168,7 @@ class AdminApiController extends BaseController
     /** */
     public function user_list_api()
     {
-        return $this->api_list($this->get_city_model());
+        return $this->api_list($this->get_user_model());
     }
     /** */
     public function user_create_api()
@@ -177,12 +178,12 @@ class AdminApiController extends BaseController
     /** */
     public function user_update_api()
     {
-        return $this->api_update($this->get_city_model(false));
+        return $this->api_update($this->get_user_model(false));
     }
     /** */
     public function user_delete_api()
     {
-        return $this->api_delete($this->get_city_model(false));
+        return $this->api_delete($this->get_user_model(false));
     }
     /**
      * {"username":"required","password":"required"}
@@ -216,6 +217,9 @@ class AdminApiController extends BaseController
         if ($user_data['data']['is_active'] == 0) {
             return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::BAD_REQUEST, "Account Is Inactive");
         }
+        if ($user_data['data']['user_type'] == UserType::SuperAdmin->value) {
+            $user_data['data']['ref_user_type'] = UserType::SuperAdmin->value;
+        }
         $session_data = $user_data['data'];
         $session_data['logged_in'] = true;
         // Session
@@ -245,7 +249,7 @@ class AdminApiController extends BaseController
         // Define validation rules for 'username', 'password', 'confirm-password', 'otp'
         $validation->setRules([
             'file' => "required",
-            'for' => "in_list[center,mr,kisan,purchase_bill,crop,kisan_vehicle,visit_image,seed_bill_image]",
+            'for' => "in_list[user]",
         ]);
         if ($validation->run($requestedData) === false) {
             // Return validation failed response
@@ -260,29 +264,8 @@ class AdminApiController extends BaseController
         }
         $folderPath = "";
         switch ($requestedData['for']) {
-            case 'center':
-                $folderPath .= "uploads/center/";
-                break;
-            case 'mr':
-                $folderPath .= "uploads/mr/";
-                break;
-            case 'kisan':
-                $folderPath .= "uploads/kisan/";
-                break;
-            case 'kisan_vehicle':
-                $folderPath .= "uploads/kisan_vehicle/";
-                break;
-            case 'purchase_bill':
-                $folderPath .= "uploads/purchase_bill/";
-                break;
-            case 'crop':
-                $folderPath .= "uploads/crop/";
-                break;
-            case 'visit_image':
-                $folderPath .= "uploads/visit_image/";
-                break;
-            case 'seed_bill_image':
-                $folderPath .= "uploads/seed_bill_image/";
+            case 'user':
+                $folderPath .= "uploads/user/";
                 break;
         }
         $errorMessage = "";

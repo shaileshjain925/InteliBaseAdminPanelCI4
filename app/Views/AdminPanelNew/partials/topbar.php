@@ -19,31 +19,14 @@
                 </div>
 
 
-
-                <div class="dropdown d-none d-lg-inline-block ms-1">
+                <div class="dropdown d-lg-inline-block ms-1">
+                    <button class="btn btn-outline-secondary"><?= UserType::from($_SESSION['user_type'])->name ?></button>
+                </div>
+                <div class="dropdown d-lg-inline-block ms-1">
                     <button type="button" class="btn header-item noti-icon waves-effect" data-toggle="fullscreen">
                         <i class="mdi mdi-fullscreen"></i>
                     </button>
                 </div>
-                <div class="dropdown d-none d-lg-inline-block ms-1">
-                    <div>
-                        <select name="user_type" id="user_type" class="form-select" onchange="setSession(event)">
-                            <option value="<?= UserType::SuperAdmin->value ?>" <?= (isset($_SESSION['user_type']) && $_SESSION['user_type'] == UserType::SuperAdmin->value) ? "selected" : "" ?>>Super Admin</option>
-                            <option value="<?= UserType::Admin->value ?>" <?= (isset($_SESSION['user_type']) && $_SESSION['user_type'] == UserType::Admin->value) ? "selected" : "" ?>>Admin</option>
-                            <option value="<?= UserType::SalesManager->value ?>" <?= (isset($_SESSION['user_type']) && $_SESSION['user_type'] == UserType::SalesManager->value) ? "selected" : "" ?>>Sales Manager</option>
-                            <option value="<?= UserType::SalesExecutive->value ?>" <?= (isset($_SESSION['user_type']) && $_SESSION['user_type'] == UserType::SalesExecutive->value) ? "selected" : "" ?>>Sales Executive</option>
-                            <option value="<?= UserType::Purchase->value ?>" <?= (isset($_SESSION['user_type']) && $_SESSION['user_type'] == UserType::Purchase->value) ? "selected" : "" ?>>Purchase</option>
-                            <option value="<?= UserType::Finance->value ?>" <?= (isset($_SESSION['user_type']) && $_SESSION['user_type'] == UserType::Finance->value) ? "selected" : "" ?>>Finance</option>
-                            <option value="<?= UserType::CRM->value ?>" <?= (isset($_SESSION['user_type']) && $_SESSION['user_type'] == UserType::CRM->value) ? "selected" : "" ?>>CRM</option>
-                        </select>
-                    </div>
-                    <script>
-                        function setSession(event) {
-                            window.location.href = `<?= base_url(route_to('setSession')) ?>/${event.target.value}`;
-                        }
-                    </script>
-                </div>
-
                 <div class="dropdown d-inline-block">
                     <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="mdi mdi-bell-outline"></i>
