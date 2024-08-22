@@ -44,6 +44,12 @@ if (!in_array($file_extension, $extensions)) {
             $routes->post('View', 'AdminPageController::dummy_view_component', ['as' => 'dummy_view_component']);
         });
         $routes->group('StaffManagement', function ($routes) {
+            $routes->group('Staff', function ($routes) {
+                $routes->get('List', 'AdminPageController::super_admin_list_page', ['as' => 'super_admin_list_page']);
+                $routes->get('CreateUpdate', 'AdminPageController::super_admin_create_update_page', ['as' => 'super_admin_create_update_page']);
+                $routes->get('CreateUpdate/(:num)', 'AdminPageController::super_admin_create_update_page/$1');
+                $routes->post('View', 'AdminPageController::super_admin_view_component', ['as' => 'super_admin_view_component']);
+            });
             $routes->group('SuperAdmin', function ($routes) {
                 $routes->get('List', 'AdminPageController::super_admin_list_page', ['as' => 'super_admin_list_page']);
                 $routes->get('CreateUpdate', 'AdminPageController::super_admin_create_update_page', ['as' => 'super_admin_create_update_page']);

@@ -11,13 +11,18 @@ class UserTable extends Migration
     use CommonTraits;
     public function up()
     {
-        helper('commonfunction');
         $this->forge->addField([
             'user_id' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'unsigned' => true,
                 'auto_increment' => true,
+            ],
+            "user_code" => [
+                'type' => 'VARCHAR',
+                'constraint' => 255,
+                'unique' => true,
+                'null' => true
             ],
             'reporting_to_user_id' => [
                 'type' => 'INT',

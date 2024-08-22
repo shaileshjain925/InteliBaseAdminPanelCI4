@@ -148,6 +148,17 @@ class AdminPageController extends BaseController
         $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Dashboard/crm_dashboard';
         return view('AdminPanelNew/partials/main', $theme_data);
     }
+    public function user_list_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Staff List';
+        $theme_data['_page_title'] = 'Staff List';
+        $theme_data['_breadcrumb1'] = 'Dashboard';
+        $theme_data['_breadcrumb2'] = 'Staff List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_list';
+        $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
     public function super_admin_list_page()
     {
         $theme_data = $this->admin_panel_common_data();
