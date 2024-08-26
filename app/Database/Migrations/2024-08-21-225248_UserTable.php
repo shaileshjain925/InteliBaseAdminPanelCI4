@@ -108,6 +108,15 @@ class UserTable extends Migration
                 ],
                 'null' => false,
             ],
+            'user_data_access' => [
+                'type' => 'ENUM',
+                'constraint' => [
+                    'all',
+                    'self',
+                    'hierarchy'
+                ],
+                'null' => false,
+            ],
             'password' => [
                 'type' => 'VARCHAR',
                 'constraint' => 255,
