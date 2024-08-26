@@ -2,22 +2,20 @@
 
 namespace App\Database\Migrations;
 
-use App\Traits\CommonTraits;
 use CodeIgniter\Database\Migration;
 
-class Designation extends Migration
+class Role extends Migration
 {
-    use CommonTraits;
     public function up()
     {
         $this->forge->addField([
-            'designation_id' => [
+            'role_id' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
-            'designation_name' => [
+            'role_name' => [
                 'type' => 'VARCHAR',
                 'constraint' => 255,
                 'null' => false
@@ -26,12 +24,12 @@ class Designation extends Migration
             'updated_at datetime default current_timestamp on update current_timestamp',
         ]);
 
-        $this->forge->addPrimaryKey('designation_id');
-        $this->forge->createTable('designations', true);
+        $this->forge->addPrimaryKey('role_id');
+        $this->forge->createTable('roles', true);
     }
 
     public function down()
     {
-        $this->forge->createTable('designations', true);
+        $this->forge->dropTable('roles', true);
     }
 }

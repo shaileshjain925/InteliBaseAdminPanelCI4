@@ -3,36 +3,16 @@
 namespace App\Models;
 
 use App\Models\FunctionModel;
-use UserType;
 
-class UserModel extends FunctionModel
+class UsersModel extends FunctionModel
 {
-    protected $table            = 'user';
+    protected $table            = 'users';
     protected $primaryKey       = 'user_id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [
-        'user_name',
-        'reporting_to_user_id',
-        'designation_id',
-        'user_code',
-        'user_email',
-        'user_mobile',
-        'user_address',
-        'user_country_id',
-        'user_state_id',
-        'user_city_id',
-        'user_pincode',
-        'user_aadhaar_card',
-        'user_aadhaar_card_image',
-        'user_image',
-        'user_type',
-        'password',
-        'otp',
-        'is_active'
-    ];
+    protected $allowedFields = ['user_id', 'user_code', 'reporting_to_user_id', 'designation_id', 'role_id', 'user_name', 'user_email', 'user_mobile', 'user_address', 'user_country_id', 'user_state_id', 'user_city_id', 'user_pincode', 'user_aadhaar_card', 'user_aadhaar_card_image', 'user_image', 'user_type', 'password', 'otp', 'is_active', 'created_at', 'updated_at'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
