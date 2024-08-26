@@ -21,7 +21,7 @@ class AdminApiController extends BaseController
      */
     public function country_get_api()
     {
-        return $this->api_get($this->get_country_model());
+        return $this->api_get($this->get_countries_model());
     }
     /**
      *  {
@@ -40,7 +40,7 @@ class AdminApiController extends BaseController
      */
     public function country_list_api()
     {
-        return $this->api_list($this->get_country_model());
+        return $this->api_list($this->get_countries_model());
     }
     /**
      *  
@@ -48,7 +48,7 @@ class AdminApiController extends BaseController
 
     public function country_create_api()
     {
-        return $this->api_create($this->get_country_model());
+        return $this->api_create($this->get_countries_model());
     }
     /**
      * {
@@ -65,14 +65,14 @@ class AdminApiController extends BaseController
      */
     public function country_update_api()
     {
-        return $this->api_update($this->get_country_model());
+        return $this->api_update($this->get_countries_model());
     }
     /**
      * {"country_id":"required"}
      */
     public function country_delete_api()
     {
-        return $this->api_delete($this->get_country_model());
+        return $this->api_delete($this->get_countries_model());
     }
     /**
      * {"state_id":"required"}
@@ -81,109 +81,241 @@ class AdminApiController extends BaseController
     /** */
     public function state_get_api()
     {
-        return $this->api_get($this->get_state_model());
+        return $this->api_get($this->get_states_model());
     }
     /** */
     public function state_list_api()
     {
-        return $this->api_list($this->get_state_model());
+        return $this->api_list($this->get_states_model());
     }
     /** */
     public function state_create_api()
     {
-        return $this->api_create($this->get_state_model());
+        return $this->api_create($this->get_states_model());
     }
     /** */
     public function state_update_api()
     {
-        return $this->api_update($this->get_state_model());
+        return $this->api_update($this->get_states_model());
     }
     /** */
     public function state_delete_api()
     {
-        return $this->api_delete($this->get_state_model());
+        return $this->api_delete($this->get_states_model());
     }
 
     // city -------------------------------------------------------------------------------------------------------
     /** */
     public function city_get_api()
     {
-        return $this->api_get($this->get_city_model());
+        return $this->api_get($this->get_cities_model());
     }
     /** */
     public function city_list_api()
     {
-        return $this->api_list($this->get_city_model());
+        return $this->api_list($this->get_cities_model());
     }
     /** */
     public function city_create_api()
     {
-        return $this->api_create($this->get_city_model());
+        return $this->api_create($this->get_cities_model());
     }
     /** */
     public function city_update_api()
     {
-        return $this->api_update($this->get_city_model());
+        return $this->api_update($this->get_cities_model());
     }
     /** */
     public function city_delete_api()
     {
-        return $this->api_delete($this->get_city_model());
+        return $this->api_delete($this->get_cities_model());
     }
 
 
-    // city -------------------------------------------------------------------------------------------------------
+    // designation -------------------------------------------------------------------------------------------------------
     /** */
     public function designation_get_api()
     {
-        return $this->api_get($this->get_designation_model());
+        return $this->api_get($this->get_designations_model());
     }
     /** */
     public function designation_list_api()
     {
-        return $this->api_list($this->get_designation_model());
+        return $this->api_list($this->get_designations_model());
     }
     /** */
     public function designation_create_api()
     {
-        return $this->api_create($this->get_designation_model(false));
+        return $this->api_create($this->get_designations_model(false));
     }
     /** */
     public function designation_update_api()
     {
-        return $this->api_update($this->get_designation_model(false));
+        return $this->api_update($this->get_designations_model(false));
     }
     /** */
     public function designation_delete_api()
     {
-        return $this->api_delete($this->get_designation_model(false));
+        return $this->api_delete($this->get_designations_model(false));
     }
 
+     // Module -------------------------------------------------------------------------------------------------------
+    /** */
+    public function module_get_api()
+    {
+        return $this->api_get($this->get_modules_model());
+    }
+    /** */
+    public function module_list_api()
+    {
+        return $this->api_list($this->get_modules_model());
+    }
+    /** */
+    public function module_create_api()
+    {
+        return $this->api_create($this->get_modules_model());
+    }
+    /** */
+    public function module_update_api()
+    {
+        return $this->api_update($this->get_modules_model());
+    }
+    /** */
+    public function module_delete_api()
+    {
+        return $this->api_delete($this->get_modules_model());
+    }
+
+     // Module Menu -------------------------------------------------------------------------------------------------------
+    /** */
+    public function module_menu_get_api()
+    {
+        return $this->api_get($this->get_module_menus_model());
+    }
+    /** */
+    public function module_menu_list_api()
+    {
+        return $this->api_list($this->get_module_menus_model());
+    }
+    /** */
+    public function module_menu_create_api()
+    {
+        return $this->api_create($this->get_module_menus_model());
+    }
+    /** */
+    public function module_menu_update_api()
+    {
+        return $this->api_update($this->get_module_menus_model());
+    }
+    /** */
+    public function module_menu_delete_api()
+    {
+        return $this->api_delete($this->get_module_menus_model());
+    }
+     // roles -------------------------------------------------------------------------------------------------------
+    /** */
+    public function role_get_api()
+    {
+        return $this->api_get($this->get_roles_model());
+    }
+    /** */
+    public function role_list_api()
+    {
+        return $this->api_list($this->get_roles_model());
+    }
+    /** */
+    public function role_create_api()
+    {
+        return $this->api_create($this->get_roles_model());
+    }
+    /** */
+    public function role_update_api()
+    {
+        return $this->api_update($this->get_roles_model());
+    }
+    /** */
+    public function role_delete_api()
+    {
+        return $this->api_delete($this->get_roles_model());
+    }
+     // role Modules -------------------------------------------------------------------------------------------------------
+    /** */
+    public function role_module_get_api()
+    {
+        return $this->api_get($this->get_role_modules_model());
+    }
+    /** */
+    public function role_module_list_api()
+    {
+        return $this->api_list($this->get_role_modules_model());
+    }
+    /** */
+    public function role_module_create_api()
+    {
+        return $this->api_create($this->get_role_modules_model());
+    }
+    /** */
+    public function role_module_update_api()
+    {
+        return $this->api_update($this->get_role_modules_model());
+    }
+    /** */
+    public function role_module_delete_api()
+    {
+        return $this->api_delete($this->get_role_modules_model());
+    }
+
+     // role Module Menu-------------------------------------------------------------------------------------------------------
+    /** */
+    public function role_module_menu_get_api()
+    {
+        return $this->api_get($this->get_role_module_menus_model());
+    }
+    /** */
+    public function role_module_menu_list_api()
+    {
+        return $this->api_list($this->get_role_module_menus_model());
+    }
+    /** */
+    public function role_module_menu_create_api()
+    {
+        return $this->api_create($this->get_role_module_menus_model());
+    }
+    /** */
+    public function role_module_menu_update_api()
+    {
+        return $this->api_update($this->get_role_module_menus_model());
+    }
+    /** */
+    public function role_module_menu_delete_api()
+    {
+        return $this->api_delete($this->get_role_module_menus_model());
+    }
     // user -------------------------------------------------------------------------------------------------------
     /** */
     public function user_get_api()
     {
-        return $this->api_get($this->get_user_model());
+        return $this->api_get($this->get_users_model());
     }
     /** */
     public function user_list_api()
     {
-        return $this->api_list($this->get_user_model());
+        return $this->api_list($this->get_users_model());
     }
     /** */
     public function user_create_api()
     {
-        return $this->api_create($this->get_user_model(false));
+        return $this->api_create($this->get_users_model(false));
     }
     /** */
     public function user_update_api()
     {
-        return $this->api_update($this->get_user_model(false));
+        return $this->api_update($this->get_users_model(false));
     }
     /** */
     public function user_delete_api()
     {
-        return $this->api_delete($this->get_user_model(false));
+        return $this->api_delete($this->get_users_model(false));
     }
     /**
      * {"username":"required","password":"required"}
@@ -210,7 +342,7 @@ class AdminApiController extends BaseController
             setcookie('username', '', time() - 3600);
         }
 
-        $user_data = $this->get_user_model()->checkLogin($data['username'], $data['password']);
+        $user_data = $this->get_users_model()->checkLogin($data['username'], $data['password']);
         if ($user_data['status'] != ApiResponseStatusCode::OK) {
             return formatApiAutoResponse($this->request, $this->response, $user_data);
         }

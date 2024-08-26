@@ -11,7 +11,7 @@
                 <a href="<?= @$_previous_path ?>">
                     <button class="btn export_btn me-3" type="button"><i class="fas fa-backward"></i></button>
                 </a>
-                <a href="<?= base_url(route_to($user_type . '_create_update_page')) ?>">
+                <a href="<?= base_url(route_to( 'staff_create_update_page')) ?>">
                     <button class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add <?= UserType::from($user_type)->name ?></button>
                 </a>
             </div>

@@ -10,39 +10,32 @@ class AdminPageController extends BaseController
 {
     use CommonTraits;
 
-    public function setSession($user_type = 'super_admin')
-    {
-        session()->set('user_type', $user_type);
-        return redirect()->route('default_dashboard_page');
-    }
     public function default_dashboard_page()
     {
-        if (!checkUserType()) {
-            $this->setSession();
-        }
-        switch (getUserType()) {
-            case UserType::SuperAdmin->value:
-                return $this->super_admin_dashboard_page();
-                break;
-            case UserType::Admin->value:
-                return $this->admin_dashboard_page();
-                break;
-            case UserType::SalesManager->value:
-                return $this->sales_dashboard_page();
-                break;
-            case UserType::SalesExecutive->value:
-                return $this->sales_dashboard_page();
-                break;
-            case UserType::Purchase->value:
-                return $this->purchase_dashboard_page();
-                break;
-            case UserType::Finance->value:
-                return $this->finance_dashboard_page();
-                break;
-            case UserType::CRM->value:
-                return $this->crm_dashboard_page();
-                break;
-        }
+        return $this->super_admin_dashboard_page();
+        // switch (getUserType()) {
+        //     case UserType::SuperAdmin->value:
+        //         return $this->super_admin_dashboard_page();
+        //         break;
+        //     case UserType::Admin->value:
+        //         return $this->admin_dashboard_page();
+        //         break;
+        //     case UserType::SalesManager->value:
+        //         return $this->sales_dashboard_page();
+        //         break;
+        //     case UserType::SalesExecutive->value:
+        //         return $this->sales_dashboard_page();
+        //         break;
+        //     case UserType::Purchase->value:
+        //         return $this->purchase_dashboard_page();
+        //         break;
+        //     case UserType::Finance->value:
+        //         return $this->finance_dashboard_page();
+        //         break;
+        //     case UserType::CRM->value:
+        //         return $this->crm_dashboard_page();
+        //         break;
+        // }
     }
     public function login_page()
     {
@@ -72,6 +65,7 @@ class AdminPageController extends BaseController
         }
         return redirect()->route('default_dashboard_page');
     }
+
     public function designation_list_page()
     {
         $theme_data = $this->admin_panel_common_data();
@@ -148,7 +142,7 @@ class AdminPageController extends BaseController
         $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Dashboard/crm_dashboard';
         return view('AdminPanelNew/partials/main', $theme_data);
     }
-    public function user_list_page()
+    public function staff_list_page()
     {
         $theme_data = $this->admin_panel_common_data();
         $theme_data['_meta_title'] = 'Staff List';
@@ -159,243 +153,25 @@ class AdminPageController extends BaseController
         $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
         return view('AdminPanelNew/partials/main', $theme_data);
     }
-    public function super_admin_list_page()
+    public function staff_create_update_page($user_id = null)
     {
         $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Super Admin List';
-        $theme_data['_page_title'] = 'Super Admin List';
-        $theme_data['_breadcrumb1'] = 'Dashboard';
-        $theme_data['_breadcrumb2'] = 'Super Admin List';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_list';
-        $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
-        $theme_data['user_type'] = UserType::SuperAdmin->value;
-        return view('AdminPanelNew/partials/main', $theme_data);
-    }
-    public function super_admin_create_update_page($user_id = null)
-    {
-        $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Super Admin ' . CreateUpdateAlias($user_id);
-        $theme_data['_page_title'] = 'Super Admin ' . CreateUpdateAlias($user_id);
-        $theme_data['_breadcrumb1'] = 'Super Admin List';
-        $theme_data['_breadcrumb2'] = 'Super Admin ' . CreateUpdateAlias($user_id);
+        $theme_data['_meta_title'] = 'Staff ' . CreateUpdateAlias($user_id);
+        $theme_data['_page_title'] = 'Staff ' . CreateUpdateAlias($user_id);
+        $theme_data['_breadcrumb1'] = 'Staff List';
+        $theme_data['_breadcrumb2'] = 'Staff ' . CreateUpdateAlias($user_id);
         $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_create_update';
         if (!empty($user_id)) {
             $theme_data = array_merge($theme_data, $this->get_users_model()->find($user_id) ?? []);
         }
-        $theme_data['user_type'] = UserType::SuperAdmin->value;
-        // $theme_data['_form_type'] = 'component';
-        $theme_data['_previous_path'] = base_url(route_to($theme_data['user_type'] . '_list_page'));
+        $theme_data['_previous_path'] = base_url(route_to('staff_list_page'));
         return view('AdminPanelNew/partials/main', $theme_data);
     }
-    public function super_admin_view_component()
+    public function staff_view_component()
     {
         $theme_data['user_type'] = UserType::SuperAdmin->value;
         $data = getRequestData($this->request, 'ARRAY');
-        $theme_data = array_merge($theme_data, $this->get_users_model()->autoJoin()->select("user.*")->find($data['user_id']));
-        return view('AdminPanelNew/components/staff_management/user_view', $theme_data);
-    }
-    public function admin_list_page()
-    {
-        $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Admin List';
-        $theme_data['_page_title'] = 'Admin List';
-        $theme_data['_breadcrumb1'] = 'Dashboard';
-        $theme_data['_breadcrumb2'] = 'Admin List';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_list';
-        $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
-        $theme_data['user_type'] = UserType::Admin->value;
-        return view('AdminPanelNew/partials/main', $theme_data);
-    }
-    public function admin_create_update_page($user_id = null)
-    {
-        $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Admin ' . CreateUpdateAlias($user_id);
-        $theme_data['_page_title'] = 'Admin ' . CreateUpdateAlias($user_id);
-        $theme_data['_breadcrumb1'] = 'Admin List';
-        $theme_data['_breadcrumb2'] = 'Admin ' . CreateUpdateAlias($user_id);
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_create_update';
-        if (!empty($user_id)) {
-            $theme_data = array_merge($theme_data, $this->get_users_model()->find($user_id) ?? []);
-        }
-        $theme_data['user_type'] = UserType::Admin->value;
-        $theme_data['_previous_path'] = base_url(route_to($theme_data['user_type'] . '_list_page'));
-        return view('AdminPanelNew/partials/main', $theme_data);
-    }
-    public function admin_view_component()
-    {
-        $theme_data['user_type'] = UserType::SuperAdmin->value;
-        $data = getRequestData($this->request, 'ARRAY');
-        $theme_data = array_merge($theme_data, $this->get_users_model()->autoJoin()->select("user.*")->find($data['user_id']));
-        return view('AdminPanelNew/components/staff_management/user_view', $theme_data);
-    }
-    public function sales_manager_list_page()
-    {
-        $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Sales Manager List';
-        $theme_data['_page_title'] = 'Sales Manager List';
-        $theme_data['_breadcrumb1'] = 'Dashboard';
-        $theme_data['_breadcrumb2'] = 'Sales Manager List';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_list';
-        $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
-        $theme_data['user_type'] = UserType::SalesManager->value;
-        return view('AdminPanelNew/partials/main', $theme_data);
-    }
-    public function sales_manager_create_update_page($user_id = null)
-    {
-        $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Sales Manager ' . CreateUpdateAlias($user_id);
-        $theme_data['_page_title'] = 'Sales Manager ' . CreateUpdateAlias($user_id);
-        $theme_data['_breadcrumb1'] = 'Sales Manager List';
-        $theme_data['_breadcrumb2'] = 'Sales Manager ' . CreateUpdateAlias($user_id);
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_create_update';
-        if (!empty($user_id)) {
-            $theme_data = array_merge($theme_data, $this->get_users_model()->find($user_id) ?? []);
-        }
-        $theme_data['user_type'] = UserType::SalesManager->value;
-        $theme_data['_previous_path'] = base_url(route_to($theme_data['user_type'] . '_list_page'));
-        return view('AdminPanelNew/partials/main', $theme_data);
-    }
-    public function sales_manager_view_component()
-    {
-        $theme_data['user_type'] = UserType::SuperAdmin->value;
-        $data = getRequestData($this->request, 'ARRAY');
-        $theme_data = array_merge($theme_data, $this->get_users_model()->autoJoin()->select("user.*")->find($data['user_id']));
-        return view('AdminPanelNew/components/staff_management/user_view', $theme_data);
-    }
-    public function sales_executive_list_page()
-    {
-        $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Sales Executive List';
-        $theme_data['_page_title'] = 'Sales Executive List';
-        $theme_data['_breadcrumb1'] = 'Dashboard';
-        $theme_data['_breadcrumb2'] = 'Sales Executive List';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_list';
-        $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
-        $theme_data['user_type'] = UserType::SalesExecutive->value;
-        return view('AdminPanelNew/partials/main', $theme_data);
-    }
-    public function sales_executive_create_update_page($user_id = null)
-    {
-        $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Sales Executive ' . CreateUpdateAlias($user_id);
-        $theme_data['_page_title'] = 'Sales Executive ' . CreateUpdateAlias($user_id);
-        $theme_data['_breadcrumb1'] = 'Sales Executive List';
-        $theme_data['_breadcrumb2'] = 'Sales Executive ' . CreateUpdateAlias($user_id);
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_create_update';
-        if (!empty($user_id)) {
-            $theme_data = array_merge($theme_data, $this->get_users_model()->find($user_id) ?? []);
-        }
-        $theme_data['user_type'] = UserType::SalesExecutive->value;
-        $theme_data['_previous_path'] = base_url(route_to($theme_data['user_type'] . '_list_page'));
-        return view('AdminPanelNew/partials/main', $theme_data);
-    }
-    public function sales_executive_view_component()
-    {
-        $theme_data['user_type'] = UserType::SuperAdmin->value;
-        $data = getRequestData($this->request, 'ARRAY');
-        $theme_data = array_merge($theme_data, $this->get_users_model()->autoJoin()->select("user.*")->find($data['user_id']));
-        return view('AdminPanelNew/components/staff_management/user_view', $theme_data);
-    }
-    public function purchase_list_page()
-    {
-        $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Purchase List';
-        $theme_data['_page_title'] = 'Purchase List';
-        $theme_data['_breadcrumb1'] = 'Dashboard';
-        $theme_data['_breadcrumb2'] = 'Purchase List';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_list';
-        $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
-        $theme_data['user_type'] = UserType::Purchase->value;
-        return view('AdminPanelNew/partials/main', $theme_data);
-    }
-    public function purchase_create_update_page($user_id = null)
-    {
-        $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Purchase ' . CreateUpdateAlias($user_id);
-        $theme_data['_page_title'] = 'Purchase ' . CreateUpdateAlias($user_id);
-        $theme_data['_breadcrumb1'] = 'Purchase List';
-        $theme_data['_breadcrumb2'] = 'Purchase ' . CreateUpdateAlias($user_id);
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_create_update';
-        if (!empty($user_id)) {
-            $theme_data = array_merge($theme_data, $this->get_users_model()->find($user_id) ?? []);
-        }
-        $theme_data['user_type'] = UserType::Purchase->value;
-        $theme_data['_previous_path'] = base_url(route_to($theme_data['user_type'] . '_list_page'));
-        return view('AdminPanelNew/partials/main', $theme_data);
-    }
-    public function purchase_view_component()
-    {
-        $theme_data['user_type'] = UserType::SuperAdmin->value;
-        $data = getRequestData($this->request, 'ARRAY');
-        $theme_data = array_merge($theme_data, $this->get_users_model()->autoJoin()->select("user.*")->find($data['user_id']));
-        return view('AdminPanelNew/components/staff_management/user_view', $theme_data);
-    }
-    public function finance_list_page()
-    {
-        $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Finance List';
-        $theme_data['_page_title'] = 'Finance List';
-        $theme_data['_breadcrumb1'] = 'Dashboard';
-        $theme_data['_breadcrumb2'] = 'Finance List';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_list';
-        $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
-        $theme_data['user_type'] = UserType::Finance->value;
-        return view('AdminPanelNew/partials/main', $theme_data);
-    }
-    public function finance_create_update_page($user_id = null)
-    {
-        $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Finance ' . CreateUpdateAlias($user_id);
-        $theme_data['_page_title'] = 'Finance ' . CreateUpdateAlias($user_id);
-        $theme_data['_breadcrumb1'] = 'Finance List';
-        $theme_data['_breadcrumb2'] = 'Finance ' . CreateUpdateAlias($user_id);
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_create_update';
-        if (!empty($user_id)) {
-            $theme_data = array_merge($theme_data, $this->get_users_model()->find($user_id) ?? []);
-        }
-        $theme_data['user_type'] = UserType::Finance->value;
-        $theme_data['_previous_path'] = base_url(route_to($theme_data['user_type'] . '_list_page'));
-        return view('AdminPanelNew/partials/main', $theme_data);
-    }
-    public function finance_view_component()
-    {
-        $theme_data['user_type'] = UserType::SuperAdmin->value;
-        $data = getRequestData($this->request, 'ARRAY');
-        $theme_data = array_merge($theme_data, $this->get_users_model()->autoJoin()->select("user.*")->find($data['user_id']));
-        return view('AdminPanelNew/components/staff_management/user_view', $theme_data);
-    }
-    public function crm_list_page()
-    {
-        $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'CRM List';
-        $theme_data['_page_title'] = 'CRM List';
-        $theme_data['_breadcrumb1'] = 'Dashboard';
-        $theme_data['_breadcrumb2'] = 'CRM List';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_list';
-        $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
-        $theme_data['user_type'] = UserType::CRM->value;
-        return view('AdminPanelNew/partials/main', $theme_data);
-    }
-    public function crm_create_update_page($user_id = null)
-    {
-        $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'CRM ' . CreateUpdateAlias($user_id);
-        $theme_data['_page_title'] = 'CRM ' . CreateUpdateAlias($user_id);
-        $theme_data['_breadcrumb1'] = 'CRM List';
-        $theme_data['_breadcrumb2'] = 'CRM ' . CreateUpdateAlias($user_id);
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/user_create_update';
-        if (!empty($user_id)) {
-            $theme_data = array_merge($theme_data, $this->get_users_model()->find($user_id) ?? []);
-        }
-        $theme_data['user_type'] = UserType::CRM->value;
-        $theme_data['_previous_path'] = base_url(route_to($theme_data['user_type'] . '_list_page'));
-        return view('AdminPanelNew/partials/main', $theme_data);
-    }
-    public function crm_view_component()
-    {
-        $theme_data['user_type'] = UserType::SuperAdmin->value;
-        $data = getRequestData($this->request, 'ARRAY');
-        $theme_data = array_merge($theme_data, $this->get_users_model()->autoJoin()->select("user.*")->find($data['user_id']));
+        $theme_data = array_merge($theme_data, $this->get_users_model()->autoJoin()->select("users.*")->find($data['user_id']));
         return view('AdminPanelNew/components/staff_management/user_view', $theme_data);
     }
     protected function admin_panel_common_data(): array
@@ -464,7 +240,7 @@ class AdminPageController extends BaseController
                         "title" => "Purchase",
                         "url" => base_url(route_to('purchase_dashboard_page')),
                         "badge_count" => 0,
-                        "visibility" => true, 
+                        "visibility" => true,
                     ],
                     [
                         "title" => "Finance",
@@ -500,7 +276,7 @@ class AdminPageController extends BaseController
                     ],
                     [
                         "title" => "Staff",
-                        "url" => base_url(route_to('sales_manager_list_page')),
+                        "url" => base_url(route_to('staff_list_page')),
                         "badge_count" => 0,
                         "visibility" => true,
                     ],

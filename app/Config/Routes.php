@@ -23,8 +23,6 @@ function encodeArray($array)
 if (!in_array($file_extension, $extensions)) {
     // Admin Page Controller Start -----------------------------------------------------------------------------
     $routes->get('/', 'AdminPageController::login_page', ['as' => 'login_page']);
-    $routes->get('setSession', 'AdminPageController::setSession/super_admin', ['as' => 'setSession']);
-    $routes->get('setSession/(:num)', 'AdminPageController::setSession/$1');
     $routes->get('logout', 'AdminPageController::logout', ['as' => 'logout']);
     $routes->group('Admin', ['filter' => 'AdminAuth'], function ($routes) {
         $routes->get('LoginByOther/(:any)', 'AdminPageController::LoginByOther/$1', ['as' => 'LoginByOther']);
@@ -45,52 +43,40 @@ if (!in_array($file_extension, $extensions)) {
         });
         $routes->group('StaffManagement', function ($routes) {
             $routes->group('Staff', function ($routes) {
-                $routes->get('List', 'AdminPageController::super_admin_list_page', ['as' => 'super_admin_list_page']);
-                $routes->get('CreateUpdate', 'AdminPageController::super_admin_create_update_page', ['as' => 'super_admin_create_update_page']);
-                $routes->get('CreateUpdate/(:num)', 'AdminPageController::super_admin_create_update_page/$1');
-                $routes->post('View', 'AdminPageController::super_admin_view_component', ['as' => 'super_admin_view_component']);
+                $routes->get('List', 'AdminPageController::staff_list_page', ['as' => 'staff_list_page']);
+                $routes->get('CreateUpdate', 'AdminPageController::staff_create_update_page', ['as' => 'staff_create_update_page']);
+                $routes->get('CreateUpdate/(:num)', 'AdminPageController::staff_create_update_page/$1');
+                $routes->post('View', 'AdminPageController::staff_view_component', ['as' => 'staff_view_component']);
             });
-            $routes->group('SuperAdmin', function ($routes) {
-                $routes->get('List', 'AdminPageController::super_admin_list_page', ['as' => 'super_admin_list_page']);
-                $routes->get('CreateUpdate', 'AdminPageController::super_admin_create_update_page', ['as' => 'super_admin_create_update_page']);
-                $routes->get('CreateUpdate/(:num)', 'AdminPageController::super_admin_create_update_page/$1');
-                $routes->post('View', 'AdminPageController::super_admin_view_component', ['as' => 'super_admin_view_component']);
+            $routes->group('Designation', function ($routes) {
+                $routes->get('List', 'AdminPageController::designation_list_page', ['as' => 'designation_list_page']);
+                $routes->get('CreateUpdate', 'AdminPageController::designation_create_update_page', ['as' => 'designation_create_update_page']);
+                $routes->get('CreateUpdate/(:num)', 'AdminPageController::designation_create_update_page/$1');
+                $routes->post('View', 'AdminPageController::designation_view_component', ['as' => 'designation_view_component']);
             });
-            $routes->group('Admin', function ($routes) {
-                $routes->get('List', 'AdminPageController::admin_list_page', ['as' => 'admin_list_page']);
-                $routes->get('CreateUpdate', 'AdminPageController::admin_create_update_page', ['as' => 'admin_create_update_page']);
-                $routes->get('CreateUpdate/(:num)', 'AdminPageController::admin_create_update_page/$1');
-                $routes->post('View', 'AdminPageController::admin_view_component', ['as' => 'admin_view_component']);
+            $routes->group('Role', function ($routes) {
+                $routes->get('List', 'AdminPageController::role_list_page', ['as' => 'role_list_page']);
+                $routes->get('CreateUpdate', 'AdminPageController::role_create_update_page', ['as' => 'role_create_update_page']);
+                $routes->get('CreateUpdate/(:num)', 'AdminPageController::role_create_update_page/$1');
+                $routes->post('View', 'AdminPageController::role_view_component', ['as' => 'role_view_component']);
             });
-            $routes->group('SalesManager', function ($routes) {
-                $routes->get('List', 'AdminPageController::sales_manager_list_page', ['as' => 'sales_manager_list_page']);
-                $routes->get('CreateUpdate', 'AdminPageController::sales_manager_create_update_page', ['as' => 'sales_manager_create_update_page']);
-                $routes->get('CreateUpdate/(:num)', 'AdminPageController::sales_manager_create_update_page/$1');
-                $routes->post('View', 'AdminPageController::sales_manager_view_component', ['as' => 'sales_manager_view_component']);
+            $routes->group('RoleModule', function ($routes) {
+                $routes->get('List', 'AdminPageController::role_module_list_page', ['as' => 'role_module_list_page']);
+                $routes->get('CreateUpdate', 'AdminPageController::role_module_create_update_page', ['as' => 'role_module_create_update_page']);
+                $routes->get('CreateUpdate/(:num)', 'AdminPageController::role_module_create_update_page/$1');
+                $routes->post('View', 'AdminPageController::role_module_view_component', ['as' => 'role_module_view_component']);
             });
-            $routes->group('SalesExecutive', function ($routes) {
-                $routes->get('List', 'AdminPageController::sales_executive_list_page', ['as' => 'sales_executive_list_page']);
-                $routes->get('CreateUpdate', 'AdminPageController::sales_executive_create_update_page', ['as' => 'sales_executive_create_update_page']);
-                $routes->get('CreateUpdate/(:num)', 'AdminPageController::sales_executive_create_update_page/$1');
-                $routes->post('View', 'AdminPageController::sales_executive_view_component', ['as' => 'sales_executive_view_component']);
+            $routes->group('RoleModuleMenu', function ($routes) {
+                $routes->get('List', 'AdminPageController::role_module_menu_list_page', ['as' => 'role_module_menu_list_page']);
+                $routes->get('CreateUpdate', 'AdminPageController::role_module_menu_create_update_page', ['as' => 'role_module_menu_create_update_page']);
+                $routes->get('CreateUpdate/(:num)', 'AdminPageController::role_module_menu_create_update_page/$1');
+                $routes->post('View', 'AdminPageController::role_module_menu_view_component', ['as' => 'role_module_menu_view_component']);
             });
-            $routes->group('Purchase', function ($routes) {
-                $routes->get('List', 'AdminPageController::purchase_list_page', ['as' => 'purchase_list_page']);
-                $routes->get('CreateUpdate', 'AdminPageController::purchase_create_update_page', ['as' => 'purchase_create_update_page']);
-                $routes->get('CreateUpdate/(:num)', 'AdminPageController::purchase_create_update_page/$1');
-                $routes->post('View', 'AdminPageController::purchase_view_component', ['as' => 'purchase_view_component']);
+            $routes->group('Module', function ($routes) {
+                $routes->post('View', 'AdminPageController::module_view_component', ['as' => 'module_view_component']);
             });
-            $routes->group('Finance', function ($routes) {
-                $routes->get('List', 'AdminPageController::finance_list_page', ['as' => 'finance_list_page']);
-                $routes->get('CreateUpdate', 'AdminPageController::finance_create_update_page', ['as' => 'finance_create_update_page']);
-                $routes->get('CreateUpdate/(:num)', 'AdminPageController::finance_create_update_page/$1');
-                $routes->post('View', 'AdminPageController::finance_view_component', ['as' => 'finance_view_component']);
-            });
-            $routes->group('CRM', function ($routes) {
-                $routes->get('List', 'AdminPageController::crm_list_page', ['as' => 'crm_list_page']);
-                $routes->get('CreateUpdate', 'AdminPageController::crm_create_update_page', ['as' => 'crm_create_update_page']);
-                $routes->get('CreateUpdate/(:num)', 'AdminPageController::crm_create_update_page/$1');
-                $routes->post('View', 'AdminPageController::crm_view_component', ['as' => 'crm_view_component']);
+            $routes->group('ModuleMenu', function ($routes) {
+                $routes->post('View', 'AdminPageController::module_menu_view_component', ['as' => 'module_menu_view_component']);
             });
         });
         $routes->group('FileUpload', function ($routes) {
@@ -134,6 +120,41 @@ if (!in_array($file_extension, $extensions)) {
                 $routes->post("designation_create_api", "AdminApiController::designation_create_api", ['as' => 'designation_create_api']);
                 $routes->post("designation_update_api", "AdminApiController::designation_update_api", ['as' => 'designation_update_api']);
                 $routes->post("designation_delete_api", "AdminApiController::designation_delete_api", ['as' => 'designation_delete_api']);
+            });
+            $routes->group('role', function ($routes) {
+                $routes->post("role_get_api", "AdminApiController::role_get_api", ['as' => 'role_get_api']);
+                $routes->post("role_list_api", "AdminApiController::role_list_api", ['as' => 'role_list_api']);
+                $routes->post("role_create_api", "AdminApiController::role_create_api", ['as' => 'role_create_api']);
+                $routes->post("role_update_api", "AdminApiController::role_update_api", ['as' => 'role_update_api']);
+                $routes->post("role_delete_api", "AdminApiController::role_delete_api", ['as' => 'role_delete_api']);
+            });
+            $routes->group('role_module', function ($routes) {
+                $routes->post("role_module_get_api", "AdminApiController::role_module_get_api", ['as' => 'role_module_get_api']);
+                $routes->post("role_module_list_api", "AdminApiController::role_module_list_api", ['as' => 'role_module_list_api']);
+                $routes->post("role_module_create_api", "AdminApiController::role_module_create_api", ['as' => 'role_module_create_api']);
+                $routes->post("role_module_update_api", "AdminApiController::role_module_update_api", ['as' => 'role_module_update_api']);
+                $routes->post("role_module_delete_api", "AdminApiController::role_module_delete_api", ['as' => 'role_module_delete_api']);
+            });
+            $routes->group('role_module_menu', function ($routes) {
+                $routes->post("role_module_menu_get_api", "AdminApiController::role_module_menu_get_api", ['as' => 'role_module_menu_get_api']);
+                $routes->post("role_module_menu_list_api", "AdminApiController::role_module_menu_list_api", ['as' => 'role_module_menu_list_api']);
+                $routes->post("role_module_menu_create_api", "AdminApiController::role_module_menu_create_api", ['as' => 'role_module_menu_create_api']);
+                $routes->post("role_module_menu_update_api", "AdminApiController::role_module_menu_update_api", ['as' => 'role_module_menu_update_api']);
+                $routes->post("role_module_menu_delete_api", "AdminApiController::role_module_menu_delete_api", ['as' => 'role_module_menu_delete_api']);
+            });
+            $routes->group('module', function ($routes) {
+                $routes->post("module_get_api", "AdminApiController::module_get_api", ['as' => 'module_get_api']);
+                $routes->post("module_list_api", "AdminApiController::module_list_api", ['as' => 'module_list_api']);
+                $routes->post("module_create_api", "AdminApiController::module_create_api", ['as' => 'module_create_api']);
+                $routes->post("module_update_api", "AdminApiController::module_update_api", ['as' => 'module_update_api']);
+                $routes->post("module_delete_api", "AdminApiController::module_delete_api", ['as' => 'module_delete_api']);
+            });
+            $routes->group('module_menu', function ($routes) {
+                $routes->post("module_menu_get_api", "AdminApiController::module_menu_get_api", ['as' => 'module_menu_get_api']);
+                $routes->post("module_menu_list_api", "AdminApiController::module_menu_list_api", ['as' => 'module_menu_list_api']);
+                $routes->post("module_menu_create_api", "AdminApiController::module_menu_create_api", ['as' => 'module_menu_create_api']);
+                $routes->post("module_menu_update_api", "AdminApiController::module_menu_update_api", ['as' => 'module_menu_update_api']);
+                $routes->post("module_menu_delete_api", "AdminApiController::module_menu_delete_api", ['as' => 'module_menu_delete_api']);
             });
             $routes->group('user', function ($routes) {
                 $routes->post("user_get_api", "AdminApiController::user_get_api", ['as' => 'user_get_api']);

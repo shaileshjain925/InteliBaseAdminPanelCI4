@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-use CodeIgniter\Model;
+use App\Models\FunctionModel;
+use App\Traits\CommonTraits;
 
-class RolesModel extends Model
+class RolesModel extends FunctionModel
 {
+    use CommonTraits;
     protected $table            = 'roles';
     protected $primaryKey       = 'role_id';
     protected $useAutoIncrement = true;
@@ -46,4 +48,9 @@ class RolesModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+    
+    public function __construct($joinRequired = true)
+    {
+        parent::__construct();
+    }
 }

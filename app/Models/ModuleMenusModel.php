@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\FunctionModel;
 use App\Traits\CommonTraits;
-use CodeIgniter\Model;
 
-class ModuleMenusModel extends Model
+class ModuleMenusModel extends FunctionModel
+
 {
     use CommonTraits;
     protected $table            = 'module_menus';
@@ -55,7 +56,7 @@ class ModuleMenusModel extends Model
     {
         parent::__construct();
         if ($joinRequired) {
-            $this->addParentJoin('module_id', $this->get_modules_model(false), 'left', ['module_name']);
+            $this->addParentJoin('module_id', $this->get_modules_model(), 'left', ['module_name']);
         }
     }
 }

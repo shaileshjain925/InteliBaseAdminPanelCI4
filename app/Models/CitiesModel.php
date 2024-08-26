@@ -34,8 +34,8 @@ class CitiesModel extends FunctionModel
     protected $validationRules = [
         'city_id' => 'permit_empty',
         'city_name' => 'required|alpha_numeric_space|max_length[255]',
-        'country_id' => 'required|integer|is_not_unique[country.country_id]',
-        'state_id' => 'required|integer|is_not_unique[state.state_id]',
+        'country_id' => 'required|integer|is_not_unique[countries.country_id]',
+        'state_id' => 'required|integer|is_not_unique[states.state_id]',
     ];
     protected $validationMessages = [
         'city_name' => [
@@ -71,7 +71,7 @@ class CitiesModel extends FunctionModel
     {
         parent::__construct();
         if ($joinRequired) {
-            $this->addParentJoin('state_id', $this->get_state_model(), 'left', ['state_name', 'state_code']);
+            $this->addParentJoin('state_id', $this->get_states_model(), 'left', ['state_name', 'state_code']);
         }
     }
 }

@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
-use CodeIgniter\Model;
+use App\Models\FunctionModel;
+use App\Traits\CommonTraits;
 
-class RoleModulesModel extends Model
+class RoleModulesModel extends FunctionModel
 {
-    protected $table            = 'rolemodules';
-    protected $primaryKey       = 'id';
+    use CommonTraits;
+
+    protected $table            = 'role_modules';
+    protected $primaryKey       = 'role_module_id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
@@ -43,4 +46,12 @@ class RoleModulesModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+    public function __construct($joinRequired = true)
+    {
+        parent::__construct();
+        if ($joinRequired) {
+            $this->addParentJoin('role_id', $this->get_roles_model(), 'left', ['role_name']);
+            $this->addParentJoin('module_id', $this->get_modules_model(), 'left', ['module_name']);
+        }
+    }
 }

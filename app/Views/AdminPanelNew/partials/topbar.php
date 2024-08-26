@@ -17,11 +17,6 @@
                         </form>
                     </div>
                 </div>
-
-
-                <div class="dropdown d-lg-inline-block ms-1">
-                    <button class="btn btn-outline-secondary"><?= UserType::from($_SESSION['user_type'])->name ?></button>
-                </div>
                 <div class="dropdown d-lg-inline-block ms-1">
                     <button type="button" class="btn header-item noti-icon waves-effect" data-toggle="fullscreen">
                         <i class="mdi mdi-fullscreen"></i>

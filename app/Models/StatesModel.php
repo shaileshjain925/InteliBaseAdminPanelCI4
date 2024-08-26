@@ -3,9 +3,10 @@
 namespace App\Models;
 
 use App\Models\FunctionModel;
-
+use App\Traits\CommonTraits;
 class StatesModel extends FunctionModel
 {
+    use CommonTraits;
     protected $table            = 'states';
     protected $primaryKey       = 'state_id';
     protected $useAutoIncrement = true;
@@ -32,7 +33,7 @@ class StatesModel extends FunctionModel
         'state_id' => 'permit_empty',
         'state_name' => 'required|alpha_numeric_space|max_length[255]',
         'state_code' => 'max_length[3]',
-        'country_id' => 'required|is_not_unique[country.country_id]',
+        'country_id' => 'required|is_not_unique[countries.country_id]',
         'short_name' => 'alpha_numeric_space|max_length[255]',
     ];
     protected $validationMessages = [
@@ -71,7 +72,7 @@ class StatesModel extends FunctionModel
     {
         parent::__construct();
         if ($joinRequired) {
-            $this->addParentJoin('country_id', $this->get_country_model(), 'left', ['country_name', 'phonecode as "country code"']);
+            $this->addParentJoin('country_id', $this->get_countries_model(), 'left', ['country_name', 'phonecode as "country code"']);
         }
     }
 }

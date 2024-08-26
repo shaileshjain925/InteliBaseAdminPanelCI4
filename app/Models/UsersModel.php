@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use App\Models\FunctionModel;
+use App\Traits\CommonTraits;
 
 class UsersModel extends FunctionModel
 {
+    use CommonTraits;
     protected $table            = 'users';
     protected $primaryKey       = 'user_id';
     protected $useAutoIncrement = true;
@@ -33,22 +35,22 @@ class UsersModel extends FunctionModel
     // Validation
     protected $validationRules = [
         'user_id' => 'permit_empty',
-        'reporting_to_user_id' => 'permit_empty|is_not_unique[user.user_id]',
-        'designation_id' => 'required|is_not_unique[designation.designation_id]',
-        'user_name'           => 'required|max_length[255]|is_unique[user.user_name,user_id,{user_id}]',
-        'user_code'          => 'required|max_length[255]|is_unique[user.user_code,user_id,{user_id}]',
-        'user_email'          => 'permit_empty|valid_email|max_length[255]|is_unique[user.user_email,user_id,{user_id}]',
-        'user_mobile'         => 'permit_empty|max_length[10]|min_length[10]|is_unique[user.user_mobile,user_id,{user_id}]',
+        'reporting_to_user_id' => 'required|is_not_unique[users.user_id]',
+        'designation_id' => 'required|is_not_unique[designations.designation_id]',
+        'user_name'           => 'required|max_length[255]|is_unique[users.user_name,user_id,{user_id}]',
+        'user_code'          => 'required|max_length[255]|is_unique[users.user_code,user_id,{user_id}]',
+        'user_email'          => 'permit_empty|valid_email|max_length[255]|is_unique[users.user_email,user_id,{user_id}]',
+        'user_mobile'         => 'permit_empty|max_length[10]|min_length[10]|is_unique[users.user_mobile,user_id,{user_id}]',
         'user_address'        => 'permit_empty',
-        'user_country_id'     => 'required|is_not_unique[country.country_id]',
-        'user_state_id'       => 'required|is_not_unique[state.state_id]',
-        'user_city_id'        => 'required|is_not_unique[city.city_id]',
+        'user_country_id'     => 'required|is_not_unique[countries.country_id]',
+        'user_state_id'       => 'required|is_not_unique[states.state_id]',
+        'user_city_id'        => 'required|is_not_unique[cities.city_id]',
         'user_pincode'        => 'required|integer|max_length[10]',
         'user_aadhaar_card'    => 'permit_empty|max_length[12]',
         'user_aadhaar_card_image' => 'permit_empty|max_length[255]',
         'password'        => 'permit_empty',
         'user_image'          => 'permit_empty|max_length[255]',
-        'user_type'           => "required|in_list[super_admin,admin,sales_manager,sales_executive,purchase,finance,crm]",
+        'user_type'           => "required|in_list[super_admin,admin,staff]",
         'otp'                 => 'permit_empty|max_length[6]',
     ];
 
@@ -112,7 +114,7 @@ class UsersModel extends FunctionModel
         ],
         'user_type' => [
             'required' => 'Staff type is required.',
-            'in_list'  => 'Staff type must be one of the following: super_admin, admin, sales_manager, sales_executive, purchase, finance, crm.',
+            'in_list'  => 'Staff type must be one of the following: super_admin, admin, staff, sales_executive, purchase, finance, crm.',
         ],
         'otp' => [
             'max_length' => 'OTP cannot exceed 6 characters.',
@@ -142,11 +144,12 @@ class UsersModel extends FunctionModel
     {
         parent::__construct();
         if ($joinRequired) {
-            $this->addParentJoin('user_country_id', $this->get_country_model(false), 'left', ['country_name as user_country_name']);
-            $this->addParentJoin('user_state_id', $this->get_state_model(false), 'left', ['state_name as user_state_name']);
-            $this->addParentJoin('user_city_id', $this->get_city_model(false), 'left', ['city_name as user_city_name']);
-            $this->addParentJoin('reporting_to_user_id', $this->get_user_model(false), 'left', ['user_name as reporting_to_user_name'], 'reporting_user');
-            $this->addParentJoin('designation_id', $this->get_designation_model(), 'left', ['designation_name']);
+            $this->addParentJoin('user_country_id', $this->get_countries_model(false), 'left', ['country_name as user_country_name']);
+            $this->addParentJoin('user_state_id', $this->get_states_model(false), 'left', ['state_name as user_state_name']);
+            $this->addParentJoin('user_city_id', $this->get_cities_model(false), 'left', ['city_name as user_city_name']);
+            $this->addParentJoin('reporting_to_user_id', $this->get_users_model(false), 'left', ['user_name as reporting_to_user_name'], 'reporting_user');
+            $this->addParentJoin('designation_id', $this->get_designations_model(), 'left', ['designation_name']);
+            $this->addParentJoin('role_id', $this->get_roles_model(), 'left', ['role_name']);
         }
     }
 }

@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-use CodeIgniter\Model;
+use App\Models\FunctionModel;
+use App\Traits\CommonTraits;
 
-class RoleModuleMenusModel extends Model
+class RoleModuleMenusModel extends FunctionModel
 {
+    use CommonTraits;
     protected $table            = 'role_module_menus';
     protected $primaryKey       = 'role_module_menu_id';
     protected $useAutoIncrement = true;
@@ -42,4 +44,13 @@ class RoleModuleMenusModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+    public function __construct($joinRequired = true)
+    {
+        parent::__construct();
+        if ($joinRequired) {
+            $this->addParentJoin('role_id', $this->get_roles_model(), 'left', ['role_name']);
+            $this->addParentJoin('module_menu_id', $this->get_module_menus_model(), 'left', ['menu_name','menu_code']);
+        }
+    }
+
 }

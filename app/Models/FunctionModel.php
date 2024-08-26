@@ -152,14 +152,17 @@ class FunctionModel extends Model
         $this->initializeMessages();
         try {
             if (!empty($filter)) {
+                // select
                 if (array_key_exists('_select', $filter) && !empty($filter['_select'])) {
                     $this->select($this->getTable() . "." . $filter['_select']);
                     unset($filter['_select']);
                 }
+                // selectOther
                 if (array_key_exists('_selectOther', $filter) && !empty($filter['_selectOther'])) {
                     $this->select($filter['_selectOther']);
                     unset($filter['_selectOther']);
                 }
+                // autoJoin
                 if (array_key_exists('_autojoin', $filter) && !empty($filter['_autojoin'])) {
                     if (strtoupper($filter['_autojoin']) == 'Y') {
                         $this->autoJoin();
@@ -169,10 +172,11 @@ class FunctionModel extends Model
                     }
                     unset($filter['_autojoin']);
                 }
+                // _otherFilters
                 if (array_key_exists('_otherFilters', $filter) && !empty($filter['_otherFilters'])) {
                     unset($filter['_otherFilters']);
                 }
-
+                // Where In
                 if (array_key_exists('_whereIn', $filter) && !empty($filter['_whereIn'] && is_array($filter['_whereIn']))) {
                     foreach ($filter['_whereIn'] as $key => $fields) {
                         # code...
@@ -181,6 +185,16 @@ class FunctionModel extends Model
                         }
                     }
                     unset($filter['_whereIn']);
+                }
+                // Where Not In
+                if (array_key_exists('_whereNotIn', $filter) && !empty($filter['_whereNotIn'] && is_array($filter['_whereNotIn']))) {
+                    foreach ($filter['_whereNotIn'] as $key => $fields) {
+                        # code...
+                        if (array_key_exists('fieldname', $fields) && array_key_exists('value', $fields)) {
+                            $this->whereNotIn(str_replace('-', '.', $fields['fieldname']), $fields['value']);
+                        }
+                    }
+                    unset($filter['_whereNotIn']);
                 }
                 foreach ($filter as $key => $value) {
                     // Check if the key is valid and value is not empty
@@ -500,74 +514,6 @@ class FunctionModel extends Model
         }
         return $data;
     }
-    public function CreateUpdateUserTableRecord($data)
-    {
-        // Extract the 'data' array from the input
-        $row = $data['data'];
-
-        // Initialize reference_id to null
-        $reference_id = null;
-
-        // Check if 'id' exists in $data and set $reference_id accordingly
-        if (!empty($data['id'])) {
-            $reference_id = (is_array($data['id'])) ? $data['id'][0] : $data['id'];
-        }
-
-        // Initialize the $user_data array with default values
-        $user_data = [
-            "user_id" => null,
-            "user_type" => null,
-            "reference_id" => $reference_id,
-            "username" => null,
-            "password" => null,
-            "is_active" => 1,
-            "is_admin" => 0,
-        ];
-
-        // Check if $row is not empty and $data['result'] is true
-        if (!empty($row) && $data['result']) {
-
-            // If 'center_name' exists in $row, set user data for center type
-            if (array_key_exists('center_name', $row)) {
-                $user_data['user_type'] = 'center';
-                $user_data['username'] = 'C' . trim($row['center_mobile']);
-                $user_data['password'] = $row['center_mobile'];
-            }
-
-            // If 'mr_name' exists in $row, set user data for mr type
-            if (array_key_exists('mr_name', $row)) {
-                $user_data['user_type'] = 'mr';
-                $user_data['username'] = 'MR' . trim($row['mr_mobile']);
-                $user_data['password'] = $row['mr_mobile'];
-            }
-
-            // If 'kisan_name' exists in $row, set user data for kisan type
-            if (array_key_exists('kisan_name', $row)) {
-                $user_data['user_type'] = 'kisan';
-                $user_data['username'] = 'K' . trim($row['kisan_mobile']);
-                $user_data['is_active'] = 0; // Kisan users are not active by default
-                $user_data['password'] = $row['kisan_mobile'];
-            }
-
-            // Retrieve the existing record from the database with matching user_type and reference_id
-            $record = $this->get_user_model()
-                ->where('user_type', $user_data['user_type'])
-                ->where('reference_id', $reference_id)
-                ->first();
-
-            // If no matching record exists, create a new record
-            if (empty($record)) {
-                $result = $this->get_user_model()->RecordCreate($user_data);
-            } else {
-                // If a matching record exists, update it while preserving the is_admin status
-                $user_data["is_admin"] = $record['is_admin'];
-                $result = $this->get_user_model()->RecordUpdate($user_data, $record['user_id']);
-            }
-        }
-
-        // Return the input data array
-        return $data;
-    }
     /**
      * Trims all string fields before insert and update operations.
      *
@@ -595,5 +541,14 @@ class FunctionModel extends Model
         }
 
         return $data;
+    }
+    public function create_update($model_instance, $row)
+    {
+        $pk = $model_instance->getPrimaryKey();
+        if (empty($model_instance->find($row[$pk]))) {
+            $model_instance->insert($row);
+        } else {
+            $model_instance->update($row[$pk], $row);
+        }
     }
 }

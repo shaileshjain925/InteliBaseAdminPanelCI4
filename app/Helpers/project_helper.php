@@ -4,7 +4,7 @@ enum UserType: string
 {
     case SuperAdmin = 'super_admin';
     case Admin = 'admin';
-    case SalesManager = 'sales_manager';
+    case SalesManager = 'staff';
     case SalesExecutive = 'sales_executive';
     case Purchase = 'purchase';
     case Finance = 'finance';

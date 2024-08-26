@@ -32,7 +32,7 @@ class DesignationsModel extends FunctionModel
     // Validation
     protected $validationRules      = [
         "designation_id" => "permit_empty",
-        "designation_name" => "required|is_unique[designation.designation_name,designation_id,{designation_id}]"
+        "designation_name" => "required|is_unique[designations.designation_name,designation_id,{designation_id}]"
     ];
     protected $validationMessages   = [];
     protected $skipValidation       = false;

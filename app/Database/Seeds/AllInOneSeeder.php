@@ -2,6 +2,7 @@
 
 namespace App\Database\Seeds;
 
+use App\Models\FunctionModel;
 use CodeIgniter\Database\Seeder;
 use App\Traits\CommonTraits;
 
@@ -10,21 +11,38 @@ class AllInOneSeeder extends Seeder
     use CommonTraits;
     public function run()
     {
+        $f = $this->get_function_model();
         // Countries Seeder
         foreach ($this->countries_data() as $country) {
-            $this->get_countries_model()->save($country);
+            $f->create_update($this->get_countries_model(false), $country);
         }
         // States Seeder
         foreach ($this->states_data() as $state) {
-            $this->get_states_model()->save($state);
+            $f->create_update($this->get_states_model(false), $state);
         }
         // Cities Seeder
         foreach ($this->cities_data() as $city) {
-            $this->get_cities_model()->save($city);
+            $f->create_update($this->get_cities_model(false), $city);
         }
         // Designations Seeder
         foreach ($this->designations_data() as $designation) {
-            $this->get_designations_model()->save($designation);
+            $f->create_update($this->get_designations_model(false), $designation);
+        }
+
+        foreach ($this->modules_data() as $module) {
+            $f->create_update($this->get_modules_model(false), $module);
+            if (isset($module['menus']) && !empty($module['menus'])) {
+                foreach ($module['menus'] as $menu) {
+                    $menu['module_id'] = $module['module_id'];
+                    $f->create_update($this->get_module_menus_model(false), $menu);
+                }
+            }
+        }
+        foreach ($this->roles_data() as $role) {
+            $f->create_update($this->get_roles_model(false), $role);
+        }
+        foreach ($this->users_data() as $user) {
+            $f->create_update($this->get_users_model(false), $user);
         }
     }
     protected function countries_data()
@@ -4637,5 +4655,49 @@ class AllInOneSeeder extends Seeder
             ['module_id' => 5, 'module_code' => 'PURCHASE', 'module_name' => 'Purchase'],
             ['module_id' => 6, 'module_code' => 'SALES', 'module_name' => 'Sales'],
         ];
+        return $modules_data;
+    }
+    protected function roles_data()
+    {
+        $role_data = [
+            ['role_id' => 1, 'role_name' => "Super Admin"],
+            ['role_id' => 2, 'role_name' => "Admin"],
+            ['role_id' => 3, 'role_name' => "Purchase Manager"],
+            ['role_id' => 4, 'role_name' => "Purchase Executive"],
+            ['role_id' => 5, 'role_name' => "Sales Manager"],
+            ['role_id' => 6, 'role_name' => "Sales Executive"],
+            ['role_id' => 7, 'role_name' => "Finance Manager"],
+            ['role_id' => 8, 'role_name' => "Finance Executive"],
+            ['role_id' => 9, 'role_name' => "CRM Manager"],
+            ['role_id' => 10, 'role_name' => "CRM Executive"],
+        ];
+        return $role_data;
+    }
+    protected function users_data()
+    {
+        $user_data = [
+            [
+                'user_id' => 1,
+                'user_code' => 'shaileshjain925',
+                'reporting_to_user_id' => null,
+                'designation_id' => 1,
+                'role_id' => 1,
+                'user_name' => 'Shailesh Jain',
+                'user_email' => 'shaileshjain925@gmail.com',
+                'user_mobile' => '7879531944',
+                'user_address' => '74 Sainath',
+                'user_country_id' => 101,
+                'user_state_id' => 4039,
+                'user_city_id' => 134263,
+                'user_pincode' => '456001',
+                'user_aadhaar_card' => null,
+                'user_aadhaar_card_image' => null,
+                'user_image' => null,
+                'user_type' => 'super_admin',
+                'password' => 'Ujjain@0734',
+                'is_active' => 1
+            ]
+        ];
+        return $user_data;
     }
 }

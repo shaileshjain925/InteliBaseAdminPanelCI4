@@ -11,11 +11,9 @@
                 <a href="<?= @$_previous_path ?>">
                     <button class="btn export_btn me-3" type="button"><i class="fas fa-backward"></i></button>
                 </a>
-                <?php if (in_array($_SESSION['user_type'], [UserType::SuperAdmin->value, UserType::Admin->value])) : ?>
-                    <a href="<?= base_url(route_to($user_type . '_create_update_page')) ?>">
-                        <button class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add <?= UserType::from($user_type)->name ?></button>
-                    </a>
-                <?php endif; ?>
+                <a href="<?= base_url(route_to('staff_create_update_page')) ?>">
+                    <button class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add Staff</button>
+                </a>
             </div>
             <div class="table-responsive">
                 <table id="table" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle"></table>
@@ -40,7 +38,7 @@
     function user_view(user_id) {
         $.ajax({
             type: "post",
-            url: "<?= base_url(route_to($user_type . '_view_component')) ?>",
+            url: "<?= base_url(route_to('staff_view_component')) ?>",
             data: {
                 user_id: user_id
             },
@@ -118,24 +116,34 @@
                 data: "user_mobile",
                 visible: true,
             },
-            <?php if ($user_type == UserType::SalesExecutive->value) : ?> {
-                    title: "Reporting To",
-                    data: "reporting_to_user_name",
-                    visible: true,
-                },
-            <?php endif; ?>
-            <?php if (in_array($_SESSION['user_type'], [UserType::SuperAdmin->value, UserType::Admin->value])) : ?> {
-                    title: "Active",
-                    data: "is_active",
-                    render: function(data, type, row) {
-                        var checked = data == 1 ? 'checked' : '';
-                        return `
+            {
+                title: "Reporting To",
+                data: "reporting_to_user_name",
+                visible: true,
+            },
+            {
+                title: "Role",
+                data: "role_name",
+                visible: true,
+            },
+            {
+                title: "Designation",
+                data: "designation_name",
+                visible: true,
+            },
+
+            {
+                title: "Active",
+                data: "is_active",
+                render: function(data, type, row) {
+                    var checked = data == 1 ? 'checked' : '';
+                    return `
             <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" id="isActiveSwitch_${row.user_id}" ${checked} onchange="change_is_active(event, ${row.user_id})">
             </div>`;
-                    }
-                },
-            <?php endif; ?> {
+                }
+            },
+            {
                 title: "Address",
                 data: "user_address",
                 visible: false,
@@ -160,41 +168,37 @@
                 data: "user_pincode",
                 visible: false,
             },
-            <?php if (in_array($_SESSION['user_type'], [UserType::SuperAdmin->value, UserType::Admin->value])) : ?> {
-                    title: "Aadhaar Card No",
-                    data: "user_aadhaar_card",
-                    visible: false,
-                },
-                {
-                    title: "Aadhaar Card Image",
-                    data: "user_aadhaar_card_image",
-                    visible: false,
-                    render: function(data, type, row) {
-                        return `<img class="image-fluid" style="height:auto; width:100px" onclick="enlargeImage(event)" src="<?= base_url() ?>${row.user_aadhaar_card_image}">`;
-                    }
-                },
-            <?php endif; ?> {
+            {
+                title: "Aadhaar Card No",
+                data: "user_aadhaar_card",
+                visible: false,
+            },
+            {
+                title: "Aadhaar Card Image",
+                data: "user_aadhaar_card_image",
+                visible: false,
+                render: function(data, type, row) {
+                    return `<img class="image-fluid" style="height:auto; width:100px" onclick="enlargeImage(event)" src="<?= base_url() ?>${row.user_aadhaar_card_image}">`;
+                }
+            },
+            {
                 "title": "Actions",
                 "data": null,
                 "render": function(data, type, row) {
                     return `
-                            <?php if (isset($_SESSION['ref_user_type']) && $_SESSION['ref_user_type'] == UserType::SuperAdmin->value) : ?>
-                                <a href="<?= base_url(route_to('LoginByOther', '')) ?>/${row.user_id}" class="text-white btn btn-sm btn-warning">
-                                    Login
-                                </a>
-                            <?php endif; ?>
-                            <?php if (in_array($_SESSION['user_type'], [UserType::SuperAdmin->value, UserType::Admin->value])) : ?> 
+                            <a href="<?= base_url(route_to('LoginByOther', '')) ?>/${row.user_id}" class="text-white btn btn-sm btn-warning">
+                                Login
+                            </a>
                             <button class="text-white btn btn-sm btn-info" onclick="user_view(${row.user_id})" data-bs-toggle="offcanvas" data-bs-target="#right_floating_div" aria-controls="right_floating_div">
                                 <i class="fa fa-eye"></i>
                             </button>
                             
-                            <a href="<?= base_url(route_to($user_type . '_create_update_page')) ?>/${row.user_id}" class="text-white btn btn-sm btn-success">
+                            <a href="<?= base_url(route_to('staff_create_update_page')) ?>/${row.user_id}" class="text-white btn btn-sm btn-success">
                                 <i class="bx bx-edit-alt"></i>
                             </a>
                             <button class="text-white btn btn-sm btn-danger" onclick="user_delete(${row.user_id})">
                                 <i class="bx bx-trash-alt"></i>
                             </button>
-                            <?php endif; ?> 
                         `;
                 }
             }
@@ -217,11 +221,7 @@
     var filter = {}
     filter._autojoin = "Y";
     filter._select = "*";
-    filter['user-user_type'] = '<?= $user_type ?>';
-    <?php if (getUserType() == UserType::SalesManager): ?>
-        filter['user-reporting_to_user_id'] = '<?= $_SESSION['user_id'] ?>';
-    <?php endif; ?>
-
+    // filter['user-reporting_to_user_id'] = '<#?= $_SESSION['user_id'] ?>';
     function fetchData() {
         DataTableInitialized('table', '<?= base_url(route_to('user_list_api')) ?>', "POST", filter, dataTableSuccessCallBack, {}, afterTableViewCallbackFunction)
     }
