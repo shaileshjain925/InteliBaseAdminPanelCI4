@@ -4,11 +4,11 @@
             <div class="col-sm-6">
                 <script>
                 document.write(new Date().getFullYear())
-                </script> &copy; Copyright Intelibase Pvt. Ltd.
+                </script> &copy; Copyright Brillsense Pvt. Ltd.
             </div>
             <div class="col-sm-6">
                 <div class="text-sm-end d-none d-sm-block">
-                    Developed by Intelibase
+                    Developed by Brillsense
                 </div>
             </div>
         </div>
