@@ -40,12 +40,12 @@ class StateMigration extends Migration
         ]);
 
         $this->forge->addKey('state_id', true);
-        $this->forge->addForeignKey('country_id', 'country', 'country_id', 'CASCADE', 'CASCADE');
-        $this->forge->createTable('state', true);
+        $this->forge->addForeignKey('country_id', 'countries', 'country_id', 'CASCADE', 'CASCADE');
+        $this->forge->createTable('states', true);
     }
 
     public function down()
     {
-        $this->forge->dropTable('state', true);
+        $this->forge->dropTable('states', true);
     }
 }

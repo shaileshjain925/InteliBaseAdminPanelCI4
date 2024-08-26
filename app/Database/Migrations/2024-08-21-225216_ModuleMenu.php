@@ -32,7 +32,7 @@ class ModuleMenu extends Migration
             ],
             'menu_type' => [
                 'type' => 'ENUM',
-                'constraint' => ['master', 'transaction', 'report', 'config', 'other'],
+                'constraint' => ['master', 'transaction', 'report', 'config'],
                 'null' => false
             ],
             'created_at datetime default current_timestamp',
@@ -40,12 +40,12 @@ class ModuleMenu extends Migration
         ]);
 
         $this->forge->addPrimaryKey('module_menu_id');
-        $this->forge->addForeignKey('module_id', 'module', 'module_id', 'RESTRICT', 'RESTRICT');
-        $this->forge->createTable('module_menu', true);
+        $this->forge->addForeignKey('module_id', 'modules', 'module_id', 'CASCADE', 'CASCADE');
+        $this->forge->createTable('module_menus', true);
     }
 
     public function down()
     {
-        //
+        $this->forge->dropTable('module_menus', true);
     }
 }

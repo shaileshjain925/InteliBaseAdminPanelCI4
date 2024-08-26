@@ -1,0 +1,22 @@
+// Allow Fields Sql Command ------------------------------------------------------------
+SELECT 
+    TABLE_NAME, 
+    CONCAT(
+        "protected \$allowedFields = [",
+        IFNULL(
+            GROUP_CONCAT(
+                CONCAT("'", COLUMN_NAME, "'") 
+                ORDER BY ORDINAL_POSITION SEPARATOR ', '
+            ),
+            ''
+        ),
+        "];"
+    ) AS allowedFieldsString 
+FROM 
+    INFORMATION_SCHEMA.COLUMNS 
+WHERE 
+    TABLE_SCHEMA = 'intelibaseadminpanelci4_db'
+GROUP BY 
+    TABLE_NAME;
+
+// End ---------------------------------------------------------------------------------------------

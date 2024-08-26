@@ -59,11 +59,11 @@ class CountryMigration extends Migration
         ]);
 
         $this->forge->addKey('country_id', true);
-        $this->forge->createTable('country', true);
+        $this->forge->createTable('countries', true);
     }
 
     public function down()
     {
-        $this->forge->dropTable('country', true);
+        $this->forge->dropTable('countries', true);
     }
 }

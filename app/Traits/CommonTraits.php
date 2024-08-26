@@ -2,12 +2,17 @@
 
 namespace App\Traits;
 
-use App\Models\CityModel;
-use App\Models\CountryModel;
-use App\Models\DesignationModel;
+use App\Models\CitiesModel;
+use App\Models\CountriesModel;
+use App\Models\DesignationsModel;
 use App\Models\FunctionModel;
-use App\Models\StateModel;
-use App\Models\UserModel;
+use App\Models\StatesModel;
+use App\Models\UsersModel;
+use App\Models\ModuleMenusModel;
+use App\Models\ModulesModel;
+use App\Models\RoleModuleMenusModel;
+use App\Models\RoleModulesModel;
+use App\Models\RolesModel;
 
 trait CommonTraits
 {
@@ -21,42 +26,82 @@ trait CommonTraits
     }
     /**
      * Return Model Instance
-     * @return CountryModel
+     * @return CountriesModel
      */
-    public static function get_country_model(...$variable)
+    public static function get_countries_model(...$variable)
     {
-        return new CountryModel(...$variable);
+        return new CountriesModel(...$variable);
     }
     /**
      * Return Model Instance
-     * @return StateModel
+     * @return StatesModel
      */
-    public static function get_state_model(...$variable)
+    public static function get_states_model(...$variable)
     {
-        return new StateModel(...$variable);
+        return new StatesModel(...$variable);
     }
     /**
      * Return Model Instance
-     * @return CityModel
+     * @return CitiesModel
      */
-    public static function get_city_model(...$variable)
+    public static function get_cities_model(...$variable)
     {
-        return new CityModel(...$variable);
+        return new CitiesModel(...$variable);
     }
     /**
      * Return Model Instance
-     * @return DesignationModel
+     * @return DesignationsModel
      */
-    public static function get_designation_model(...$variable)
+    public static function get_designations_model(...$variable)
     {
-        return new DesignationModel(...$variable);
+        return new DesignationsModel(...$variable);
     }
     /**
      * Return Model Instance
-     * @return UserModel
+     * @return UsersModel
      */
-    public static function get_user_model(...$variable)
+    public static function get_users_model(...$variable)
     {
-        return new UserModel(...$variable);
+        return new UsersModel(...$variable);
+    }
+    /**
+     * Return Model Instance
+     * @return ModuleMenusModel
+     */
+    public static function get_module_menus_model(...$variable)
+    {
+        return new ModuleMenusModel(...$variable);
+    }
+    /**
+     * Return Model Instance
+     * @return ModulesModel
+     */
+    public static function get_modules_model(...$variable)
+    {
+        return new ModulesModel(...$variable);
+    }
+    /**
+     * Return Model Instance
+     * @return RoleModuleMenusModel
+     */
+    public static function get_role_module_menus_model(...$variable)
+    {
+        return new RoleModuleMenusModel(...$variable);
+    }
+    /**
+     * Return Model Instance
+     * @return RoleModulesModel
+     */
+    public static function get_role_modules_model(...$variable)
+    {
+        return new RoleModulesModel(...$variable);
+    }
+    /**
+     * Return Model Instance
+     * @return RolesModel
+     */
+    public static function get_roles_model(...$variable)
+    {
+        return new RolesModel(...$variable);
     }
 }

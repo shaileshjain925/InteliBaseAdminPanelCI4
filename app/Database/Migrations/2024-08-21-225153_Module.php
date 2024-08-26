@@ -30,12 +30,11 @@ class Module extends Migration
         ]);
 
         $this->forge->addPrimaryKey('module_id');
-        $this->forge->createTable('module', true);
-
+        $this->forge->createTable('modules', true);
     }
 
     public function down()
     {
-        //
+        $this->forge->dropTable('modules', true);
     }
 }

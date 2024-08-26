@@ -3,16 +3,18 @@
 namespace App\Models;
 
 use App\Models\FunctionModel;
+use App\Traits\CommonTraits;
 
-class CountryModel extends FunctionModel
+class CountriesModel extends FunctionModel
 {
-    protected $table            = 'country';
+    use CommonTraits;
+    protected $table            = 'countries';
     protected $primaryKey       = 'country_id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields = ['country_id', 'country_name', 'alias', 'short_name', 'phonecode', 'currency', 'currency_name', 'currency_symbol', 'region'];
+    protected $allowedFields = ['country_id', 'country_name', 'alias', 'short_name', 'phonecode', 'currency', 'currency_name', 'currency_symbol', 'region', 'created_at', 'updated_at'];
 
 
     protected bool $allowEmptyInserts = false;

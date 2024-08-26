@@ -34,13 +34,13 @@ class CityMigration extends Migration
         ]);
 
         $this->forge->addKey('city_id', true);
-        $this->forge->addForeignKey('country_id', 'country', 'country_id', 'RESTRICT', 'RESTRICT');
-        $this->forge->addForeignKey('state_id', 'state', 'state_id', 'RESTRICT', 'RESTRICT');
-        $this->forge->createTable('city', true);
+        $this->forge->addForeignKey('country_id', 'countries', 'country_id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('state_id', 'states', 'state_id', 'CASCADE', 'CASCADE');
+        $this->forge->createTable('cities', true);
     }
 
     public function down()
     {
-        $this->forge->dropTable('city', true);
+        $this->forge->dropTable('cities', true);
     }
 }

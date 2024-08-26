@@ -3,16 +3,18 @@
 namespace App\Models;
 
 use App\Models\FunctionModel;
+use App\Traits\CommonTraits;
 
-class DesignationModel extends FunctionModel
+class ModulesModel extends FunctionModel
 {
-    protected $table            = 'designation';
-    protected $primaryKey       = 'designation_id';
+    use CommonTraits;
+    protected $table            = 'modules';
+    protected $primaryKey       = 'module_id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ["designation_id", "designation_name"];
+    protected $allowedFields = ['module_id', 'module_code', 'module_name', 'created_at', 'updated_at'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -29,8 +31,9 @@ class DesignationModel extends FunctionModel
 
     // Validation
     protected $validationRules      = [
-        "designation_id" => "permit_empty",
-        "designation_name" => "required|is_unique[designation.designation_name,designation_id,{designation_id}]"
+        'module_id' => "required",
+        'module_code' => "required|is_unique[modules.module_code,module_id,{module_id}]",
+        'module_name' => "required|is_unique[modules.module_name,module_id,{module_id}]",
     ];
     protected $validationMessages   = [];
     protected $skipValidation       = false;
@@ -46,7 +49,6 @@ class DesignationModel extends FunctionModel
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-
     public function __construct($joinRequired = true)
     {
         parent::__construct();
