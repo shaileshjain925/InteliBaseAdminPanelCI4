@@ -51,27 +51,10 @@ if (!in_array($file_extension, $extensions)) {
             });
             $routes->group('Designation', function ($routes) {
                 $routes->get('List', 'AdminPageController::designation_list_page', ['as' => 'designation_list_page']);
-                $routes->get('CreateUpdate', 'AdminPageController::designation_create_update_page', ['as' => 'designation_create_update_page']);
-                $routes->get('CreateUpdate/(:num)', 'AdminPageController::designation_create_update_page/$1');
-                $routes->post('View', 'AdminPageController::designation_view_component', ['as' => 'designation_view_component']);
             });
             $routes->group('Role', function ($routes) {
                 $routes->get('List', 'AdminPageController::role_list_page', ['as' => 'role_list_page']);
-                $routes->get('CreateUpdate', 'AdminPageController::role_create_update_page', ['as' => 'role_create_update_page']);
-                $routes->get('CreateUpdate/(:num)', 'AdminPageController::role_create_update_page/$1');
-                $routes->post('View', 'AdminPageController::role_view_component', ['as' => 'role_view_component']);
-            });
-            $routes->group('RoleModule', function ($routes) {
-                $routes->get('List', 'AdminPageController::role_module_list_page', ['as' => 'role_module_list_page']);
-                $routes->get('CreateUpdate', 'AdminPageController::role_module_create_update_page', ['as' => 'role_module_create_update_page']);
-                $routes->get('CreateUpdate/(:num)', 'AdminPageController::role_module_create_update_page/$1');
-                $routes->post('View', 'AdminPageController::role_module_view_component', ['as' => 'role_module_view_component']);
-            });
-            $routes->group('RoleModuleMenu', function ($routes) {
-                $routes->get('List', 'AdminPageController::role_module_menu_list_page', ['as' => 'role_module_menu_list_page']);
-                $routes->get('CreateUpdate', 'AdminPageController::role_module_menu_create_update_page', ['as' => 'role_module_menu_create_update_page']);
-                $routes->get('CreateUpdate/(:num)', 'AdminPageController::role_module_menu_create_update_page/$1');
-                $routes->post('View', 'AdminPageController::role_module_menu_view_component', ['as' => 'role_module_menu_view_component']);
+                $routes->get('RoleModuleMenus/(:any)', 'AdminPageController::role_module_menus/$1', ['as' => 'role_module_menus']);
             });
             $routes->group('Module', function ($routes) {
                 $routes->post('View', 'AdminPageController::module_view_component', ['as' => 'module_view_component']);

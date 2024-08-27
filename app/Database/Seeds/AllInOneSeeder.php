@@ -12,22 +12,22 @@ class AllInOneSeeder extends Seeder
     public function run()
     {
         $f = $this->get_function_model();
-        // Countries Seeder
-        // $errors['countries'] = $f->create_update($this->get_countries_model(false), $this->countries_data());
-        // // States Seeder
-        // $errors['states'] = $f->create_update($this->get_states_model(false), $this->states_data());
-        // // Cities Seeder
-        // $errors['cities'] = $f->create_update($this->get_cities_model(false), $this->cities_data());
-        // // Designations Seeder
-        // $errors['designations'] = $f->create_update($this->get_designations_model(false), $this->designations_data());
-        // // Modules Seeder
-        // $errors['modules'] = $f->create_update($this->get_modules_model(false), $this->modules_data());
-        // // Menus Seeder
-        // $menus = array_merge(...array_map(fn($m) => array_map(fn($menu) => $menu + ['module_id' => $m['module_id']], $m['menus'] ?? []), $this->modules_data()));
-        // $errors['module_menus'] = $f->create_update($this->get_module_menus_model(false), $menus);
-        // // Roles Seeder
-        // $errors['roles'] = $f->create_update($this->get_roles_model(false), $this->roles_data());
-        // // User Seeder
+        //Countries Seeder
+        $errors['countries'] = $f->create_update($this->get_countries_model(false), $this->countries_data());
+        // States Seeder
+        $errors['states'] = $f->create_update($this->get_states_model(false), $this->states_data());
+        // Cities Seeder
+        $errors['cities'] = $f->create_update($this->get_cities_model(false), $this->cities_data());
+        // Designations Seeder
+        $errors['designations'] = $f->create_update($this->get_designations_model(false), $this->designations_data());
+        // Modules Seeder
+        $errors['modules'] = $f->create_update($this->get_modules_model(false), $this->modules_data());
+        // Menus Seeder
+        $menus = array_merge(...array_map(fn($m) => array_map(fn($menu) => $menu + ['module_id' => $m['module_id']], $m['menus'] ?? []), $this->modules_data()));
+        $errors['module_menus'] = $f->create_update($this->get_module_menus_model(false), $menus);
+        // Roles Seeder
+        $errors['roles'] = $f->create_update($this->get_roles_model(false), $this->roles_data());
+        // User Seeder
         $errors['users'] = $f->create_update($this->get_users_model(false), $this->users_data());
         print_r($errors);
     }

@@ -31,7 +31,7 @@ class RolesModel extends FunctionModel
 
     // Validation
     protected $validationRules      = [
-        'role_id' => "required",
+        'role_id' => "permit_empty",
         'role_name' => "required|is_unique[roles.role_name,role_id,{role_id}]",
     ];
     protected $validationMessages   = [];
@@ -48,7 +48,7 @@ class RolesModel extends FunctionModel
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-    
+
     public function __construct($joinRequired = true)
     {
         parent::__construct();
