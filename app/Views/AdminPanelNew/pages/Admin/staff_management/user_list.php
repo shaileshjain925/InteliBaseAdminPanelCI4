@@ -109,7 +109,7 @@
             {
                 title: "Email",
                 data: "user_email",
-                visible: true,
+                visible: false,
             },
             {
                 title: "Mobile",
@@ -120,6 +120,17 @@
                 title: "Reporting To",
                 data: "reporting_to_user_name",
                 visible: true,
+            },
+            {
+                title: "Data Access",
+                data: "user_data_access",
+                visible: true, // Make it true if you want to display the column
+                render: function(data, type, row) {
+                    // Convert the data to ucwords
+                    return data.replace(/\b\w/g, function(l) {
+                        return l.toUpperCase();
+                    });
+                }
             },
             {
                 title: "Role",

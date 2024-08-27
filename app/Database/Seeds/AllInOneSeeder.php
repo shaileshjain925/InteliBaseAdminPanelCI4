@@ -4662,27 +4662,28 @@ class AllInOneSeeder extends Seeder
     protected function users_data()
     {
         $user_data = [
-            // [
-            //     'user_id' => 1,
-            //     'user_code' => 'shaileshjain925',
-            //     'reporting_to_user_id' => 1,
-            //     'designation_id' => 1,
-            //     'role_id' => 1,
-            //     'user_name' => 'Shailesh Jain',
-            //     'user_email' => 'shaileshjain925@gmail.com',
-            //     'user_mobile' => '7879531944',
-            //     'user_address' => '74 Sainath',
-            //     'user_country_id' => 101,
-            //     'user_state_id' => 4039,
-            //     'user_city_id' => 134263,
-            //     'user_pincode' => '456001',
-            //     'user_aadhaar_card' => null,
-            //     'user_aadhaar_card_image' => null,
-            //     'user_image' => null,
-            //     'user_type' => 'super_admin',
-            //     'password' => 'Ujjain@0734',
-            //     'is_active' => 1
-            // ],
+            [
+                'user_id' => 1,
+                'user_code' => 'shaileshjain925',
+                'reporting_to_user_id' => 1,
+                'designation_id' => 1,
+                'role_id' => 1,
+                'user_name' => 'Shailesh Jain',
+                'user_email' => 'shaileshjain925@gmail.com',
+                'user_mobile' => '7879531944',
+                'user_address' => '74 Sainath',
+                'user_country_id' => 101,
+                'user_state_id' => 4039,
+                'user_city_id' => 134263,
+                'user_pincode' => '456001',
+                'user_aadhaar_card' => null,
+                'user_aadhaar_card_image' => null,
+                'user_image' => null,
+                'user_type' => 'super_admin',
+                'user_data_access' => 'all',
+                'password' => 'Ujjain@0734',
+                'is_active' => 1
+            ],
             [
                 'user_id' => 2,
                 'user_code' => 'admin_01',
@@ -4701,6 +4702,7 @@ class AllInOneSeeder extends Seeder
                 'user_aadhaar_card_image' => null,
                 'user_image' => null,
                 'user_type' => 'admin',
+                'user_data_access' => 'all',
                 'password' => 'Admin@123',
                 'is_active' => 1
             ],
@@ -4722,6 +4724,7 @@ class AllInOneSeeder extends Seeder
                 'user_aadhaar_card_image' => null,
                 'user_image' => null,
                 'user_type' => 'staff',
+                'user_data_access' => 'hierarchy',
                 'password' => 'Purchase@123',
                 'is_active' => 1
             ],
@@ -4743,6 +4746,7 @@ class AllInOneSeeder extends Seeder
                 'user_aadhaar_card_image' => null,
                 'user_image' => null,
                 'user_type' => 'staff',
+                'user_data_access' => 'self',
                 'password' => 'PurchaseExec@123',
                 'is_active' => 1
             ],
@@ -4764,6 +4768,7 @@ class AllInOneSeeder extends Seeder
                 'user_aadhaar_card_image' => null,
                 'user_image' => null,
                 'user_type' => 'staff',
+                'user_data_access' => 'hierarchy',
                 'password' => 'Sales@123',
                 'is_active' => 1
             ],
@@ -4785,6 +4790,7 @@ class AllInOneSeeder extends Seeder
                 'user_aadhaar_card_image' => null,
                 'user_image' => null,
                 'user_type' => 'staff',
+                'user_data_access' => 'self',
                 'password' => 'SalesExec@123',
                 'is_active' => 1
             ],
@@ -4806,6 +4812,7 @@ class AllInOneSeeder extends Seeder
                 'user_aadhaar_card_image' => null,
                 'user_image' => null,
                 'user_type' => 'staff',
+                'user_data_access' => 'hierarchy',
                 'password' => 'Finance@123',
                 'is_active' => 1
             ],
@@ -4827,6 +4834,7 @@ class AllInOneSeeder extends Seeder
                 'user_aadhaar_card_image' => null,
                 'user_image' => null,
                 'user_type' => 'staff',
+                'user_data_access' => 'self',
                 'password' => 'FinanceExec@123',
                 'is_active' => 1
             ],
@@ -4848,6 +4856,7 @@ class AllInOneSeeder extends Seeder
                 'user_aadhaar_card_image' => null,
                 'user_image' => null,
                 'user_type' => 'staff',
+                'user_data_access' => 'hierarchy',
                 'password' => 'CRM@123',
                 'is_active' => 1
             ],
@@ -4869,6 +4878,7 @@ class AllInOneSeeder extends Seeder
                 'user_aadhaar_card_image' => null,
                 'user_image' => null,
                 'user_type' => 'staff',
+                'user_data_access' => 'self',
                 'password' => 'CRMExec@123',
                 'is_active' => 1
             ]

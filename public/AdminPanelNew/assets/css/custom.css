@@ -588,6 +588,12 @@ body[data-layout="detached"] .page-title-box .breadcrumb-item > a {
 body[data-layout="detached"] .page-title-box .breadcrumb-item + .breadcrumb-item::before, body[data-layout="detached"] .page-title-box .breadcrumb-item.active {
     color: var(--black_color) !important;
 }
+.table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before, table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before {
+    left: -12px !important;
+}
+.table{
+    padding-left: 15px !important;
+}
 @media (max-width: 500px) {
     .vertical-menu {
       min-width: 200px;

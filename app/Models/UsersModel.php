@@ -14,7 +14,7 @@ class UsersModel extends FunctionModel
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields = ['user_id', 'user_code', 'reporting_to_user_id', 'designation_id', 'role_id', 'user_name', 'user_email', 'user_mobile', 'user_address', 'user_country_id', 'user_state_id', 'user_city_id', 'user_pincode', 'user_aadhaar_card', 'user_aadhaar_card_image', 'user_image', 'user_type', 'password', 'otp', 'is_active', 'created_at', 'updated_at'];
+    protected $allowedFields = ['user_id', 'user_code', 'reporting_to_user_id', 'designation_id', 'role_id', 'user_name', 'user_email', 'user_mobile', 'user_address', 'user_country_id', 'user_state_id', 'user_city_id', 'user_pincode', 'user_aadhaar_card', 'user_aadhaar_card_image', 'user_image', 'user_type', 'user_data_access', 'password', 'otp', 'is_active', 'created_at', 'updated_at'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -51,6 +51,7 @@ class UsersModel extends FunctionModel
         'password'        => 'permit_empty',
         'user_image'          => 'permit_empty|max_length[255]',
         'user_type'           => "required|in_list[super_admin,admin,staff]",
+        "user_data_access"    => "required|in_list[all,self,hierarchy]",
         'otp'                 => 'permit_empty|max_length[6]',
     ];
 
@@ -153,5 +154,22 @@ class UsersModel extends FunctionModel
             $this->addParentJoin('designation_id', $this->get_designations_model(), 'left', ['designation_name']);
             $this->addParentJoin('role_id', $this->get_roles_model(), 'left', ['role_name']);
         }
+    }
+    function getHierarchyUserIds($user_id)
+    {
+        $user_ids = [$user_id]; // Start with the given user_id
+
+        // Get all users reporting to this user
+        $query = $this->db->table('users')
+            ->select('user_id')
+            ->where('reporting_to_user_id', $user_id)
+            ->get();
+
+        foreach ($query->getResult() as $row) {
+            // Recursively add all users under each user found
+            $user_ids = array_merge($user_ids, $this->getHierarchyUserIds($row->user_id));
+        }
+
+        return $user_ids;
     }
 }

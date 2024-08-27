@@ -14,154 +14,189 @@
             <input type="hidden" name="user_id" id="user_id" value="<?= @$user_id ?>">
             <input type="hidden" name="user_aadhaar_card_image" id="user_aadhaar_card_image" value="<?= @$user_aadhaar_card_image ?>">
             <input type="hidden" name="user_image" id="user_image" value="<?= @$user_image ?>">
+
             <div class="row">
-                <div class="mb-3 col-md-3">
-                    <label class="mb-2 form-label">Name</label>
-                    <input type="text" class="form-control" name="user_name" value="<?= @$user_name ?>" placeholder="" />
-                    <span class="error-message" id="error-user_name"></span>
-                </div>
-                <div class="mb-3 col-md-3">
-                    <label class="mb-2 form-label">Code</label>
-                    <input type="text" class="form-control" name="user_code" value="<?= @$user_code ?>" placeholder="" />
-                    <span class="error-message" id="error-user_code"></span>
-                </div>
+                <!-- Personal Information Group -->
+                <div class="col-md-12">
+                    <h5>Personal Information</h5>
+                    <div class="row">
+                        <!-- User Name -->
+                        <div class="mb-3 col-md-4">
+                            <label class="mb-2 form-label">Name</label>
+                            <input type="text" class="form-control" name="user_name" value="<?= @$user_name ?>" placeholder="Full Name" />
+                            <span class="error-message" id="error-user_name"></span>
+                        </div>
 
-                <!-- User Image -->
-                <div class="mb-3 col-md-3">
-                    <img class="image-fluid" style="height:auto; width:100px" id="user_image_display" onclick="enlargeImage(event)" src="<?= (isset($user_image) && !empty($user_image)) ? base_url($user_image) : "" ?>">
-                    <?php if (isset($user_image) && !empty($user_image)) : ?>
-                        <button type="button" class="btn btn-danger ms-2" onclick="deleteImage('user_image', 'user_image_display')"><i class="bx bx-trash-alt"></i></button>
-                    <?php endif; ?>
-                    <label class="mb-2 form-label">Staff Image</label>
-                    <input type="file" name="user_image_upload" id="user_image_upload" class="form-control" onchange="uploadImage('user_image_upload','user','user_image','user_image_display')">
-                    <span class="error-message" id="error-user_image"></span>
-                </div>
-                <!-- user_aadhaar_card_image -->
-                <div class="mb-3 col-md-3">
-                    <img class="image-fluid" style="height:auto; width:100px" id="user_aadhaar_card_image_display" onclick="enlargeImage(event)" src="<?= (isset($user_aadhaar_card_image) && !empty($user_aadhaar_card_image)) ? base_url($user_aadhaar_card_image) : "" ?>">
-                    <?php if (isset($user_aadhaar_card_image) && !empty($user_aadhaar_card_image)) : ?>
-                        <button type="button" class="btn btn-danger ms-2" onclick="deleteImage('user_aadhaar_card_image', 'user_aadhaar_card_image_display')"><i class="bx bx-trash-alt"></i></button>
-                    <?php endif; ?>
-                    <label class="mb-2 form-label">Staff Aadhaar Image</label>
-                    <input type="file" name="user_aadhaar_card_image_upload" id="user_aadhaar_card_image_upload" class="form-control" onchange="uploadImage('user_aadhaar_card_image_upload','user','user_aadhaar_card_image','user_aadhaar_card_image_display')">
-                    <span class="error-message" id="error-user_aadhaar_card_image"></span>
-                </div>
+                        <!-- User Email -->
+                        <div class="mb-3 col-md-4">
+                            <label class="mb-2 form-label">Email</label>
+                            <input type="email" class="form-control" name="user_email" value="<?= @$user_email ?>" placeholder="Email Address" />
+                            <span class="error-message" id="error-user_email"></span>
+                        </div>
 
-                <!-- User Email -->
-                <div class="mb-3 col-md-4">
-                    <label class="mb-2 form-label">Email</label>
-                    <input type="text" class="form-control" name="user_email" value="<?= @$user_email ?>" placeholder="" />
-                    <span class="error-message" id="error-user_email"></span>
-                </div>
+                        <!-- User Mobile -->
+                        <div class="mb-3 col-md-4">
+                            <label class="mb-2 form-label">Mobile Number</label>
+                            <input type="text" class="form-control" name="user_mobile" value="<?= @$user_mobile ?>" placeholder="Mobile Number" />
+                            <span class="error-message" id="error-user_mobile"></span>
+                        </div>
 
-                <!-- User Mobile -->
-                <div class="mb-3 col-md-4">
-                    <label class="mb-2 form-label">Mobile Number</label>
-                    <input type="text" class="form-control" name="user_mobile" value="<?= @$user_mobile ?>" placeholder="" />
-                    <span class="error-message" id="error-user_mobile"></span>
-                </div>
+                        <!-- User Address -->
+                        <div class="mb-3 col-md-6">
+                            <label class="mb-2 form-label">Address</label>
+                            <textarea class="form-control" name="user_address" placeholder="Current Address"><?= @$user_address ?></textarea>
+                            <span class="error-message" id="error-user_address"></span>
+                        </div>
 
-                <!-- User Address -->
-                <div class="mb-3 col-md-4">
-                    <label class="mb-2 form-label">Address</label>
-                    <textarea type="text" class="form-control" name="user_address" placeholder=""><?= @$user_address ?></textarea>
-                    <span class="error-message" id="error-user_address"></span>
-                </div>
+                        <!-- Pincode -->
+                        <div class="mb-3 col-md-6">
+                            <label class="mb-2 form-label">Pincode</label>
+                            <input type="text" class="form-control" name="user_pincode" value="<?= @$user_pincode ?>" placeholder="Postal Code" />
+                            <span class="error-message" id="error-user_pincode"></span>
+                        </div>
 
-                <!-- Country -->
-                <div class="mb-3 col-md-3">
-                    <label class="mb-2 form-label">Country</label>
-                    <select class="" name="user_country_id" id="user_country_id">
-                    </select>
-                    <span class="error-message" id="error-user_country_id"></span>
+                        <!-- Aadhaar Card -->
+                        <div class="mb-3 col-md-6">
+                            <label class="mb-2 form-label">Aadhaar Card</label>
+                            <input type="text" class="form-control" name="user_aadhaar_card" value="<?= @$user_aadhaar_card ?>" placeholder="Aadhaar Number" />
+                            <span class="error-message" id="error-user_aadhaar_card"></span>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="mb-3 col-md-6">
+                            <label class="mb-2 form-label">Password</label>
+                            <input type="password" class="form-control" name="password" placeholder="Password" />
+                            <span class="error-message" id="error-password"></span>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- State -->
-                <div class="mb-3 col-md-3">
-                    <label class="mb-2 form-label">State</label>
-                    <select class="" name="user_state_id" id="user_state_id">
-                    </select>
-                    <span class="error-message" id="error-user_state_id"></span>
+                <!-- Work Information Group -->
+                <div class="col-md-12 mt-3">
+                    <h5>Work Information</h5>
+                    <div class="row">
+                        <!-- Designation -->
+                        <div class="mb-3 col-md-3">
+                            <label class="mb-2 form-label">Designation</label>
+                            <select class="form-control" name="designation_id" id="designation_id"></select>
+                            <span class="error-message" id="error-designation_id"></span>
+                        </div>
+
+                        <!-- Role -->
+                        <div class="mb-3 col-md-3">
+                            <label class="mb-2 form-label">Role</label>
+                            <select class="form-control" name="role_id" id="role_id"></select>
+                            <span class="error-message" id="error-role_id"></span>
+                        </div>
+
+                        <!-- Reporting To -->
+                        <div class="mb-3 col-md-3">
+                            <label class="mb-2 form-label">Reporting To</label>
+                            <select class="form-control" name="reporting_to_user_id" id="reporting_to_user_id"></select>
+                            <span class="error-message" id="error-reporting_to_user_id"></span>
+                        </div>
+
+                        <!-- User Type -->
+                        <div class="mb-3 col-md-3">
+                            <label class="mb-2 form-label">User Type</label>
+                            <select class="form-control" name="user_type" id="user_type">
+                                <?php if (isset($user_type) && $user_type == 'super_admin'): ?>
+                                    <option value="super_admin" selected>Super Admin</option>
+                                <?php else: ?>
+                                    <option value="admin" <?= (isset($user_type) && $user_type == 'admin') ? "selected" : "" ?>>Admin</option>
+                                    <option value="staff" <?= (isset($user_type) && $user_type == 'staff') ? "selected" : "" ?>>Staff</option>
+                                <?php endif; ?>
+                            </select>
+                            <span class="error-message" id="error-user_type"></span>
+                        </div>
+
+                        <!-- Data Access Rights -->
+                        <div class="mb-3 col-md-3">
+                            <label class="mb-2 form-label">Data Access Rights</label>
+                            <select class="form-control" name="user_data_access" id="user_data_access">
+                                <option value="self" <?= (isset($user_data_access) && $user_data_access == 'self') ? "selected" : "" ?>>Self</option>
+                                <option value="hierarchy" <?= (isset($user_data_access) && $user_data_access == 'hierarchy') ? "selected" : "" ?>>Hierarchy</option>
+                                <option value="all" <?= (isset($user_data_access) && $user_data_access == 'all') ? "selected" : "" ?>>All</option>
+                            </select>
+                            <span class="error-message" id="error-user_data_access"></span>
+                        </div>
+
+                        <!-- User Code -->
+                        <div class="mb-3 col-md-3">
+                            <label class="mb-2 form-label">Code</label>
+                            <input type="text" class="form-control" name="user_code" value="<?= @$user_code ?>" placeholder="User Code" />
+                            <span class="error-message" id="error-user_code"></span>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- City -->
-                <div class="mb-3 col-md-3">
-                    <label class="mb-2 form-label">City</label>
-                    <select class="" name="user_city_id" id="user_city_id">
-                    </select>
-                    <span class="error-message" id="error-user_city_id"></span>
+                <!-- Location Information Group -->
+                <div class="col-md-12 mt-3">
+                    <h5>Location Information</h5>
+                    <div class="row">
+                        <!-- Country -->
+                        <div class="mb-3 col-md-4">
+                            <label class="mb-2 form-label">Country</label>
+                            <select class="form-control" name="user_country_id" id="user_country_id"></select>
+                            <span class="error-message" id="error-user_country_id"></span>
+                        </div>
+
+                        <!-- State -->
+                        <div class="mb-3 col-md-4">
+                            <label class="mb-2 form-label">State</label>
+                            <select class="form-control" name="user_state_id" id="user_state_id"></select>
+                            <span class="error-message" id="error-user_state_id"></span>
+                        </div>
+
+                        <!-- City -->
+                        <div class="mb-3 col-md-4">
+                            <label class="mb-2 form-label">City</label>
+                            <select class="form-control" name="user_city_id" id="user_city_id"></select>
+                            <span class="error-message" id="error-user_city_id"></span>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- Image Uploads Group -->
+                <div class="col-md-12 mt-3">
+                    <h5>Image Uploads</h5>
+                    <div class="row">
+                        <!-- User Image -->
+                        <div class="mb-3 col-md-6">
+                            <label class="mb-2 form-label">Staff Image</label>
+                            <div class="d-flex align-items-center">
+                                <img class="image-fluid" style="height:auto; width:100px" id="user_image_display" onclick="enlargeImage(event)" src="<?= (isset($user_image) && !empty($user_image)) ? base_url($user_image) : "" ?>">
+                                <?php if (isset($user_image) && !empty($user_image)) : ?>
+                                    <button type="button" class="btn btn-danger ms-2" onclick="deleteImage('user_image', 'user_image_display')"><i class="bx bx-trash-alt"></i></button>
+                                <?php endif; ?>
+                            </div>
+                            <input type="file" name="user_image_upload" id="user_image_upload" class="form-control mt-2" onchange="uploadImage('user_image_upload','user','user_image','user_image_display')">
+                            <span class="error-message" id="error-user_image"></span>
+                        </div>
 
-                <!-- Pincode -->
-                <div class="mb-3 col-md-3">
-                    <label class="mb-2 form-label">Pincode</label>
-                    <input type="text" class="form-control" name="user_pincode" value="<?= @$user_pincode ?>" placeholder="" />
-                    <span class="error-message" id="error-user_pincode"></span>
-                </div>
-                <!-- Designation -->
-                <div class="mb-3 col-md-3">
-                    <label class="mb-2 form-label">Designation</label>
-                    <select class="" name="designation_id" id="designation_id">
-                    </select>
-                    <span class="error-message" id="error-designation_id"></span>
-                </div>
-
-                <!-- Role To -->
-                <div class="mb-3 col-md-3">
-                    <label class="mb-2 form-label">Role</label>
-                    <select class="" name="role_id" id="role_id">
-                    </select>
-                    <span class="error-message" id="error-role_id"></span>
-                </div>
-
-                <!-- Reporting To -->
-                <div class="mb-3 col-md-3">
-                    <label class="mb-2 form-label">Reporting To</label>
-                    <select class="" name="reporting_to_user_id" id="reporting_to_user_id">
-                    </select>
-                    <span class="error-message" id="error-reporting_to_user_id"></span>
-                </div>
-
-                <!-- User Type-->
-                <div class="mb-3 col-md-3">
-                    <label class="mb-2 form-label">User Type</label>
-                    <select class="" name="user_type" id="user_type">
-                        <?php if (isset($user_type) && $user_type == 'super_admin'): ?>
-                            <option value="super_admin" <?= (isset($user_type) && $user_type == 'super_admin') ? "selected" : "" ?>>Super Admin</option>
-                        <?php else: ?>
-                            <option value="admin" <?= (isset($user_type) && $user_type == 'admin') ? "selected" : "" ?>>Admin</option>
-                            <option value="staff" <?= (isset($user_type) && $user_type == 'staff') ? "selected" : "" ?>>Staff</option>
-                        <?php endif; ?>
-                    </select>
-                    <span class="error-message" id="error-user_type"></span>
-                </div>
-
-
-
-                <!-- Aadhaar Card -->
-                <div class="mb-3 col-md-3">
-                    <label class="mb-2 form-label">Aadhaar Card</label>
-                    <input type="text" class="form-control" name="user_aadhaar_card" value="<?= @$user_aadhaar_card ?>" placeholder="" />
-                    <span class="error-message" id="error-user_aadhaar_card"></span>
-                </div>
-
-                <!-- Password -->
-                <div class="mb-3 col-md-3">
-                    <label class="mb-2 form-label">Password</label>
-                    <input type="password" class="form-control" name="password" />
-                    <span class="error-message" id="error-password"></span>
+                        <!-- Aadhaar Card Image -->
+                        <div class="mb-3 col-md-6">
+                            <label class="mb-2 form-label">Staff Aadhaar Image</label>
+                            <div class="d-flex align-items-center">
+                                <img class="image-fluid" style="height:auto; width:100px" id="user_aadhaar_card_image_display" onclick="enlargeImage(event)" src="<?= (isset($user_aadhaar_card_image) && !empty($user_aadhaar_card_image)) ? base_url($user_aadhaar_card_image) : "" ?>">
+                                <?php if (isset($user_aadhaar_card_image) && !empty($user_aadhaar_card_image)) : ?>
+                                    <button type="button" class="btn btn-danger ms-2" onclick="deleteImage('user_aadhaar_card_image', 'user_aadhaar_card_image_display')"><i class="bx bx-trash-alt"></i></button>
+                                <?php endif; ?>
+                            </div>
+                            <input type="file" name="user_aadhaar_card_image_upload" id="user_aadhaar_card_image_upload" class="form-control mt-2" onchange="uploadImage('user_aadhaar_card_image_upload','user','user_aadhaar_card_image','user_aadhaar_card_image_display')">
+                            <span class="error-message" id="error-user_aadhaar_card_image"></span>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Form Submit -->
-                <div class="form_submit_div text-center">
-                    <button type="button" class="submit_btn waves-effect waves-light me-1" onclick="user_form_submit()">
-                        Submit
-                    </button>
+                <div class="form_submit_div text-center mt-4">
+                    <button type="button" class="submit_btn waves-effect waves-light me-1" onclick="user_form_submit()">Submit</button>
                 </div>
             </div>
         </form>
     </div>
+
 </div>
 <script>
     var selected_user_country_id = '<?= @$user_country_id ?>';
@@ -217,6 +252,7 @@
             initializeSelectize('user_type', {
                 placeholder: "Select User Type"
             })
+            initializeSelectize('user_data_access', {})
             initializeSelectize('user_country_id', {
                     placeholder: "Select Country"
                 }, apiUrl = "<?= base_url(route_to('country_list_api')) ?>", {}, "country_id", "country_name", selected_user_country_id)
