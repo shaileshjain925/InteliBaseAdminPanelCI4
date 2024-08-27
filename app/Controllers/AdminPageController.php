@@ -3,7 +3,9 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Database\Seeds\AllInOneSeeder;
 use App\Traits\CommonTraits;
+use Config\Database;
 use UserType;
 
 class AdminPageController extends BaseController
@@ -36,6 +38,12 @@ class AdminPageController extends BaseController
         //         return $this->crm_dashboard_page();
         //         break;
         // }
+    }
+    public function seeder_run()
+    {
+        $db = new Database();
+        $seeder = new AllInOneSeeder($db);
+        $seeder->run();
     }
     public function login_page()
     {

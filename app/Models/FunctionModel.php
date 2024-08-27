@@ -5,8 +5,10 @@ namespace App\Models;
 use ApiResponseStatusCode;
 use CodeIgniter\Model;
 use App\Traits\CommonTraits;
+use CodeIgniter\Database\Exceptions\DatabaseException;
 use Exception;
 use Firebase\JWT\JWT;
+use ReflectionException;
 use RuntimeException;
 
 class FunctionModel extends Model
@@ -290,15 +292,33 @@ class FunctionModel extends Model
     public function hashPassword($data)
     {
         $passwordField = $this->passwordField ?? null;
-        if (!empty($passwordField) && array_key_exists($passwordField, $data['data'])) {
-            if (empty($data['data'][$passwordField])) {
-                unset($data['data'][$passwordField]);
-            } else {
-                $data['data'][$passwordField] = password_hash($data['data'][$passwordField], PASSWORD_DEFAULT);
+
+        // Handle bulk data (array of records)
+        if (isset($data['data'][0]) && is_array($data['data'][0])) {
+            foreach ($data['data'] as &$row) {
+                if (!empty($passwordField) && isset($row[$passwordField])) {
+                    if (empty($row[$passwordField])) {
+                        unset($row[$passwordField]);
+                    } else {
+                        $row[$passwordField] = password_hash($row[$passwordField], PASSWORD_DEFAULT);
+                    }
+                }
             }
         }
+        // Handle single record
+        else if (isset($data['data']) && is_array($data['data'])) {
+            if (!empty($passwordField) && isset($data['data'][$passwordField])) {
+                if (empty($data['data'][$passwordField])) {
+                    unset($data['data'][$passwordField]);
+                } else {
+                    $data['data'][$passwordField] = password_hash($data['data'][$passwordField], PASSWORD_DEFAULT);
+                }
+            }
+        }
+
         return $data;
     }
+
     public function checkLogin(string $username, string $password)
     {
 
@@ -522,33 +542,105 @@ class FunctionModel extends Model
      */
     public function allTrim(array $data): array
     {
-        // Check if data is provided
+        // Check if data is provided and has the expected structure
         if (!isset($data['data']) || !is_array($data['data'])) {
             // Return data unchanged if it does not meet expected structure
             return $data;
         }
 
-        foreach ($data['data'] as $key => &$value) {
-            // Skip fields listed in excludeTrimFields
-            if (isset($this->excludeTrimFields) && in_array($key, $this->excludeTrimFields, true)) {
-                continue;
-            }
+        // Retrieve the fields to exclude from trimming
+        $excludeTrimFields = $this->excludeTrimFields ?? [];
 
-            // Trim the value if it is a string
-            if (is_string($value)) {
-                $value = trim($value);
+        // Check if data is a batch of records (array of arrays)
+        if (isset($data['data'][0]) && is_array($data['data'][0])) {
+            foreach ($data['data'] as &$row) {
+                if (is_array($row)) {
+                    foreach ($row as $key => &$value) {
+                        // Skip fields listed in excludeTrimFields
+                        if (in_array($key, $excludeTrimFields, true)) {
+                            continue;
+                        }
+
+                        // Trim the value if it is a string
+                        if (is_string($value)) {
+                            $value = trim($value);
+                        }
+                    }
+                }
+            }
+        }
+        // Handle single record scenario
+        else {
+            foreach ($data['data'] as $key => &$value) {
+                // Skip fields listed in excludeTrimFields
+                if (in_array($key, $excludeTrimFields, true)) {
+                    continue;
+                }
+
+                // Trim the value if it is a string
+                if (is_string($value)) {
+                    $value = trim($value);
+                }
             }
         }
 
         return $data;
     }
-    public function create_update($model_instance, $row)
+
+    public function create_update($model_instance, $data)
     {
         $pk = $model_instance->getPrimaryKey();
-        if (empty($model_instance->find($row[$pk]))) {
-            $model_instance->insert($row);
-        } else {
-            $model_instance->update($row[$pk], $row);
+        $existing_data = $model_instance->select($pk)->findAll() ?? [];
+        $existing_data_primary_keys = array_column($existing_data, $pk);
+        $data_for_insert = [];
+        $data_for_update = [];
+
+        foreach ($data as $row) {
+            if (!in_array($row[$pk], $existing_data_primary_keys)) {
+                $data_for_insert[] = $row;
+            } else {
+                $data_for_update[] = $row;
+            }
         }
+
+        $errors = [];
+
+        // Handle batch insert
+        if (!empty($data_for_insert)) {
+            try {
+                $result = $model_instance->insertBatch($data_for_insert);
+                if ($result === false) {
+                    $errors[] = $model_instance->errors();
+                } else {
+                    $errors[] = $result . " rows inserted successfully.";
+                }
+            } catch (ReflectionException $e) {
+                $errors[] = $model_instance->errors();;
+            } catch (\Exception $e) {
+                $errors[] = $model_instance->errors();;
+            }
+        }
+
+        // Handle batch update
+        if (!empty($data_for_update)) {
+            try {
+                $result = $model_instance->updateBatch($data_for_update, $pk);
+
+                if ($result === false) {
+                    $errors[] = $model_instance->errors();
+                } else {
+                    $errors[] = $result . " rows updated successfully.";
+                }
+            } catch (DatabaseException $e) {
+                $errors[] = $model_instance->errors();;
+            } catch (ReflectionException $e) {
+                $errors[] = $model_instance->errors();;
+            } catch (\Exception $e) {
+                $errors[] = $model_instance->errors();;
+            }
+        }
+
+        // Return errors if any
+        return !empty($errors) ? $errors : null;
     }
 }

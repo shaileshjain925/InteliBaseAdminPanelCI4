@@ -21,7 +21,7 @@ class CountryMigration extends Migration
             ],
             'alias' => [
                 'type' => 'CHAR',
-                'constraint' => 3,
+                'constraint' => 5,
                 'null' => true,
             ],
             'short_name' => [

@@ -33,9 +33,9 @@ class CountriesModel extends FunctionModel
     // Validation
     protected $validationRules = [
         "country_id" => "permit_empty",
-        'country_name' => 'required|alpha_numeric_space|max_length[100]',
+        'country_name' => 'required|max_length[100]',
         'alias' => 'permit_empty|max_length[3]',
-        'short_name' => 'permit_empty|alpha_numeric_space|max_length[2]',
+        'short_name' => 'permit_empty',
         'phonecode' => 'permit_empty|max_length[255]',
         'currency' => 'permit_empty|max_length[255]',
         'currency_name' => 'permit_empty|max_length[255]',
