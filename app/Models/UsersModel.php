@@ -35,7 +35,7 @@ class UsersModel extends FunctionModel
     // Validation
     protected $validationRules = [
         'user_id' => 'permit_empty',
-        'reporting_to_user_id' => 'permit_empty|is_not_unique[users.user_id]',
+        'reporting_to_user_id' => 'permit_empty',
         'designation_id' => 'required|is_not_unique[designations.designation_id]',
         'user_name'           => 'required|max_length[255]|is_unique[users.user_name,user_id,{user_id}]',
         'user_code'          => 'required|max_length[255]|is_unique[users.user_code,user_id,{user_id}]',

@@ -12,22 +12,22 @@ class AllInOneSeeder extends Seeder
     public function run()
     {
         $f = $this->get_function_model();
-        // // Countries Seeder
+        // Countries Seeder
         // $errors['countries'] = $f->create_update($this->get_countries_model(false), $this->countries_data());
         // // States Seeder
         // $errors['states'] = $f->create_update($this->get_states_model(false), $this->states_data());
         // // Cities Seeder
         // $errors['cities'] = $f->create_update($this->get_cities_model(false), $this->cities_data());
         // // Designations Seeder
-        $errors['designations'] = $f->create_update($this->get_designations_model(false), $this->designations_data());
-        // Modules Seeder
-        $errors['modules'] = $f->create_update($this->get_modules_model(false), $this->modules_data());
-        // Menus Seeder
-        $menus = array_merge(...array_map(fn($m) => array_map(fn($menu) => $menu + ['module_id' => $m['module_id']], $m['menus'] ?? []), $this->modules_data()));
-        $errors['module_menus'] = $f->create_update($this->get_module_menus_model(false), $menus);
-        // Roles Seeder
-        $errors['roles'] = $f->create_update($this->get_roles_model(false), $this->roles_data());
-        // User Seeder
+        // $errors['designations'] = $f->create_update($this->get_designations_model(false), $this->designations_data());
+        // // Modules Seeder
+        // $errors['modules'] = $f->create_update($this->get_modules_model(false), $this->modules_data());
+        // // Menus Seeder
+        // $menus = array_merge(...array_map(fn($m) => array_map(fn($menu) => $menu + ['module_id' => $m['module_id']], $m['menus'] ?? []), $this->modules_data()));
+        // $errors['module_menus'] = $f->create_update($this->get_module_menus_model(false), $menus);
+        // // Roles Seeder
+        // $errors['roles'] = $f->create_update($this->get_roles_model(false), $this->roles_data());
+        // // User Seeder
         $errors['users'] = $f->create_update($this->get_users_model(false), $this->users_data());
         print_r($errors);
     }
@@ -4545,7 +4545,7 @@ class AllInOneSeeder extends Seeder
     protected function designations_data()
     {
         $designations = [
-            ["designation_id" => "1", 'designation_name' => 'Developer'],
+            ["designation_id" => "1", 'designation_name' => 'Project Developer'],
             ["designation_id" => "2", 'designation_name' => 'Owner / CEO'],
             ["designation_id" => "3", 'designation_name' => 'National Sales Manager'],
             ["designation_id" => "4", 'designation_name' => 'Regional Sales Manager'],
@@ -4662,25 +4662,214 @@ class AllInOneSeeder extends Seeder
     protected function users_data()
     {
         $user_data = [
+            // [
+            //     'user_id' => 1,
+            //     'user_code' => 'shaileshjain925',
+            //     'reporting_to_user_id' => 1,
+            //     'designation_id' => 1,
+            //     'role_id' => 1,
+            //     'user_name' => 'Shailesh Jain',
+            //     'user_email' => 'shaileshjain925@gmail.com',
+            //     'user_mobile' => '7879531944',
+            //     'user_address' => '74 Sainath',
+            //     'user_country_id' => 101,
+            //     'user_state_id' => 4039,
+            //     'user_city_id' => 134263,
+            //     'user_pincode' => '456001',
+            //     'user_aadhaar_card' => null,
+            //     'user_aadhaar_card_image' => null,
+            //     'user_image' => null,
+            //     'user_type' => 'super_admin',
+            //     'password' => 'Ujjain@0734',
+            //     'is_active' => 1
+            // ],
             [
-                'user_id' => 1,
-                'user_code' => 'shaileshjain925',
-                'reporting_to_user_id' => null,
-                'designation_id' => 1,
-                'role_id' => 1,
-                'user_name' => 'Shailesh Jain',
-                'user_email' => 'shaileshjain925@gmail.com',
-                'user_mobile' => '7879531944',
-                'user_address' => '74 Sainath',
+                'user_id' => 2,
+                'user_code' => 'admin_01',
+                'reporting_to_user_id' => 1,
+                'designation_id' => 2,
+                'role_id' => 2,
+                'user_name' => 'Admin User',
+                'user_email' => 'admin01@example.com',
+                'user_mobile' => '9000000001',
+                'user_address' => 'Address 1',
                 'user_country_id' => 101,
                 'user_state_id' => 4039,
                 'user_city_id' => 134263,
-                'user_pincode' => '456001',
+                'user_pincode' => '123456',
                 'user_aadhaar_card' => null,
                 'user_aadhaar_card_image' => null,
                 'user_image' => null,
-                'user_type' => 'super_admin',
-                'password' => 'Ujjain@0734',
+                'user_type' => 'admin',
+                'password' => 'Admin@123',
+                'is_active' => 1
+            ],
+            [
+                'user_id' => 3,
+                'user_code' => 'purchase_manager_01',
+                'reporting_to_user_id' => 2,
+                'designation_id' => 3,
+                'role_id' => 3,
+                'user_name' => 'Purchase Manager',
+                'user_email' => 'purchasemanager@example.com',
+                'user_mobile' => '9000000002',
+                'user_address' => 'Address 2',
+                'user_country_id' => 101,
+                'user_state_id' => 4039,
+                'user_city_id' => 134263,
+                'user_pincode' => '123457',
+                'user_aadhaar_card' => null,
+                'user_aadhaar_card_image' => null,
+                'user_image' => null,
+                'user_type' => 'staff',
+                'password' => 'Purchase@123',
+                'is_active' => 1
+            ],
+            [
+                'user_id' => 4,
+                'user_code' => 'purchase_exec_01',
+                'reporting_to_user_id' => 3,
+                'designation_id' => 4,
+                'role_id' => 4,
+                'user_name' => 'Purchase Executive',
+                'user_email' => 'purchaseexec@example.com',
+                'user_mobile' => '9000000003',
+                'user_address' => 'Address 3',
+                'user_country_id' => 101,
+                'user_state_id' => 4039,
+                'user_city_id' => 134263,
+                'user_pincode' => '123458',
+                'user_aadhaar_card' => null,
+                'user_aadhaar_card_image' => null,
+                'user_image' => null,
+                'user_type' => 'staff',
+                'password' => 'PurchaseExec@123',
+                'is_active' => 1
+            ],
+            [
+                'user_id' => 5,
+                'user_code' => 'sales_manager_01',
+                'reporting_to_user_id' => 2,
+                'designation_id' => 5,
+                'role_id' => 5,
+                'user_name' => 'Sales Manager',
+                'user_email' => 'salesmanager@example.com',
+                'user_mobile' => '9000000004',
+                'user_address' => 'Address 4',
+                'user_country_id' => 101,
+                'user_state_id' => 4039,
+                'user_city_id' => 134263,
+                'user_pincode' => '123459',
+                'user_aadhaar_card' => null,
+                'user_aadhaar_card_image' => null,
+                'user_image' => null,
+                'user_type' => 'staff',
+                'password' => 'Sales@123',
+                'is_active' => 1
+            ],
+            [
+                'user_id' => 6,
+                'user_code' => 'sales_exec_01',
+                'reporting_to_user_id' => 5,
+                'designation_id' => 6,
+                'role_id' => 6,
+                'user_name' => 'Sales Executive',
+                'user_email' => 'salesexec@example.com',
+                'user_mobile' => '9000000005',
+                'user_address' => 'Address 5',
+                'user_country_id' => 101,
+                'user_state_id' => 4039,
+                'user_city_id' => 134263,
+                'user_pincode' => '123460',
+                'user_aadhaar_card' => null,
+                'user_aadhaar_card_image' => null,
+                'user_image' => null,
+                'user_type' => 'staff',
+                'password' => 'SalesExec@123',
+                'is_active' => 1
+            ],
+            [
+                'user_id' => 7,
+                'user_code' => 'finance_manager_01',
+                'reporting_to_user_id' => 2,
+                'designation_id' => 7,
+                'role_id' => 7,
+                'user_name' => 'Finance Manager',
+                'user_email' => 'financemanager@example.com',
+                'user_mobile' => '9000000006',
+                'user_address' => 'Address 6',
+                'user_country_id' => 101,
+                'user_state_id' => 4039,
+                'user_city_id' => 134263,
+                'user_pincode' => '123461',
+                'user_aadhaar_card' => null,
+                'user_aadhaar_card_image' => null,
+                'user_image' => null,
+                'user_type' => 'staff',
+                'password' => 'Finance@123',
+                'is_active' => 1
+            ],
+            [
+                'user_id' => 8,
+                'user_code' => 'finance_exec_01',
+                'reporting_to_user_id' => 7,
+                'designation_id' => 8,
+                'role_id' => 8,
+                'user_name' => 'Finance Executive',
+                'user_email' => 'financeexec@example.com',
+                'user_mobile' => '9000000007',
+                'user_address' => 'Address 7',
+                'user_country_id' => 101,
+                'user_state_id' => 4039,
+                'user_city_id' => 134263,
+                'user_pincode' => '123462',
+                'user_aadhaar_card' => null,
+                'user_aadhaar_card_image' => null,
+                'user_image' => null,
+                'user_type' => 'staff',
+                'password' => 'FinanceExec@123',
+                'is_active' => 1
+            ],
+            [
+                'user_id' => 9,
+                'user_code' => 'crm_manager_01',
+                'reporting_to_user_id' => 2,
+                'designation_id' => 9,
+                'role_id' => 9,
+                'user_name' => 'CRM Manager',
+                'user_email' => 'crmmanager@example.com',
+                'user_mobile' => '9000000008',
+                'user_address' => 'Address 8',
+                'user_country_id' => 101,
+                'user_state_id' => 4039,
+                'user_city_id' => 134263,
+                'user_pincode' => '123463',
+                'user_aadhaar_card' => null,
+                'user_aadhaar_card_image' => null,
+                'user_image' => null,
+                'user_type' => 'staff',
+                'password' => 'CRM@123',
+                'is_active' => 1
+            ],
+            [
+                'user_id' => 10,
+                'user_code' => 'crm_exec_01',
+                'reporting_to_user_id' => 9,
+                'designation_id' => 10,
+                'role_id' => 10,
+                'user_name' => 'CRM Executive',
+                'user_email' => 'crmexec@example.com',
+                'user_mobile' => '9000000009',
+                'user_address' => 'Address 9',
+                'user_country_id' => 101,
+                'user_state_id' => 4039,
+                'user_city_id' => 134263,
+                'user_pincode' => '123464',
+                'user_aadhaar_card' => null,
+                'user_aadhaar_card_image' => null,
+                'user_image' => null,
+                'user_type' => 'staff',
+                'password' => 'CRMExec@123',
                 'is_active' => 1
             ]
         ];
