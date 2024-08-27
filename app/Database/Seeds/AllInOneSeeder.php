@@ -12,38 +12,24 @@ class AllInOneSeeder extends Seeder
     public function run()
     {
         $f = $this->get_function_model();
-        // Countries Seeder
-        foreach ($this->countries_data() as $country) {
-            $f->create_update($this->get_countries_model(false), $country);
-        }
-        // States Seeder
-        foreach ($this->states_data() as $state) {
-            $f->create_update($this->get_states_model(false), $state);
-        }
-        // Cities Seeder
-        foreach ($this->cities_data() as $city) {
-            $f->create_update($this->get_cities_model(false), $city);
-        }
-        // Designations Seeder
-        foreach ($this->designations_data() as $designation) {
-            $f->create_update($this->get_designations_model(false), $designation);
-        }
-
-        foreach ($this->modules_data() as $module) {
-            $f->create_update($this->get_modules_model(false), $module);
-            if (isset($module['menus']) && !empty($module['menus'])) {
-                foreach ($module['menus'] as $menu) {
-                    $menu['module_id'] = $module['module_id'];
-                    $f->create_update($this->get_module_menus_model(false), $menu);
-                }
-            }
-        }
-        foreach ($this->roles_data() as $role) {
-            $f->create_update($this->get_roles_model(false), $role);
-        }
-        foreach ($this->users_data() as $user) {
-            $f->create_update($this->get_users_model(false), $user);
-        }
+        // // Countries Seeder
+        // $errors['countries'] = $f->create_update($this->get_countries_model(false), $this->countries_data());
+        // // States Seeder
+        // $errors['states'] = $f->create_update($this->get_states_model(false), $this->states_data());
+        // // Cities Seeder
+        // $errors['cities'] = $f->create_update($this->get_cities_model(false), $this->cities_data());
+        // // Designations Seeder
+        $errors['designations'] = $f->create_update($this->get_designations_model(false), $this->designations_data());
+        // Modules Seeder
+        $errors['modules'] = $f->create_update($this->get_modules_model(false), $this->modules_data());
+        // Menus Seeder
+        $menus = array_merge(...array_map(fn($m) => array_map(fn($menu) => $menu + ['module_id' => $m['module_id']], $m['menus'] ?? []), $this->modules_data()));
+        $errors['module_menus'] = $f->create_update($this->get_module_menus_model(false), $menus);
+        // Roles Seeder
+        $errors['roles'] = $f->create_update($this->get_roles_model(false), $this->roles_data());
+        // User Seeder
+        $errors['users'] = $f->create_update($this->get_users_model(false), $this->users_data());
+        print_r($errors);
     }
     protected function countries_data()
     {
@@ -4619,7 +4605,7 @@ class AllInOneSeeder extends Seeder
             ["designation_id" => "58", 'designation_name' => 'Payroll Manager'],
             ["designation_id" => "59", 'designation_name' => 'Accountant'],
             ["designation_id" => "60", 'designation_name' => 'Billing Specialist'],
-            ["designation_id" => "61", 'designation_name' => 'Inventory Control Manager'],
+            ["designation_id" => "61", 'designation_name' => 'Inventory Control Executive'],
             ["designation_id" => "62", 'designation_name' => 'Inventory Analyst'],
             ["designation_id" => "63", 'designation_name' => 'Inventory Planner'],
             ["designation_id" => "64", 'designation_name' => 'Inventory Coordinator'],
@@ -4640,16 +4626,16 @@ class AllInOneSeeder extends Seeder
             ]],
             ['module_id' => 2, 'module_code' => 'DASHBOARD', 'module_name' => 'Dashboards', 'menus' => [
                 ['module_menu_id' => 201, 'menu_code' => 'ADMIN_DASHBOARD', 'menu_name' => 'Admin Dashboard', 'menu_type' => 'master'],
-                ['module_menu_id' => 201, 'menu_code' => 'SALES_DASHBOARD', 'menu_name' => 'Sales Dashboard', 'menu_type' => 'master'],
-                ['module_menu_id' => 202, 'menu_code' => 'PURCHASE_DASHBOARD', 'menu_name' => 'Purchase Dashboard', 'menu_type' => 'master'],
-                ['module_menu_id' => 203, 'menu_code' => 'INVENTORY_DASHBOARD', 'menu_name' => 'Inventory Dashboard', 'menu_type' => 'master'],
-                ['module_menu_id' => 204, 'menu_code' => 'FINANCE_DASHBOARD', 'menu_name' => 'Finance Dashboard', 'menu_type' => 'master'],
-                ['module_menu_id' => 204, 'menu_code' => 'CRM_DASHBOARD', 'menu_name' => 'CRM Dashboard', 'menu_type' => 'master'],
+                ['module_menu_id' => 202, 'menu_code' => 'SALES_DASHBOARD', 'menu_name' => 'Sales Dashboard', 'menu_type' => 'master'],
+                ['module_menu_id' => 203, 'menu_code' => 'PURCHASE_DASHBOARD', 'menu_name' => 'Purchase Dashboard', 'menu_type' => 'master'],
+                ['module_menu_id' => 204, 'menu_code' => 'INVENTORY_DASHBOARD', 'menu_name' => 'Inventory Dashboard', 'menu_type' => 'master'],
+                ['module_menu_id' => 205, 'menu_code' => 'FINANCE_DASHBOARD', 'menu_name' => 'Finance Dashboard', 'menu_type' => 'master'],
+                ['module_menu_id' => 206, 'menu_code' => 'CRM_DASHBOARD', 'menu_name' => 'CRM Dashboard', 'menu_type' => 'master'],
             ]],
             ['module_id' => 3, 'module_code' => 'STAFF_MANAGEMENT', 'module_name' => 'Staff Management', 'menus' => [
                 ['module_menu_id' => 301, 'menu_code' => 'DESIGNATIONS', 'menu_name' => 'Designation', 'menu_type' => 'master'],
                 ['module_menu_id' => 302, 'menu_code' => 'ROLES', 'menu_name' => 'Roles', 'menu_type' => 'master'],
-                ['module_menu_id' => 303, 'menu_code' => 'STAFF', 'menu_name' => 'Staffs', 'menu_type' => 'master'],
+                ['module_menu_id' => 303, 'menu_code' => 'STAFF', 'menu_name' => 'Staff', 'menu_type' => 'master'],
             ]],
             ['module_id' => 4, 'module_code' => 'INVENTORY', 'module_name' => 'Inventory'],
             ['module_id' => 5, 'module_code' => 'PURCHASE', 'module_name' => 'Purchase'],

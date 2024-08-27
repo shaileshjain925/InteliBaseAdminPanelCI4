@@ -31,10 +31,10 @@ class StatesModel extends FunctionModel
     // Validation
     protected $validationRules = [
         'state_id' => 'permit_empty',
-        'state_name' => 'required|alpha_numeric_space|max_length[255]',
+        'state_name' => 'required|max_length[255]',
         'state_code' => 'max_length[3]',
         'country_id' => 'required|is_not_unique[countries.country_id]',
-        'short_name' => 'alpha_numeric_space|max_length[255]',
+        'short_name' => 'max_length[255]',
     ];
     protected $validationMessages = [
         'state_name' => [

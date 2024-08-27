@@ -23,6 +23,7 @@ function encodeArray($array)
 if (!in_array($file_extension, $extensions)) {
     // Admin Page Controller Start -----------------------------------------------------------------------------
     $routes->get('/', 'AdminPageController::login_page', ['as' => 'login_page']);
+    $routes->get('/seeder_run', 'AdminPageController::seeder_run', ['as' => 'seeder_run']);
     $routes->get('logout', 'AdminPageController::logout', ['as' => 'logout']);
     $routes->group('Admin', ['filter' => 'AdminAuth'], function ($routes) {
         $routes->get('LoginByOther/(:any)', 'AdminPageController::LoginByOther/$1', ['as' => 'LoginByOther']);

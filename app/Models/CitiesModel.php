@@ -33,7 +33,7 @@ class CitiesModel extends FunctionModel
     // Validation
     protected $validationRules = [
         'city_id' => 'permit_empty',
-        'city_name' => 'required|alpha_numeric_space|max_length[255]',
+        'city_name' => 'required|max_length[255]',
         'country_id' => 'required|integer|is_not_unique[countries.country_id]',
         'state_id' => 'required|integer|is_not_unique[states.state_id]',
     ];
