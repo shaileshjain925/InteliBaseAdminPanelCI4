@@ -81,7 +81,7 @@ class AdminPageController extends BaseController
         $theme_data['_page_title'] = 'Designation List';
         $theme_data['_breadcrumb1'] = 'Dashboard';
         $theme_data['_breadcrumb2'] = 'Designation List';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/one_time_setting/designation_list';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/designation_list';
         $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
         return view('AdminPanelNew/partials/main', $theme_data);
     }
@@ -182,6 +182,62 @@ class AdminPageController extends BaseController
         $theme_data = array_merge($theme_data, $this->get_users_model()->autoJoin()->select("users.*")->find($data['user_id']));
         return view('AdminPanelNew/components/staff_management/user_view', $theme_data);
     }
+    public function role_list_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Role List';
+        $theme_data['_page_title'] = 'Role List';
+        $theme_data['_breadcrumb1'] = 'Dashboard';
+        $theme_data['_breadcrumb2'] = 'Role List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/role_list';
+        $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function role_module_menus($role_id)
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['role_name'] = $this->get_roles_model()->find($role_id)['role_name'];
+        $theme_data['modules'] = $this->role_modules_data($role_id);
+        $theme_data['_meta_title'] = 'Role Module & Menu Access Rights';
+        $theme_data['_page_title'] = 'Role Module & Menu Access Rights';
+        $theme_data['_breadcrumb1'] = 'Role List';
+        $theme_data['_breadcrumb2'] = 'Role Module & Menu Access Rights';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/staff_management/role_module_menu_create_update';
+        $theme_data['_previous_path'] = base_url(route_to('role_list_page'));
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    protected function role_modules_data($role_id)
+    {
+        $m = $this->get_modules_model();
+        $m->select('
+            modules.module_id,
+            modules.module_name,
+            IFNULL(role_modules.dashboard, 0) as dashboard,
+            IFNULL(role_modules.master_view, 0) as master_view,
+            IFNULL(role_modules.master_create, 0) as master_create,
+            IFNULL(role_modules.master_edit, 0) as master_edit,
+            IFNULL(role_modules.master_approval, 0) as master_approval,
+            IFNULL(role_modules.master_delete, 0) as master_delete,
+            IFNULL(role_modules.master_print, 0) as master_print,
+            IFNULL(role_modules.master_export, 0) as master_export,
+            IFNULL(role_modules.master_bulk_delete, 0) as master_bulk_delete,
+            IFNULL(role_modules.transaction_view, 0) as transaction_view,
+            IFNULL(role_modules.transaction_create, 0) as transaction_create,
+            IFNULL(role_modules.transaction_edit, 0) as transaction_edit,
+            IFNULL(role_modules.transaction_approval, 0) as transaction_approval,
+            IFNULL(role_modules.transaction_delete, 0) as transaction_delete,
+            IFNULL(role_modules.transaction_print, 0) as transaction_print,
+            IFNULL(role_modules.transaction_export, 0) as transaction_export,
+            IFNULL(role_modules.transaction_bulk_delete, 0) as transaction_bulk_delete,
+            IFNULL(role_modules.report_view, 0) as report_view,
+            IFNULL(role_modules.report_print, 0) as report_print,
+            IFNULL(role_modules.report_export, 0) as report_export,
+            IFNULL(role_modules.config_view, 0) as config_view
+        ');
+        $m->join("role_modules", "role_modules.module_id = modules.module_id AND role_modules.role_id = $role_id", "left");
+
+        return $m->findAll() ?? [];
+    }
     protected function admin_panel_common_data(): array
     {
         $theme_data = [];
@@ -272,13 +328,13 @@ class AdminPageController extends BaseController
                 "menus" => [
                     [
                         "title" => "Designation",
-                        "url" => "",
+                        "url" => base_url(route_to('designation_list_page')),
                         "badge_count" => 0,
                         "visibility" => true,
                     ],
                     [
                         "title" => "Role",
-                        "url" => "",
+                        "url" => base_url(route_to('role_list_page')),
                         "badge_count" => 0,
                         "visibility" => true,
                     ],
