@@ -606,11 +606,10 @@ class FunctionModel extends Model
         }
 
         $errors = [];
-
         // Handle batch insert
         if (!empty($data_for_insert)) {
             try {
-                $result = $model_instance->insertBatch($data_for_insert);
+                $result = $model_instance->insertBatch($data_for_insert, null, 5000);
                 if ($result === false) {
                     $errors[] = $model_instance->errors();
                 } else {
@@ -622,11 +621,10 @@ class FunctionModel extends Model
                 $errors[] = $model_instance->errors();;
             }
         }
-
         // Handle batch update
         if (!empty($data_for_update)) {
             try {
-                $result = $model_instance->updateBatch($data_for_update, $pk);
+                $result = $model_instance->updateBatch($data_for_update, $pk, 5000);
 
                 if ($result === false) {
                     $errors[] = $model_instance->errors();
