@@ -37,9 +37,9 @@
                             <div class="bg-login-overlay"></div>
                             <div class="position-relative">
                                 <h5 class="font-size-20">Welcome Back !</h5>
-                                <p class="mb-0">Sign in to continue to The HUB Services</p>
+                                <p class="mb-0">Sign in to continue to Brillsense</p>
                                 <a href="/" class="logo logo-admin mt-4">
-                                    <img src="<?= base_url('AdminPanelNew/assets/images/logo.png') ?>" alt="logo-sm-dark">
+                                    <img src="https://brillsense.com/theme/assets/images/homeimg/logo-brill.svg" alt="logo-sm-dark">
                                 </a>
                             </div>
                         </div>

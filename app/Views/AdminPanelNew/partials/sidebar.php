@@ -25,7 +25,7 @@
                             <img src="assets/images/logo_sm.png" alt="logo" height="20">
                         </span>
                         <span class="logo-lg">
-                            <img src="<?= base_url('AdminPanelNew/assets/images/logo.png') ?>" alt="logo" height="80">
+                            <img src="https://brillsense.com/theme/assets/images/homeimg/logo-brill.svg" alt="logo" height="80">
                         </span>
                     </a>
 
@@ -34,7 +34,7 @@
                             <img src="assets/images/logo_sm.png" alt="logo" height="20">
                         </span>
                         <span class="logo-lg">
-                            <img src="<?= base_url('AdminPanelNew/assets/images/logo.png') ?>" alt="logo" height="80">
+                            <img src="https://brillsense.com/theme/assets/images/homeimg/logo-brill.svg" alt="logo" height="80">
                         </span>
                     </a>
                 </div>
