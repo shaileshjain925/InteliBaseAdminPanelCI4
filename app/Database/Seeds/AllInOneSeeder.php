@@ -13,11 +13,11 @@ class AllInOneSeeder extends Seeder
     {
         $f = $this->get_function_model();
         //Countries Seeder
-        $errors['countries'] = $f->create_update($this->get_countries_model(false), $this->countries_data());
-        // States Seeder
-        $errors['states'] = $f->create_update($this->get_states_model(false), $this->states_data());
-        // Cities Seeder
-        $errors['cities'] = $f->create_update($this->get_cities_model(false), $this->cities_data());
+        // $errors['countries'] = $f->create_update($this->get_countries_model(false), $this->countries_data());
+        // // States Seeder
+        // $errors['states'] = $f->create_update($this->get_states_model(false), $this->states_data());
+        // // Cities Seeder
+        // $errors['cities'] = $f->create_update($this->get_cities_model(false), $this->cities_data());
         // Designations Seeder
         $errors['designations'] = $f->create_update($this->get_designations_model(false), $this->designations_data());
         // Modules Seeder
@@ -4624,14 +4624,14 @@ class AllInOneSeeder extends Seeder
                 ['module_menu_id' => 102, 'menu_code' => 'STATE', 'menu_name' => 'State', 'menu_type' => 'master'],
                 ['module_menu_id' => 103, 'menu_code' => 'CITIES', 'menu_name' => 'Cities', 'menu_type' => 'master'],
             ]],
-            ['module_id' => 2, 'module_code' => 'DASHBOARD', 'module_name' => 'Dashboards', 'menus' => [
-                ['module_menu_id' => 201, 'menu_code' => 'ADMIN_DASHBOARD', 'menu_name' => 'Admin Dashboard', 'menu_type' => 'master'],
-                ['module_menu_id' => 202, 'menu_code' => 'SALES_DASHBOARD', 'menu_name' => 'Sales Dashboard', 'menu_type' => 'master'],
-                ['module_menu_id' => 203, 'menu_code' => 'PURCHASE_DASHBOARD', 'menu_name' => 'Purchase Dashboard', 'menu_type' => 'master'],
-                ['module_menu_id' => 204, 'menu_code' => 'INVENTORY_DASHBOARD', 'menu_name' => 'Inventory Dashboard', 'menu_type' => 'master'],
-                ['module_menu_id' => 205, 'menu_code' => 'FINANCE_DASHBOARD', 'menu_name' => 'Finance Dashboard', 'menu_type' => 'master'],
-                ['module_menu_id' => 206, 'menu_code' => 'CRM_DASHBOARD', 'menu_name' => 'CRM Dashboard', 'menu_type' => 'master'],
-            ]],
+            // ['module_id' => 2, 'module_code' => 'DASHBOARD', 'module_name' => 'Dashboards', 'menus' => [
+            //     ['module_menu_id' => 201, 'menu_code' => 'ADMIN_DASHBOARD', 'menu_name' => 'Admin Dashboard', 'menu_type' => 'master'],
+            //     ['module_menu_id' => 202, 'menu_code' => 'SALES_DASHBOARD', 'menu_name' => 'Sales Dashboard', 'menu_type' => 'master'],
+            //     ['module_menu_id' => 203, 'menu_code' => 'PURCHASE_DASHBOARD', 'menu_name' => 'Purchase Dashboard', 'menu_type' => 'master'],
+            //     ['module_menu_id' => 204, 'menu_code' => 'INVENTORY_DASHBOARD', 'menu_name' => 'Inventory Dashboard', 'menu_type' => 'master'],
+            //     ['module_menu_id' => 205, 'menu_code' => 'FINANCE_DASHBOARD', 'menu_name' => 'Finance Dashboard', 'menu_type' => 'master'],
+            //     ['module_menu_id' => 206, 'menu_code' => 'CRM_DASHBOARD', 'menu_name' => 'CRM Dashboard', 'menu_type' => 'master'],
+            // ]],
             ['module_id' => 3, 'module_code' => 'STAFF_MANAGEMENT', 'module_name' => 'Staff Management', 'menus' => [
                 ['module_menu_id' => 301, 'menu_code' => 'DESIGNATIONS', 'menu_name' => 'Designation', 'menu_type' => 'master'],
                 ['module_menu_id' => 302, 'menu_code' => 'ROLES', 'menu_name' => 'Roles', 'menu_type' => 'master'],
@@ -4640,6 +4640,13 @@ class AllInOneSeeder extends Seeder
             ['module_id' => 4, 'module_code' => 'INVENTORY', 'module_name' => 'Inventory'],
             ['module_id' => 5, 'module_code' => 'PURCHASE', 'module_name' => 'Purchase'],
             ['module_id' => 6, 'module_code' => 'SALES', 'module_name' => 'Sales'],
+            ['module_id' => 7, 'module_code' => 'FINANCE', 'module_name' => 'Finance'],
+            ['module_id' => 8, 'module_code' => 'CRM', 'module_name' => 'CRM'],
+            ['module_id' => 9, 'module_code' => 'PART_MAINTENANCE', 'module_name' => 'Product Maintenance'],
+            ['module_id' => 10, 'module_code' => 'HR', 'module_name' => 'HR'],
+            ['module_id' => 11, 'module_code' => 'SCM', 'module_name' => 'SCM'],
+            ['module_id' => 12, 'module_code' => 'WH', 'module_name' => 'Warehouse'],
+            ['module_id' => 13, 'module_code' => 'LOGISTICS', 'module_name' => 'Logistics'],
         ];
         return $modules_data;
     }

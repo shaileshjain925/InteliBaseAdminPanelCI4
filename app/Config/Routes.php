@@ -55,6 +55,7 @@ if (!in_array($file_extension, $extensions)) {
             $routes->group('Role', function ($routes) {
                 $routes->get('List', 'AdminPageController::role_list_page', ['as' => 'role_list_page']);
                 $routes->get('RoleModuleMenus/(:any)', 'AdminPageController::role_module_menus/$1', ['as' => 'role_module_menus']);
+                $routes->post('role_module_menus_component', 'AdminPageController::role_module_menus_component', ['as' => 'role_module_menus_component']);
             });
             $routes->group('Module', function ($routes) {
                 $routes->post('View', 'AdminPageController::module_view_component', ['as' => 'module_view_component']);

@@ -26,11 +26,14 @@
         Swal.fire({
             title: role_id ? 'Update Role' : 'Create Role',
             html: `
-            <form id="roleForm">
-                <label>Role Name</label>
-                <input type="text" id="role_name" value="${role_name}" required>
+            <form id="roleForm" class="mb-3">
+                <div class="mb-3">
+                    <label for="role_name" class="form-label">Role Name</label>
+                    <input type="text" class="form-control" id="role_name" value="${role_name}" required>
+                </div>
                 <input type="hidden" id="role_id" value="${role_id}">
             </form>
+
         `,
             showCancelButton: true,
             confirmButtonText: role_id ? 'Update' : 'Create',

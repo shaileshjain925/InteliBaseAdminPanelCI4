@@ -11,7 +11,7 @@
                 <a href="<?= @$_previous_path ?>">
                     <button class="btn export_btn me-3" type="button"><i class="fas fa-backward"></i></button>
                 </a>
-                <button onclick="OpenCreateUpdateRoleInSweetAlert('', onSuccess, onFail)" class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add Designation</button>
+                <button onclick="OpenCreateUpdateDesignationInSweetAlert('', onSuccess, onFail)" class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add Designation</button>
             </div>
             <div class="table-responsive">
                 <table id="table" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle"></table>
@@ -22,13 +22,15 @@
 <script>
     var DeleteApiUrl = "<?= base_url(route_to('designation_delete_api')) ?>"
 
-    function OpenCreateUpdateRoleInSweetAlert(designation_name = '', onSuccess, onFail, designation_id = '') {
+    function OpenCreateUpdateDesignationInSweetAlert(designation_name = '', onSuccess, onFail, designation_id = '') {
         Swal.fire({
-            title: designation_id ? 'Update Role' : 'Create Role',
+            title: designation_id ? 'Update Designation' : 'Create Designation',
             html: `
-            <form id="designationForm">
-                <label>Role Name</label>
-                <input type="text" id="designation_name" value="${designation_name}" required>
+            <form id="designationForm" class="mb-3">
+                <div class="mb-3">
+                    <label for="designation_name" class="form-label">Designation Name</label>
+                    <input type="text" class="form-control" id="designation_name" value="${designation_name}" required>
+                </div>
                 <input type="hidden" id="designation_id" value="${designation_id}">
             </form>
         `,
@@ -71,7 +73,7 @@
                 "data": null,
                 "render": function(data, type, row) {
                     return `
-                            <button class="text-white btn btn-sm btn-success" onclick="OpenCreateUpdateRoleInSweetAlert('${row.designation_name}', onSuccess, onFail, '${row.designation_id}')">
+                            <button class="text-white btn btn-sm btn-success" onclick="OpenCreateUpdateDesignationInSweetAlert('${row.designation_name}', onSuccess, onFail, '${row.designation_id}')">
                                 <i class="bx bx-edit-alt"></i>
                             </button>
                             <button class="text-white btn btn-sm btn-danger" onclick="designation_delete(${row.designation_id})">
