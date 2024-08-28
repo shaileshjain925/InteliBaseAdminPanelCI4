@@ -74,7 +74,142 @@ class AdminPageController extends BaseController
         }
         return redirect()->route('default_dashboard_page');
     }
+    public function country_list_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Country List';
+        $theme_data['_page_title'] = 'Country List';
+        $theme_data['_breadcrumb1'] = 'Dashboard';
+        $theme_data['_breadcrumb2'] = 'Country List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/OneTimeSetting/country_list';
+        $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function country_create_update_page($country_id = null)
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'country ' . CreateUpdateAlias($country_id);
+        $theme_data['_page_title'] = 'country ' . CreateUpdateAlias($country_id);
+        $theme_data['_breadcrumb1'] = 'country List';
+        $theme_data['_breadcrumb2'] = 'country ' . CreateUpdateAlias($country_id);
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/OneTimeSetting/country_create_update';
+        if (!empty($country_id)) {
+            $theme_data = array_merge($theme_data, $this->get_countries_model()->find($country_id) ?? []);
+        }
+        $theme_data['_previous_path'] = base_url(route_to('country_list_page'));
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function country_view_component()
+    {
+        $data = getRequestData($this->request, 'ARRAY');
+        $filter = [
+            '_autojoin' => "F",
+            '_select' => "*",
+            'country_id' => $data['country_id'],
+        ];
+        $country_data = $this->get_countries_model()->RecordList($filter);
+        if ($country_data['status'] == ApiResponseStatusCode::OK && !empty($country_data['data'])) {
+            return view('AdminPanelNew/components/country_view', $country_data['data'][0]);
+        }
+        return "<h1>Country Record Not Found</h1>";
+    
+    }
+    public function state_list_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'State List';
+        $theme_data['_page_title'] = 'State List';
+        $theme_data['_breadcrumb1'] = 'Dashboard';
+        $theme_data['_breadcrumb2'] = 'State List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/OneTimeSetting/state_list';
+        $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function state_create_update_page($state_id = null)
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'State ' . CreateUpdateAlias($state_id);
+        $theme_data['_page_title'] = 'State ' . CreateUpdateAlias($state_id);
+        $theme_data['_breadcrumb1'] = 'State List';
+        $theme_data['_breadcrumb2'] = 'State ' . CreateUpdateAlias($state_id);
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/OneTimeSetting/state_create_update';
+        
+    if (!empty($state_id)) {
+        $state_data = $this->get_states_model()->find($state_id) ?? [];
+        $theme_data = array_merge($theme_data, $state_data);
 
+    }
+        
+        $theme_data['_previous_path'] = base_url(route_to('state_list_page'));
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function state_view_component()
+    {
+        $data = getRequestData($this->request, 'ARRAY');
+        $filter = [
+            '_autojoin' => "F",
+            '_select' => "*",
+            'state_id' => $data['state_id'],
+        ];
+        $state_data = $this->get_states_model()->RecordList($filter);
+        if ($state_data['status'] == ApiResponseStatusCode::OK && !empty($state_data['data'])) {
+            return view('AdminPanelNew/components/state_view', $state_data['data'][0]);
+        }
+        return "<h1>State Record Not Found</h1>";
+    
+    }
+    public function city_list_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'City List';
+        $theme_data['_page_title'] = 'City List';
+        $theme_data['_breadcrumb1'] = 'Dashboard';
+        $theme_data['_breadcrumb2'] = 'City List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/OneTimeSetting/city_list';
+        $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function city_create_update_page($city_id = null)
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'City ' . CreateUpdateAlias($city_id);
+        $theme_data['_page_title'] = 'City ' . CreateUpdateAlias($city_id);
+        $theme_data['_breadcrumb1'] = 'City List';
+        $theme_data['_breadcrumb2'] = 'City ' . CreateUpdateAlias($city_id);
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/OneTimeSetting/city_create_update';
+        if (!empty($city_id)) {
+            $theme_data = array_merge($theme_data, $this->get_cities_model()->find($city_id) ?? []);
+        }
+        $theme_data['_previous_path'] = base_url(route_to('city_list_page'));
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function city_view_component()
+    {
+        $data = getRequestData($this->request, 'ARRAY');
+        $filter = [
+            '_autojoin' => "F",
+            '_select' => "*",
+            'city_id' => $data['city_id'],
+        ];
+        $city_data = $this->get_cities_model()->RecordList($filter);
+        if ($city_data['status'] == ApiResponseStatusCode::OK && !empty($city_data['data'])) {
+            return view('AdminPanelNew/components/city_view', $city_data['data'][0]);
+        }
+        return "<h1>City Record Not Found</h1>";
+    
+    }
+    public function log_list_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Log List';
+        $theme_data['_page_title'] = 'Log List';
+        $theme_data['_breadcrumb1'] = 'Dashboard';
+        $theme_data['_breadcrumb2'] = 'Log List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/OneTimeSetting/log_list';
+        $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+   
     public function designation_list_page()
     {
         $theme_data = $this->admin_panel_common_data();

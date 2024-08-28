@@ -117,7 +117,7 @@ abstract class BaseController extends Controller
             return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::BAD_REQUEST, $e->getMessage(), []);
         }
     }
-    protected function api_delete(FunctionModel $modelInstance)
+    protected function api_delete(FunctionModel $modelInstance, &$returnResultInArray = [])
     {
         try {
             $requestData = getRequestData($this->request, 'ARRAY') ?? [];
@@ -131,9 +131,23 @@ abstract class BaseController extends Controller
                 return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::VALIDATION_FAILED, 'Validation Failed', [], $validation->getErrors());
             }
             $result = $modelInstance->RecordDelete($requestData[$modelInstance->getPrimaryKey()]);
+            $returnResultInArray = $result;
             return formatApiAutoResponse($this->request, $this->response, $result);
         } catch (Exception $e) {
             return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::BAD_REQUEST, $e->getMessage(), []);
         }
+    }
+    protected function createLog(string $log_type, string $log_menu_code, string $log_message, string $table_name = null, string|int $record_id = null, array $log_data = null)
+    {
+        $data = [
+            "log_type" => $log_type,
+            "log_menu_code" => $log_menu_code,
+            "log_message" => $log_message,
+            "table_name" => $table_name,
+            "record_id" => $record_id,
+            "user_id" => $_SESSION['user_id'],
+            "log_json_data" => (!empty($log_data)) ? json_encode($log_data) : ""
+        ];
+        return $this->get_logs_model(false)->RecordCreate($data);
     }
 }

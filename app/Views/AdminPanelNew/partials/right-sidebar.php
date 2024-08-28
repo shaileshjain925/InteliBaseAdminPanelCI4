@@ -19,6 +19,9 @@
                         </h2>
                         <div id="one_time_setting_div" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                             <div class="accordion-body py-0">
+                            <ul class="right_sidebar_ul px-0 mt-2 m-0">
+                                    <li class="mb-0"><a class=" waves-effect" href="<?= base_url(route_to('log_list_page')) ?>"> <i class="icon_theme_color_1 bx bx-grid-small"></i> <span>Log</span></a></li>
+                                </ul>
                                 <ul class="right_sidebar_ul px-0 mt-2 m-0">
                                     <li class="mb-0"><a class=" waves-effect" href="<?= base_url() ?>"> <i class="icon_theme_color_1 bx bx-grid-small"></i> <span>Designation</span></a></li>
                                 </ul>
@@ -26,13 +29,13 @@
                                     <li class="mb-0"><a class=" waves-effect" href="<?= base_url() ?>"> <i class="icon_theme_color_1 bx bx-grid-small"></i> <span>Unit of Measurement (UMO)</span></a></li>
                                 </ul>
                                 <ul class="right_sidebar_ul px-0 mt-2 m-0">
-                                    <li class="mb-0"><a class=" waves-effect" href="<?= base_url() ?>"> <i class="icon_theme_color_1 bx bx-grid-small"></i> <span>Country</span></a></li>
+                                    <li class="mb-0"><a class=" waves-effect" href="<?= base_url(route_to('country_list_page')) ?>"> <i class="icon_theme_color_1 bx bx-grid-small"></i> <span>Country</span></a></li>
                                 </ul>
                                 <ul class="right_sidebar_ul px-0 mt-2 m-0">
-                                    <li class="mb-0"><a class=" waves-effect" href="<?= base_url() ?>"> <i class="icon_theme_color_1 bx bx-grid-small"></i> <span>State</span></a></li>
+                                    <li class="mb-0"><a class=" waves-effect" href="<?= base_url(route_to('state_list_page')) ?>"> <i class="icon_theme_color_1 bx bx-grid-small"></i> <span>State</span></a></li>
                                 </ul>
                                 <ul class="right_sidebar_ul px-0 mt-2 m-0">
-                                    <li class="mb-0"><a class=" waves-effect" href="<?= base_url() ?>"> <i class="icon_theme_color_1 bx bx-grid-small"></i> <span>City</span></a></li>
+                                    <li class="mb-0"><a class=" waves-effect" href="<?= base_url(route_to('city_list_page')) ?>"> <i class="icon_theme_color_1 bx bx-grid-small"></i> <span>City</span></a></li>
                                 </ul>
                                 <ul class="right_sidebar_ul px-0 mt-2 m-0">
                                     <li class="mb-0"><a class=" waves-effect" href="<?= base_url() ?>"> <i class="icon_theme_color_1 bx bx-grid-small"></i> <span>Business Sector</span></a></li>

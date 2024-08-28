@@ -280,11 +280,13 @@ class FunctionModel extends Model
     {
         $this->initializeMessages();
         try {
+            $data = $this->find($primaryKey);
             $result = $this->delete($primaryKey);
+
             if (empty($result)) {
                 return formatCommonResponse(ApiResponseStatusCode::NO_CONTENT, $this->getRecordNotFoundMsg);
             }
-            return formatCommonResponse(ApiResponseStatusCode::OK, $this->deleteRecordSuccessMsg, $result);
+            return formatCommonResponse(ApiResponseStatusCode::OK, $this->deleteRecordSuccessMsg, $data);
         } catch (\Throwable $th) {
             return formatCommonResponse(ApiResponseStatusCode::BAD_REQUEST,  $th->getMessage());
         }

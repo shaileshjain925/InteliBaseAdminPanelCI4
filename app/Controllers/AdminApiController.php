@@ -146,20 +146,49 @@ class AdminApiController extends BaseController
     /** */
     public function designation_create_api()
     {
-        return $this->api_create($this->get_designations_model(false));
+        $result = null;
+        $response =  $this->api_create($this->get_designations_model(), $result);
+        if ($result['status'] == ApiResponseStatusCode::CREATED) {
+            $this->createLog('create', 'DESIGNATIONS', "Designation Created (" . $result['data']['designation_name'] . ")", 'designations', $result['data']['designation_id'] ?? null, $result['data']);
+        }
+        return $response;
     }
     /** */
     public function designation_update_api()
     {
-        return $this->api_update($this->get_designations_model(false));
+        $result = null;
+        $response =  $this->api_update($this->get_designations_model(), $result);
+        if ($result['status'] == ApiResponseStatusCode::OK) {
+            $this->createLog(
+                'update',
+                'DESIGNATIONS',
+                "Designation Update (" . $result['data']['designation_name'] . ")",
+                'designations',
+                $result['data']['designation_id'] ?? null,
+                $result['data']
+            );
+            return $response;
+        }
     }
     /** */
     public function designation_delete_api()
     {
-        return $this->api_delete($this->get_designations_model(false));
+        $result = null;
+        $response =  $this->api_delete($this->get_designations_model(), $result);
+        if ($result['status'] == ApiResponseStatusCode::OK) {
+            $this->createLog(
+                'delete',
+                'DESIGNATIONS',
+                "Designation Deleted (" . $result['data']['designation_name'] . ")",
+                'designations',
+                $result['data']['designation_id'] ?? null,
+                $result['data']
+            );
+        }
+        return $response;
     }
 
-     // Module -------------------------------------------------------------------------------------------------------
+    // Module -------------------------------------------------------------------------------------------------------
     /** */
     public function module_get_api()
     {
@@ -186,7 +215,7 @@ class AdminApiController extends BaseController
         return $this->api_delete($this->get_modules_model());
     }
 
-     // Module Menu -------------------------------------------------------------------------------------------------------
+    // Module Menu -------------------------------------------------------------------------------------------------------
     /** */
     public function module_menu_get_api()
     {
@@ -212,7 +241,7 @@ class AdminApiController extends BaseController
     {
         return $this->api_delete($this->get_module_menus_model());
     }
-     // roles -------------------------------------------------------------------------------------------------------
+    // roles -------------------------------------------------------------------------------------------------------
     /** */
     public function role_get_api()
     {
@@ -226,19 +255,48 @@ class AdminApiController extends BaseController
     /** */
     public function role_create_api()
     {
-        return $this->api_create($this->get_roles_model());
+        $result = null;
+        $response =  $this->api_create($this->get_roles_model(), $result);
+        if ($result['status'] == ApiResponseStatusCode::CREATED) {
+            $this->createLog('create', 'ROLES', "Role Created (" . $result['data']['role_name'] . ")", 'roles', $result['data']['role_id'] ?? null, $result['data']);
+        }
+        return $response;
     }
     /** */
     public function role_update_api()
     {
-        return $this->api_update($this->get_roles_model());
+        $result = null;
+        $response =  $this->api_update($this->get_roles_model(), $result);
+        if ($result['status'] == ApiResponseStatusCode::OK) {
+            $this->createLog(
+                'update',
+                'ROLES',
+                "Role Update (" . $result['data']['role_name'] . ")",
+                'roles',
+                $result['data']['role_id'] ?? null,
+                $result['data']
+            );
+        }
+        return $response;
     }
     /** */
     public function role_delete_api()
     {
-        return $this->api_delete($this->get_roles_model());
+        $result = null;
+        $response =  $this->api_delete($this->get_roles_model(), $result);
+        if ($result['status'] == ApiResponseStatusCode::OK) {
+            $this->createLog(
+                'delete',
+                'ROLES',
+                "Role Deleted (" . $result['data']['role_name'] . ")",
+                'roles',
+                $result['data']['role_id'] ?? null,
+                $result['data']
+            );
+        }
+        return $response;
     }
-     // role Modules -------------------------------------------------------------------------------------------------------
+    // role Modules -------------------------------------------------------------------------------------------------------
     /** */
     public function role_module_get_api()
     {
@@ -265,7 +323,7 @@ class AdminApiController extends BaseController
         return $this->api_delete($this->get_role_modules_model());
     }
 
-     // role Module Menu-------------------------------------------------------------------------------------------------------
+    // role Module Menu-------------------------------------------------------------------------------------------------------
     /** */
     public function role_module_menu_get_api()
     {
@@ -291,6 +349,17 @@ class AdminApiController extends BaseController
     {
         return $this->api_delete($this->get_role_module_menus_model());
     }
+    // logs -------------------------------------------------------------------------------------------------------
+    /** */
+    public function log_get_api()
+    {
+        return $this->api_get($this->get_logs_model());
+    }
+    /** */
+    public function log_list_api()
+    {
+        return $this->api_list($this->get_logs_model());
+    }
     // user -------------------------------------------------------------------------------------------------------
     /** */
     public function user_get_api()
@@ -305,17 +374,46 @@ class AdminApiController extends BaseController
     /** */
     public function user_create_api()
     {
-        return $this->api_create($this->get_users_model(false));
+        $result = null;
+        $response =  $this->api_create($this->get_users_model(), $result);
+        if ($result['status'] == ApiResponseStatusCode::CREATED) {
+            $this->createLog('create', 'STAFF', "user Created (" . $result['data']['user_name'] . ")", 'users', $result['data']['user_id'] ?? null, $result['data']);
+        }
+        return $response;
     }
     /** */
     public function user_update_api()
     {
-        return $this->api_update($this->get_users_model(false));
+        $result = null;
+        $response =  $this->api_update($this->get_users_model(), $result);
+        if ($result['status'] == ApiResponseStatusCode::OK) {
+            $this->createLog(
+                'update',
+                'STAFF',
+                "user Update (" . $result['data']['user_name'] . ")",
+                'users',
+                $result['data']['user_id'] ?? null,
+                $result['data']
+            );
+            return $response;
+        }
     }
     /** */
     public function user_delete_api()
     {
-        return $this->api_delete($this->get_users_model(false));
+        $result = null;
+        $response =  $this->api_delete($this->get_users_model(), $result);
+        if ($result['status'] == ApiResponseStatusCode::OK) {
+            $this->createLog(
+                'delete',
+                'STAFF',
+                "user Deleted (" . $result['data']['user_name'] . ")",
+                'users',
+                $result['data']['user_id'] ?? null,
+                $result['data']
+            );
+        }
+        return $response;
     }
     /**
      * {"username":"required","password":"required"}
