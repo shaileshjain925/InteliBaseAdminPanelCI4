@@ -65,6 +65,28 @@ if (!in_array($file_extension, $extensions)) {
                 $routes->post('View', 'AdminPageController::module_menu_view_component', ['as' => 'module_menu_view_component']);
             });
         });
+        $routes->group('Log', function ($routes) {
+            $routes->get('List', 'AdminPageController::log_list_page', ['as' => 'log_list_page']);
+         
+        });
+        $routes->group('country', function ($routes) {
+            $routes->get('List', 'AdminPageController::country_list_page', ['as' => 'country_list_page']);
+            $routes->get('CreateUpdate', 'AdminPageController::country_create_update_page', ['as' => 'country_create_update_page']);
+            $routes->get('CreateUpdate/(:num)', 'AdminPageController::country_create_update_page/$1');
+            $routes->post('View', 'AdminPageController::country_view_component', ['as' => 'country_view_component']);
+        });
+        $routes->group('state', function ($routes) {
+            $routes->get('List', 'AdminPageController::state_list_page', ['as' => 'state_list_page']);
+            $routes->get('CreateUpdate', 'AdminPageController::state_create_update_page', ['as' => 'state_create_update_page']);
+            $routes->get('CreateUpdate/(:num)', 'AdminPageController::state_create_update_page/$1');
+            $routes->post('View', 'AdminPageController::state_view_component', ['as' => 'state_view_component']);
+        });
+        $routes->group('city', function ($routes) {
+            $routes->get('List', 'AdminPageController::city_list_page', ['as' => 'city_list_page']);
+            $routes->get('CreateUpdate', 'AdminPageController::city_create_update_page', ['as' => 'city_create_update_page']);
+            $routes->get('CreateUpdate/(:num)', 'AdminPageController::city_create_update_page/$1');
+            $routes->post('View', 'AdminPageController::city_view_component', ['as' => 'city_view_component']);
+        });
         $routes->group('FileUpload', function ($routes) {
             $routes->post('ImageUpload', 'AdminApiController::ImageUpload', ['as' => 'file_upload_image_api']);
             $routes->post('ImageDelete', 'AdminApiController::deleteImage', ['as' => 'file_delete_image_api']);
@@ -141,6 +163,13 @@ if (!in_array($file_extension, $extensions)) {
                 $routes->post("module_menu_create_api", "AdminApiController::module_menu_create_api", ['as' => 'module_menu_create_api']);
                 $routes->post("module_menu_update_api", "AdminApiController::module_menu_update_api", ['as' => 'module_menu_update_api']);
                 $routes->post("module_menu_delete_api", "AdminApiController::module_menu_delete_api", ['as' => 'module_menu_delete_api']);
+            });
+            $routes->group('log', function ($routes) {
+                $routes->post("log_get_api", "AdminApiController::log_get_api", ['as' => 'log_get_api']);
+                $routes->post("log_list_api", "AdminApiController::log_list_api", ['as' => 'log_list_api']);
+                $routes->post("log_create_api", "AdminApiController::log_create_api", ['as' => 'log_create_api']);
+                $routes->post("log_update_api", "AdminApiController::log_update_api", ['as' => 'log_update_api']);
+                $routes->post("log_delete_api", "AdminApiController::log_delete_api", ['as' => 'log_delete_api']);
             });
             $routes->group('user', function ($routes) {
                 $routes->post("user_get_api", "AdminApiController::user_get_api", ['as' => 'user_get_api']);

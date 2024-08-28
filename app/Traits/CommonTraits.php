@@ -13,7 +13,7 @@ use App\Models\ModulesModel;
 use App\Models\RoleModuleMenusModel;
 use App\Models\RoleModulesModel;
 use App\Models\RolesModel;
-
+use App\Models\LogsModel;
 trait CommonTraits
 {
     /**
@@ -103,5 +103,13 @@ trait CommonTraits
     public static function get_roles_model(...$variable)
     {
         return new RolesModel(...$variable);
+    }
+     /**
+     * Return Model Instance
+     * @return LogsModel
+     */
+    public static function get_logs_model(...$variable)
+    {
+        return new LogsModel(...$variable);
     }
 }
