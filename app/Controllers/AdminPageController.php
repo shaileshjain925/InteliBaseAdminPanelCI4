@@ -63,9 +63,9 @@ class AdminPageController extends BaseController
     public function LoginByOther($user_id)
     {
         if (isset($_SESSION['ref_user_type']) && $_SESSION['ref_user_type'] == UserType::SuperAdmin->value) {
-            $user_data['data'] = $this->get_users_model()->find($user_id);
+            $user_data['data'] = $this->get_users_model(false)->find($user_id);
             $user_data['data']['ref_user_type'] = UserType::SuperAdmin->value;
-            $user_data['data']['user_ids'] = $this->get_users_model()->getHierarchyUserIds($user_id);
+            $user_data['data']['user_ids'] = $this->get_users_model(false)->getHierarchyUserIds($user_id);
             $session_data = $user_data['data'];
             $session_data['logged_in'] = true;
             // Session
@@ -244,24 +244,89 @@ class AdminPageController extends BaseController
     public function role_module_menus_component()
     {
         $data = getRequestData($this->request, 'ARRAY');
-        $noModuleRightsSelected = true; // Assume true initially
-
+        $return_data = [];
+        $return_data['noModuleRightsSelected'] = true;
+        // noModuleRightsSelected
         foreach ($data['modules'] as $module) {
             if (count($module) >= 3) {
                 // If any module array has 2 or more elements, set to false and break the loop
-                $noModuleRightsSelected = false;
+                $return_data['noModuleRightsSelected'] = false;
                 break;
             }
         }
-        if ($noModuleRightsSelected) {
+
+
+        if ($return_data['noModuleRightsSelected']) {
             return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::BAD_REQUEST, "Please Select Any Module's Permission First");
         }
-        $role_module_menus_data = [];
-        $return_data = [];
-        $return_data['html'] = view('AdminPanelNew/components/staff_management/role_module_menus_component', $role_module_menus_data);
+        $modules = [];
+        foreach ($data['modules'] as $module) {
+            if (count($module) >= 3) {
+                $modules[] = $module;
+            }
+        }
+        unset($return_data['noModuleRightsSelected']);
+        $return_data['module_menus'] = $this->role_module_menus_data($data['role_id'], array_column($modules, 'module_id'));
+        foreach ($return_data['module_menus'] as $item) {
+            $return_data['modules'][$item['module_name']][$item['menu_type']][] = $item;
+        }
+        $return_data['access_modules'] = $data['modules'];
+        $return_data['role_id'] = $data['role_id'];
+        $return_data['html'] = view('AdminPanelNew/components/staff_management/role_module_menus_component', $return_data);
         return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::OK, "Modules Permission Setup Finished", $return_data);
     }
-    protected function role_module_menus_data($role_id) {}
+    public function role_module_menus_create_update()
+    {
+        $data = getRequestData($this->request, 'ARRAY');
+        $r1 = $this->get_role_modules_model(false)->where('role_id', $data['role_id'])->delete();
+        foreach ($data['modules'] as $key => $role_modules) {
+            $r2 = $this->get_role_modules_model(false)->RecordCreate($role_modules);
+        }
+        $r3 = $this->get_role_module_menus_model(false)->where('role_id', $data['role_id'])->delete();
+        foreach ($data['module_menus'] as $key => $role_module_menus) {
+            $r4 = $this->get_role_module_menus_model(false)->RecordCreate($role_module_menus);
+        }
+        return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::OK, 'Role Modules & Menus Right Setup Successfull');
+    }
+    protected function role_module_menus_data($role_id, $modules_ids)
+    {
+        $mm = $this->get_module_menus_model();
+
+        $mm->select("
+            modules.module_id,
+            modules.module_name,
+            module_menus.module_menu_id,
+            module_menus.menu_name,
+            module_menus.menu_type,
+            IFNULL(role_module_menus.view, 0) as 'view',
+            IFNULL(role_module_menus.create, 0) as 'create',
+            IFNULL(role_module_menus.edit, 0) as 'edit',
+            IFNULL(role_module_menus.approval, 0) as 'approval',
+            IFNULL(role_module_menus.delete, 0) as 'delete',
+            IFNULL(role_module_menus.print, 0) as 'print',
+            IFNULL(role_module_menus.export, 0) as 'export',
+            IFNULL(role_module_menus.bulk_delete, 0) as 'bulk_delete',
+            IFNULL(role_module_menus.back_days_data_allowed, 0) as 'back_days_data_allowed'
+        ");
+
+        $mm->join("modules", "modules.module_id = module_menus.module_id", "left");
+        $mm->join("role_module_menus", "role_module_menus.module_menu_id = module_menus.module_menu_id AND role_module_menus.role_id = $role_id", "left");
+        $mm->whereIn('modules.module_id', $modules_ids);
+
+        return $mm->findAll() ?? [];
+    }
+    function checkKeyStartsWith(array $data, string $prefix): bool
+    {
+        foreach ($data as $module) {
+            foreach (array_keys($module) as $key) {
+                if (strpos($key, $prefix) === 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     protected function admin_panel_common_data(): array
     {
         $theme_data = [];

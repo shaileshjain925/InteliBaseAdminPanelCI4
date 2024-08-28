@@ -879,3 +879,14 @@ if (!function_exists('getThumbnailImagePath')) {
     return implode('/', $pathComponents);
   }
 }
+if (!function_exists('findRowIndexByKeyValue')) {
+  function findRowIndexByKeyValue($array, $searchKey, $searchValue)
+  {
+    foreach ($array as $index => $row) {
+      if (isset($row[$searchKey]) && $row[$searchKey] === $searchValue) {
+        return $index;
+      }
+    }
+    return false; // Return false if not found
+  }
+}

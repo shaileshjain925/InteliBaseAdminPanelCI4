@@ -499,7 +499,7 @@ class FunctionModel extends Model
         foreach ($booleanFields as $key => $field) {
             // Check if the field exists in the data and if its value indicates it's checked
             if (isset($data['data'][$field])) {
-                $data['data'][$field] = ($data['data'][$field] == 1) ? 1 : 0; // Ensure it's explicitly set to 1 or 0
+                $data['data'][$field] = ($data['data'][$field] == 1 || $data['data'][$field] == 'on') ? 1 : 0; // Ensure it's explicitly set to 1 or 0
             } else {
                 $data['data'][$field] = 0; // Set to 0 or false if not explicitly set to 1
             }

@@ -33,3 +33,20 @@ function CreateUpdateAlias($variable)
 {
     return (empty($variable)) ? "Create" : "Update";
 }
+function module_menu_type_access($access_modules, $module_id, $prefix): bool
+{
+    $access_data = [];
+    foreach ($access_modules as $key => $module) {
+        if ($module['module_id'] == $module_id) {
+            $access_data = $module;
+            break;
+        }
+    }
+    foreach ($access_data as $key => $value) {
+        if(strpos($key, $prefix) === 0){
+            return true;
+        }
+    }
+
+    return false;
+}

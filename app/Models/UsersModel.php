@@ -155,19 +155,23 @@ class UsersModel extends FunctionModel
             $this->addParentJoin('role_id', $this->get_roles_model(), 'left', ['role_name']);
         }
     }
-    function getHierarchyUserIds($user_id)
+    function getHierarchyUserIds($user_id, &$processed_user_ids = [])
     {
+        // If the user_id has already been processed, return an empty array to avoid an infinite loop
+        if (in_array($user_id, $processed_user_ids)) {
+            return [];
+        }
+        // Mark the user_id as processed
+        $processed_user_ids[] = $user_id;
+
         $user_ids = [$user_id]; // Start with the given user_id
+        $users = $this->select('user_id')->where('reporting_to_user_id', $user_id)->findAll() ?? [];
 
-        // Get all users reporting to this user
-        $query = $this->db->table('users')
-            ->select('user_id')
-            ->where('reporting_to_user_id', $user_id)
-            ->get();
-
-        foreach ($query->getResult() as $row) {
-            // Recursively add all users under each user found
-            $user_ids = array_merge($user_ids, $this->getHierarchyUserIds($row->user_id));
+        if (!empty($users)) {
+            foreach ($users as $user) {
+                // Recursively add all users under each user found
+                $user_ids = array_merge($user_ids, $this->getHierarchyUserIds($user['user_id'], $processed_user_ids));
+            }
         }
 
         return $user_ids;
