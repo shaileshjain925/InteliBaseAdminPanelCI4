@@ -230,15 +230,16 @@
                 placeholder: "Select Role"
             }, apiUrl = "<?= base_url(route_to('role_list_api')) ?>", {}, "role_id", "role_name", selected_role_id)
             initializeSelectize('reporting_to_user_id', {
-                placeholder: "Select Reporting To"
-            }, apiUrl = "<?= base_url(route_to('user_list_api')) ?>", {
-                <?php if (isset($user_id) && !empty($user_id)): ?>
-                    _whereNotIn: [{
-                        fieldname: "reporting_to_user_id",
-                        value: ["<?= $user_id ?>"]
-                    }, ]
-                <?php endif; ?>
-            }, "user_id", "user_name", selected_reporting_to_user_id)
+                    placeholder: "Select Reporting To"
+                }, apiUrl = "<?= base_url(route_to('user_list_api')) ?>",
+                <?php if (isset($user_id) && !empty($user_id)): ?> {
+                        _whereNotIn: [{
+                            fieldname: "reporting_to_user_id",
+                            value: ["<?= $user_id ?>"]
+                        }, ]
+                    }
+                <?php else: ?> {}
+                <?php endif; ?>, "user_id", "user_name", selected_reporting_to_user_id)
             initializeSelectize('designation_id', {
                 placeholder: "Select Designation"
             }, apiUrl = "<?= base_url(route_to('designation_list_api')) ?>", {}, "designation_id", "designation_name", selected_designation_id)

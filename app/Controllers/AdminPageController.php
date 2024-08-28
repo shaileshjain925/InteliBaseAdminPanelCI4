@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use ApiResponseStatusCode;
 use App\Controllers\BaseController;
 use App\Database\Seeds\AllInOneSeeder;
 use App\Traits\CommonTraits;
@@ -197,6 +198,7 @@ class AdminPageController extends BaseController
     {
         $theme_data = $this->admin_panel_common_data();
         $theme_data['role_name'] = $this->get_roles_model()->find($role_id)['role_name'];
+        $theme_data['role_id'] = $role_id;
         $theme_data['modules'] = $this->role_modules_data($role_id);
         $theme_data['_meta_title'] = 'Role Module & Menu Access Rights';
         $theme_data['_page_title'] = 'Role Module & Menu Access Rights';
@@ -235,9 +237,31 @@ class AdminPageController extends BaseController
             IFNULL(role_modules.config_view, 0) as config_view
         ');
         $m->join("role_modules", "role_modules.module_id = modules.module_id AND role_modules.role_id = $role_id", "left");
-
+        $modules_menus_ids = array_column($this->get_module_menus_model(false)->distinct()->select('module_id')->findAll() ?? [], 'module_id');
+        $m->whereIn('modules.module_id', $modules_menus_ids);
         return $m->findAll() ?? [];
     }
+    public function role_module_menus_component()
+    {
+        $data = getRequestData($this->request, 'ARRAY');
+        $noModuleRightsSelected = true; // Assume true initially
+
+        foreach ($data['modules'] as $module) {
+            if (count($module) >= 3) {
+                // If any module array has 2 or more elements, set to false and break the loop
+                $noModuleRightsSelected = false;
+                break;
+            }
+        }
+        if ($noModuleRightsSelected) {
+            return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::BAD_REQUEST, "Please Select Any Module's Permission First");
+        }
+        $role_module_menus_data = [];
+        $return_data = [];
+        $return_data['html'] = view('AdminPanelNew/components/staff_management/role_module_menus_component', $role_module_menus_data);
+        return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::OK, "Modules Permission Setup Finished", $return_data);
+    }
+    protected function role_module_menus_data($role_id) {}
     protected function admin_panel_common_data(): array
     {
         $theme_data = [];
