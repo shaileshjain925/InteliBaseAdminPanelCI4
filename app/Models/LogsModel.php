@@ -59,7 +59,7 @@ class LogsModel extends FunctionModel
     {
         parent::__construct();
         if ($joinRequired) {
-            $this->addParentJoin('user_id', $this->get_users_model(), 'left', ['user_name']);
+            $this->addParentJoin('user_id', $this->get_users_model(), 'left', ['user_name','user_code']);
         }
     }
 }
