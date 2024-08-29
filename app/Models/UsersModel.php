@@ -155,6 +155,32 @@ class UsersModel extends FunctionModel
             $this->addParentJoin('role_id', $this->get_roles_model(), 'left', ['role_name']);
         }
     }
+    public function getUserLoginSessionAccessRights(array $user_data)
+    {
+        $data = [
+            'user_ids' => null,
+            'modules' => null,
+            'module_menus' => null,
+        ];
+        if ($user_data['user_type'] == 'staff' || $user_data['user_type'] == 'admin') {
+            // User Ids
+            switch ($user_data['user_data_access']) {
+                case 'self':
+                    $data['user_ids'] = [$user_data['user_id']];
+                    break;
+                case 'hierarchy':
+                    $data['user_ids'] = $this->getHierarchyUserIds($user_data['user_ids']);
+                    break;
+            }
+            // Modules
+            $data['modules'] = $this->get_role_modules_model()->where('role_modules.role_id', $data['role_id'])->findAll();
+            // Module Menus
+            $data['module_menus'] = 
+            $data['user_ids'] = $user_data['user_id'];
+        } else {
+            return $data;
+        };
+    }
     function getHierarchyUserIds($user_id, &$processed_user_ids = [])
     {
         // If the user_id has already been processed, return an empty array to avoid an infinite loop
@@ -173,7 +199,6 @@ class UsersModel extends FunctionModel
                 $user_ids = array_merge($user_ids, $this->getHierarchyUserIds($user['user_id'], $processed_user_ids));
             }
         }
-
         return $user_ids;
     }
 }

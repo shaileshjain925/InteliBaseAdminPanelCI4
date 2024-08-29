@@ -59,4 +59,28 @@ class ModuleMenusModel extends FunctionModel
             $this->addParentJoin('module_id', $this->get_modules_model(), 'left', ['module_name']);
         }
     }
+    public function role_module_menus_data($role_id, $modules_ids)
+    {
+        $this->select("
+            modules.module_id,
+            modules.module_name,
+            module_menus.module_menu_id,
+            module_menus.menu_name,
+            module_menus.menu_type,
+            IFNULL(role_module_menus.view, 0) as 'view',
+            IFNULL(role_module_menus.create, 0) as 'create',
+            IFNULL(role_module_menus.edit, 0) as 'edit',
+            IFNULL(role_module_menus.approval, 0) as 'approval',
+            IFNULL(role_module_menus.delete, 0) as 'delete',
+            IFNULL(role_module_menus.print, 0) as 'print',
+            IFNULL(role_module_menus.export, 0) as 'export',
+            IFNULL(role_module_menus.bulk_delete, 0) as 'bulk_delete',
+            IFNULL(role_module_menus.back_days_data_allowed, 0) as 'back_days_data_allowed'
+        ");
+
+        $this->join("modules", "modules.module_id = module_menus.module_id", "left");
+        $this->join("role_module_menus", "role_module_menus.module_menu_id = module_menus.module_menu_id AND role_module_menus.role_id = $role_id", "left");
+        $this->whereIn('modules.module_id', $modules_ids);
+        return $this->findAll() ?? [];
+    }
 }
