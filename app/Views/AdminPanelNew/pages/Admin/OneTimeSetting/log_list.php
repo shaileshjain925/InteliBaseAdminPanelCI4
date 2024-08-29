@@ -36,11 +36,20 @@
         var columns = [{
                 title: "ID",
                 data: "log_id",
+                visible: false
+            },
+            {
+                title: "DateTime",
+                data: "created_at",
                 visible: true
             },
             {
                 title: "Log Type",
                 data: "log_type"
+            },
+            {
+                title: "User Code",
+                data: "user_code"
             },
             {
                 title: "User Name",
@@ -49,6 +58,10 @@
             {
                 title: "Menu Code",
                 data: "log_menu_code"
+            },
+            {
+                title: "RID",
+                data: "record_id"
             },
             {
                 title: "Log Message",
