@@ -193,6 +193,15 @@
                 }
             },
             {
+                "title": "Access",
+                "data": null,
+                "render": function(data, type, row) {
+                    return `
+                            <a href="<?= base_url('Admin/StaffManagement/Staff/user_data_access_create_update') ?>/${row.user_id}/${row.user_name}" class="text-white btn btn-sm btn-info">User Data Access</a>
+                        `;
+                }
+            },
+            {
                 "title": "Actions",
                 "data": null,
                 "render": function(data, type, row) {
@@ -210,6 +219,7 @@
                             <button class="text-white btn btn-sm btn-danger" onclick="user_delete(${row.user_id})">
                                 <i class="bx bx-trash-alt"></i>
                             </button>
+
                         `;
                 }
             }

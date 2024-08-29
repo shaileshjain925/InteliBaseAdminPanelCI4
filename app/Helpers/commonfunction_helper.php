@@ -890,3 +890,22 @@ if (!function_exists('findRowIndexByKeyValue')) {
     return false; // Return false if not found
   }
 }
+if (!function_exists('TransformMultiRowArray')) {
+  function TransformMultiRowArray($array, $column_name, $return_column_name_value = null)
+  {
+    $return_array = [];
+    $column_names = array_unique(array_column($array, $column_name));
+    foreach ($column_names as $field_name) {
+      foreach ($array as $row) {
+        if ($row[$column_name] == $field_name) {
+          if (empty($return_column_name_value)) {
+            $return_array[$field_name][] = $row;
+          } else {
+            $return_array[$field_name][] = $row[$return_column_name_value];
+          }
+        }
+      }
+    }
+    return $return_array;
+  }
+}

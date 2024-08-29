@@ -360,6 +360,79 @@ class AdminApiController extends BaseController
     {
         return $this->api_list($this->get_logs_model());
     }
+    // GroupType -------------------------------------------------------------------------------------------------------
+    /** */
+    public function group_type_get_api()
+    {
+        return $this->api_get($this->get_group_type_model());
+    }
+    /** */
+    public function group_type_list_api()
+    {
+        return $this->api_list($this->get_group_type_model());
+    }
+    /** */
+    public function group_type_create_api()
+    {
+        return $this->api_create($this->get_group_type_model());
+    }
+    /** */
+    public function group_type_update_api()
+    {
+        return $this->api_update($this->get_group_type_model());
+    }
+    /** */
+    public function group_type_delete_api()
+    {
+        return $this->api_delete($this->get_group_type_model());
+    }
+    // Group -------------------------------------------------------------------------------------------------------
+    /** */
+    public function group_get_api()
+    {
+        return $this->api_get($this->get_group_model());
+    }
+    /** */
+    public function group_list_api()
+    {
+        return $this->api_list($this->get_group_model());
+    }
+    /** */
+    public function group_create_api()
+    {
+        return $this->api_create($this->get_group_model());
+    }
+    /** */
+    public function group_update_api()
+    {
+        return $this->api_update($this->get_group_model());
+    }
+    /** */
+    public function group_delete_api()
+    {
+        return $this->api_delete($this->get_group_model());
+    }
+    // UserDataAccess -------------------------------------------------------------------------------------------------------
+    /** */
+    public function user_data_access_create_api()
+    {
+        $data = getRequestData($this->request,'ARRAY');
+        $this->get_user_data_access_model()->where('user_id',$data['user_id'])->delete();
+        $insert_data = [];
+        foreach ($data as $key => $row) {
+            if(is_array($row)){
+                foreach ($row as $value) {
+                    $insert_data[] = [
+                        'user_id' => $data['user_id'],
+                        'user_data_access_type' => $key,
+                        'record_id' => $value
+                    ];
+                }
+            }
+        }
+        $this->get_user_data_access_model()->insertBatch($insert_data);
+        return formatApiResponse($this->request,$this->response,ApiResponseStatusCode::CREATED,'User Data Access Rights Saved');
+    }
     // user -------------------------------------------------------------------------------------------------------
     /** */
     public function user_get_api()
@@ -479,7 +552,7 @@ class AdminApiController extends BaseController
         // Define validation rules for 'username', 'password', 'confirm-password', 'otp'
         $validation->setRules([
             'file' => "required",
-            'for' => "in_list[user]",
+            'for' => "in_list[user,group_type,group]",
         ]);
         if ($validation->run($requestedData) === false) {
             // Return validation failed response
@@ -497,6 +570,12 @@ class AdminApiController extends BaseController
             case 'user':
                 $folderPath .= "uploads/user/";
                 break;
+            case 'group_type':
+                $folderPath .= "uploads/group_type/";
+                break;
+                case 'group':
+                    $folderPath .= "uploads/group/";
+                    break;
         }
         $errorMessage = "";
         $uploadResult = uploadImageWithThumbnail($requestedData['file'], $folderPath, $errorMessage);
