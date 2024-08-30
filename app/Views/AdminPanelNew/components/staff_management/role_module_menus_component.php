@@ -70,8 +70,11 @@ $input_count = 0;
                                                         </svg>
                                                     </th>
                                                 <?php endif; ?>
-                                                <th title="Bulk Delete Permission">
-                                                    <strong>Back Days Data Allowed</strong>
+                                                <th title="Back Days Data View Allowed">
+                                                    <strong>Back Days Data View Allowed</strong>
+                                                </th>
+                                                <th title="Back Days Data Edit Allowed">
+                                                    <strong>Back Days Data Edit Allowed</strong>
                                                 </th>
                                             <?php endif; ?>
 
@@ -145,8 +148,11 @@ $input_count = 0;
                                                             </div>
                                                         </td>
                                                     <?php endif; ?>
-                                                    <td title="Bulk Delete Permission">
+                                                    <td title="Back Date Data View Allowed">
                                                         <input type="number" class="form-control" name="module_menus[<?= $input_count ?>][back_days_data_allowed]" value="<?= $menu['back_days_data_allowed'] ?>">
+                                                    </td>
+                                                    <td title="Back Date Data Edit Allowed">
+                                                        <input type="number" class="form-control" name="module_menus[<?= $input_count ?>][back_days_data_edit_allowed]" value="<?= $menu['back_days_data_edit_allowed'] ?>">
                                                     </td>
                                                 <?php endif; ?>
                                             </tr>

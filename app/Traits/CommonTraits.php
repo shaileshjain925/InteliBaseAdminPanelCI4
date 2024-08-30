@@ -14,6 +14,10 @@ use App\Models\RoleModuleMenusModel;
 use App\Models\RoleModulesModel;
 use App\Models\RolesModel;
 use App\Models\LogsModel;
+use App\Models\GroupTypeModel;
+use App\Models\GroupModel;
+use App\Models\UserDataAccessModel;
+use App\Models\CategoryModel;
 trait CommonTraits
 {
     /**
@@ -104,12 +108,44 @@ trait CommonTraits
     {
         return new RolesModel(...$variable);
     }
-     /**
+    /**
      * Return Model Instance
      * @return LogsModel
      */
     public static function get_logs_model(...$variable)
     {
         return new LogsModel(...$variable);
+    }
+ /**
+     * Return Model Instance
+     * @return GroupTypeModel
+     */
+    public static function get_group_type_model(...$variable)
+    {
+        return new GroupTypeModel(...$variable);
+    }
+    /**
+     * Return Model Instance
+     * @return GroupModel
+     */
+    public static function get_group_model(...$variable)
+    {
+        return new GroupModel(...$variable);
+    }
+    /**
+     * Return Model Instance
+     * @return UserDataAccessModel
+     */
+    public static function get_user_data_access_model(...$variable)
+    {
+        return new UserDataAccessModel(...$variable);
+    }
+      /**
+     * Return Model Instance
+     * @return CategoryModel
+     */
+    public static function get_category_model(...$variable)
+    {
+        return new CategoryModel(...$variable);
     }
 }
