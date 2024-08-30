@@ -65,7 +65,7 @@ class AdminPageController extends BaseController
         if (isset($_SESSION['ref_user_type']) && $_SESSION['ref_user_type'] == UserType::SuperAdmin->value) {
             $user_data['data'] = $this->get_users_model(false)->find($user_id);
             $user_data['data']['ref_user_type'] = UserType::SuperAdmin->value;
-            $user_data['data']['user_ids'] = $this->get_users_model(false)->getHierarchyUserIds($user_id);
+            $user_data['data']['_access_rights'] = $this->get_users_model(false)->getUserLoginSessionAccessRights($user_data);
             $session_data = $user_data['data'];
             $session_data['logged_in'] = true;
             // Session
@@ -454,7 +454,7 @@ class AdminPageController extends BaseController
         $theme_data = $this->admin_panel_common_data();
         $theme_data['role_name'] = $this->get_roles_model()->find($role_id)['role_name'];
         $theme_data['role_id'] = $role_id;
-        $theme_data['modules'] = $this->role_modules_data($role_id);
+        $theme_data['modules'] = $this->get_modules_model()->role_modules_data($role_id);
         $theme_data['_meta_title'] = 'Role Module & Menu Access Rights';
         $theme_data['_page_title'] = 'Role Module & Menu Access Rights';
         $theme_data['_breadcrumb1'] = 'Role List';
@@ -463,39 +463,7 @@ class AdminPageController extends BaseController
         $theme_data['_previous_path'] = base_url(route_to('role_list_page'));
         return view('AdminPanelNew/partials/main', $theme_data);
     }
-    protected function role_modules_data($role_id)
-    {
-        $m = $this->get_modules_model();
-        $m->select('
-            modules.module_id,
-            modules.module_name,
-            IFNULL(role_modules.dashboard, 0) as dashboard,
-            IFNULL(role_modules.master_view, 0) as master_view,
-            IFNULL(role_modules.master_create, 0) as master_create,
-            IFNULL(role_modules.master_edit, 0) as master_edit,
-            IFNULL(role_modules.master_approval, 0) as master_approval,
-            IFNULL(role_modules.master_delete, 0) as master_delete,
-            IFNULL(role_modules.master_print, 0) as master_print,
-            IFNULL(role_modules.master_export, 0) as master_export,
-            IFNULL(role_modules.master_bulk_delete, 0) as master_bulk_delete,
-            IFNULL(role_modules.transaction_view, 0) as transaction_view,
-            IFNULL(role_modules.transaction_create, 0) as transaction_create,
-            IFNULL(role_modules.transaction_edit, 0) as transaction_edit,
-            IFNULL(role_modules.transaction_approval, 0) as transaction_approval,
-            IFNULL(role_modules.transaction_delete, 0) as transaction_delete,
-            IFNULL(role_modules.transaction_print, 0) as transaction_print,
-            IFNULL(role_modules.transaction_export, 0) as transaction_export,
-            IFNULL(role_modules.transaction_bulk_delete, 0) as transaction_bulk_delete,
-            IFNULL(role_modules.report_view, 0) as report_view,
-            IFNULL(role_modules.report_print, 0) as report_print,
-            IFNULL(role_modules.report_export, 0) as report_export,
-            IFNULL(role_modules.config_view, 0) as config_view
-        ');
-        $m->join("role_modules", "role_modules.module_id = modules.module_id AND role_modules.role_id = $role_id", "left");
-        $modules_menus_ids = array_column($this->get_module_menus_model(false)->distinct()->select('module_id')->findAll() ?? [], 'module_id');
-        $m->whereIn('modules.module_id', $modules_menus_ids);
-        return $m->findAll() ?? [];
-    }
+
     public function role_module_menus_component()
     {
         $data = getRequestData($this->request, 'ARRAY');
@@ -521,7 +489,7 @@ class AdminPageController extends BaseController
             }
         }
         unset($return_data['noModuleRightsSelected']);
-        $return_data['module_menus'] = $this->role_module_menus_data($data['role_id'], array_column($modules, 'module_id'));
+        $return_data['module_menus'] = $this->get_module_menus_model()->role_module_menus_data($data['role_id'], array_column($modules, 'module_id'));
         foreach ($return_data['module_menus'] as $item) {
             $return_data['modules'][$item['module_name']][$item['menu_type']][] = $item;
         }
@@ -542,33 +510,6 @@ class AdminPageController extends BaseController
             $r4 = $this->get_role_module_menus_model(false)->RecordCreate($role_module_menus);
         }
         return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::OK, 'Role Modules & Menus Right Setup Successfull');
-    }
-    protected function role_module_menus_data($role_id, $modules_ids)
-    {
-        $mm = $this->get_module_menus_model();
-
-        $mm->select("
-            modules.module_id,
-            modules.module_name,
-            module_menus.module_menu_id,
-            module_menus.menu_name,
-            module_menus.menu_type,
-            IFNULL(role_module_menus.view, 0) as 'view',
-            IFNULL(role_module_menus.create, 0) as 'create',
-            IFNULL(role_module_menus.edit, 0) as 'edit',
-            IFNULL(role_module_menus.approval, 0) as 'approval',
-            IFNULL(role_module_menus.delete, 0) as 'delete',
-            IFNULL(role_module_menus.print, 0) as 'print',
-            IFNULL(role_module_menus.export, 0) as 'export',
-            IFNULL(role_module_menus.bulk_delete, 0) as 'bulk_delete',
-            IFNULL(role_module_menus.back_days_data_allowed, 0) as 'back_days_data_allowed'
-        ");
-
-        $mm->join("modules", "modules.module_id = module_menus.module_id", "left");
-        $mm->join("role_module_menus", "role_module_menus.module_menu_id = module_menus.module_menu_id AND role_module_menus.role_id = $role_id", "left");
-        $mm->whereIn('modules.module_id', $modules_ids);
-
-        return $mm->findAll() ?? [];
     }
     function checkKeyStartsWith(array $data, string $prefix): bool
     {
@@ -757,6 +698,12 @@ class AdminPageController extends BaseController
                     [
                         "title" => "Category",
                         "url" => base_url(route_to('category_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => true,
+                    ],
+                    [
+                        "title" => "Group Type",
+                        "url" => base_url(route_to('group_type_list_page')),
                         "badge_count" => 0,
                         "visibility" => true,
                     ],

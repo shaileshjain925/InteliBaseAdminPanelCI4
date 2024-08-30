@@ -190,6 +190,7 @@ if (!in_array($file_extension, $extensions)) {
                 $routes->post("category_update_api", "AdminApiController::category_update_api", ['as' => 'category_update_api']);
                 $routes->post("category_delete_api", "AdminApiController::category_delete_api", ['as' => 'category_delete_api']);
             });
+
             $routes->group('group_type', function ($routes) {
                 $routes->post("group_type_get_api", "AdminApiController::group_type_get_api", ['as' => 'group_type_get_api']);
                 $routes->post("group_type_list_api", "AdminApiController::group_type_list_api", ['as' => 'group_type_list_api']);

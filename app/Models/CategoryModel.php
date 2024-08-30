@@ -8,6 +8,7 @@ use App\Traits\CommonTraits;
 class CategoryModel extends FunctionModel
 {
     use CommonTraits;
+
     protected $table            = 'categories';
     protected $primaryKey       = 'category_id';
     protected $useAutoIncrement = true;

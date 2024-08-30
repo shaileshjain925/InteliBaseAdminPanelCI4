@@ -17,6 +17,7 @@ use App\Models\LogsModel;
 use App\Models\GroupTypeModel;
 use App\Models\GroupModel;
 use App\Models\UserDataAccessModel;
+
 use App\Models\CategoryModel;
 trait CommonTraits
 {
@@ -140,6 +141,7 @@ trait CommonTraits
     {
         return new UserDataAccessModel(...$variable);
     }
+    
       /**
      * Return Model Instance
      * @return CategoryModel
@@ -148,4 +150,5 @@ trait CommonTraits
     {
         return new CategoryModel(...$variable);
     }
+
 }

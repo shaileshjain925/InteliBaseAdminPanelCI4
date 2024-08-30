@@ -155,6 +155,41 @@ class UsersModel extends FunctionModel
             $this->addParentJoin('role_id', $this->get_roles_model(), 'left', ['role_name']);
         }
     }
+    public function getUserLoginSessionAccessRights(array $user_data)
+    {
+        $data = [
+            'user_ids' => null,
+            'modules' => null,
+            'module_menus' => null,
+        ];
+        if ($user_data['user_type'] == 'staff' || $user_data['user_type'] == 'admin') {
+            // User Ids
+            switch ($user_data['user_data_access']) {
+                case 'self':
+                    $data['user_ids'] = [$user_data['user_id']];
+                    break;
+                case 'hierarchy':
+                    $data['user_ids'] = $this->getHierarchyUserIds($user_data['user_ids']);
+                    break;
+                case 'all':
+                    $data['user_ids'] = null;
+                    break;
+            }
+            // Modules
+            $data['modules'] = $this->get_role_modules_model()->select('role_modules.*')->autoJoin(true)->where('role_modules.role_id', $data['role_id'])->findAll() ?? null;
+            // Module Menus
+            $data['module_menus'] = $this->get_role_module_menus_model()->select('role_module_menus.*')->autoJoin(true)->where('role_module_menus.role_id', $data['role_id'])->findAll() ?? null;
+            // User Data Access
+            $user_data_access = $this->get_user_data_access_model()->where('user_id', $data['user_id'])->findAll() ?? null;
+            if (!empty($user_data_access)) {
+                $user_data_access_type_wise = TransformMultiRowArray($user_data_access, 'user_data_access_type', 'record_id');
+                $data = array_merge($data, $user_data_access_type_wise);
+            }
+            return $data;
+        } else {
+            return $data;
+        };
+    }
     function getHierarchyUserIds($user_id, &$processed_user_ids = [])
     {
         // If the user_id has already been processed, return an empty array to avoid an infinite loop
@@ -173,7 +208,6 @@ class UsersModel extends FunctionModel
                 $user_ids = array_merge($user_ids, $this->getHierarchyUserIds($user['user_id'], $processed_user_ids));
             }
         }
-
         return $user_ids;
     }
 }

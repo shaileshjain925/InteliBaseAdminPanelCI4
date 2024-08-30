@@ -5,6 +5,9 @@
         <div class="col">
             <label for="groups" class="">User Groups Access</label>
             <select name="groups[]" id="groups" multiple></select>
+
+            <span class="error-message" id="error-user_data_access_type"></span>
+
         </div>
     </div>
     <div class="row">
@@ -14,7 +17,6 @@
         </div>
     </div>
 
-    
     <div class="form_submit_div text-center mt-4">
         <button type="button" class="submit_btn waves-effect waves-light me-1" onclick="submitFormWithAjax('user_access_data_from',true,true,successCallback,errorCallback)">
             Save
@@ -39,7 +41,6 @@
     <?php else: ?>
         var selected_groups = null;
     <?php endif; ?>
-
     <?php if (isset($states) && !empty($states)): ?>
         var selected_states = JSON.parse('<?= json_encode($states) ?>');
     <?php else: ?>
