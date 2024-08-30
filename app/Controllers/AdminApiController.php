@@ -412,7 +412,7 @@ class AdminApiController extends BaseController
     {
         return $this->api_delete($this->get_group_model());
     }
-     // Category -------------------------------------------------------------------------------------------------------
+    // Category -------------------------------------------------------------------------------------------------------
     /** */
     public function category_get_api()
     {
@@ -442,11 +442,11 @@ class AdminApiController extends BaseController
     /** */
     public function user_data_access_create_api()
     {
-        $data = getRequestData($this->request,'ARRAY');
-        $this->get_user_data_access_model()->where('user_id',$data['user_id'])->delete();
+        $data = getRequestData($this->request, 'ARRAY');
+        $this->get_user_data_access_model()->where('user_id', $data['user_id'])->delete();
         $insert_data = [];
         foreach ($data as $key => $row) {
-            if(is_array($row)){
+            if (is_array($row)) {
                 foreach ($row as $value) {
                     $insert_data[] = [
                         'user_id' => $data['user_id'],
@@ -457,7 +457,7 @@ class AdminApiController extends BaseController
             }
         }
         $this->get_user_data_access_model()->insertBatch($insert_data);
-        return formatApiResponse($this->request,$this->response,ApiResponseStatusCode::CREATED,'User Data Access Rights Saved');
+        return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::CREATED, 'User Data Access Rights Saved');
     }
     // user -------------------------------------------------------------------------------------------------------
     /** */
@@ -549,6 +549,7 @@ class AdminApiController extends BaseController
         if ($user_data['data']['user_type'] == UserType::SuperAdmin->value) {
             $user_data['data']['ref_user_type'] = UserType::SuperAdmin->value;
         }
+        $user_data['data']['_access_rights'] = $this->get_users_model(false)->getUserLoginSessionAccessRights($user_data['data']);
         $session_data = $user_data['data'];
         $session_data['logged_in'] = true;
         // Session
@@ -599,9 +600,9 @@ class AdminApiController extends BaseController
             case 'group_type':
                 $folderPath .= "uploads/group_type/";
                 break;
-                case 'group':
-                    $folderPath .= "uploads/group/";
-                    break;
+            case 'group':
+                $folderPath .= "uploads/group/";
+                break;
         }
         $errorMessage = "";
         $uploadResult = uploadImageWithThumbnail($requestedData['file'], $folderPath, $errorMessage);

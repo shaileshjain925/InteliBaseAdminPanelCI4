@@ -162,7 +162,7 @@ class UsersModel extends FunctionModel
             'modules' => null,
             'module_menus' => null,
         ];
-        if ($user_data['user_type'] == 'staff' || $user_data['user_type'] == 'admin') {
+        if ($user_data['user_type'] != 'super_admin') {
             // User Ids
             switch ($user_data['user_data_access']) {
                 case 'self':
@@ -176,11 +176,11 @@ class UsersModel extends FunctionModel
                     break;
             }
             // Modules
-            $data['modules'] = $this->get_role_modules_model()->select('role_modules.*')->autoJoin(true)->where('role_modules.role_id', $data['role_id'])->findAll() ?? null;
+            $data['modules'] = $this->get_role_modules_model()->select('role_modules.*')->autoJoin(true)->where('role_modules.role_id', $user_data['role_id'])->findAll() ?? null;
             // Module Menus
-            $data['module_menus'] = $this->get_role_module_menus_model()->select('role_module_menus.*')->autoJoin(true)->where('role_module_menus.role_id', $data['role_id'])->findAll() ?? null;
+            $data['module_menus'] = $this->get_role_module_menus_model()->select('role_module_menus.*')->autoJoin(true)->where('role_module_menus.role_id', $user_data['role_id'])->findAll() ?? null;
             // User Data Access
-            $user_data_access = $this->get_user_data_access_model()->where('user_id', $data['user_id'])->findAll() ?? null;
+            $user_data_access = $this->get_user_data_access_model()->where('user_id', $user_data['user_id'])->findAll() ?? null;
             if (!empty($user_data_access)) {
                 $user_data_access_type_wise = TransformMultiRowArray($user_data_access, 'user_data_access_type', 'record_id');
                 $data = array_merge($data, $user_data_access_type_wise);

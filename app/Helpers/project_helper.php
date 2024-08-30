@@ -1,5 +1,8 @@
 
 <?php
+
+use PhpOffice\PhpSpreadsheet\Calculation\Logical\Boolean;
+
 enum UserType: string
 {
     case SuperAdmin = 'super_admin';
@@ -43,10 +46,50 @@ function module_menu_type_access($access_modules, $module_id, $prefix): bool
         }
     }
     foreach ($access_data as $key => $value) {
-        if(strpos($key, $prefix) === 0){
+        if (strpos($key, $prefix) === 0) {
             return true;
         }
     }
 
     return false;
+}
+function check_module_access(string $module_code): bool
+{
+    if ($_SESSION['user_type'] == 'super_admin') {
+        return true;
+    }
+    $modules = isset($_SESSION['_access_rights']['modules']) ? $_SESSION['_access_rights']['modules'] : null;
+    if (empty($modules)) {
+        return false;
+    } else {
+        $module_codes = array_column($modules, 'module_code') ?? [];
+        return in_array($module_code, $module_codes);
+    }
+}
+function check_menu_access(string $menu_code, $access_type): bool
+{
+    if ($_SESSION['user_type'] == 'super_admin') {
+        return true;
+    }
+    return true;
+}
+function back_date_view_access(string $menu_code, $date_required = false): string|int|null
+{
+    if ($_SESSION['user_type'] == 'super_admin') {
+        return null;
+    }
+    return null;
+}
+function back_date_edit_access(string $menu_code, $date_required = false): string|int|null
+{
+    if ($_SESSION['user_type'] == 'super_admin') {
+        return null;
+    }
+    return null;
+}
+function get_data_access($access_type): array|null
+{
+    if ($_SESSION['user_type'] == 'super_admin') {
+        return null;
+    }
 }

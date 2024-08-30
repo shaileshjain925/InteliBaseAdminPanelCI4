@@ -51,7 +51,7 @@ class RoleModulesModel extends FunctionModel
         parent::__construct();
         if ($joinRequired) {
             $this->addParentJoin('role_id', $this->get_roles_model(), 'left', ['role_name']);
-            $this->addParentJoin('module_id', $this->get_modules_model(), 'left', ['module_name']);
+            $this->addParentJoin('module_id', $this->get_modules_model(), 'left', ['module_name','module_code']);
         }
     }
 }

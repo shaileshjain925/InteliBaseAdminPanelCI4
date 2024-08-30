@@ -65,7 +65,7 @@ class AdminPageController extends BaseController
         if (isset($_SESSION['ref_user_type']) && $_SESSION['ref_user_type'] == UserType::SuperAdmin->value) {
             $user_data['data'] = $this->get_users_model(false)->find($user_id);
             $user_data['data']['ref_user_type'] = UserType::SuperAdmin->value;
-            $user_data['data']['_access_rights'] = $this->get_users_model(false)->getUserLoginSessionAccessRights($user_data);
+            $user_data['data']['_access_rights'] = $this->get_users_model(false)->getUserLoginSessionAccessRights($user_data['data']);
             $session_data = $user_data['data'];
             $session_data['logged_in'] = true;
             // Session
@@ -503,11 +503,15 @@ class AdminPageController extends BaseController
         $data = getRequestData($this->request, 'ARRAY');
         $r1 = $this->get_role_modules_model(false)->where('role_id', $data['role_id'])->delete();
         foreach ($data['modules'] as $key => $role_modules) {
-            $r2 = $this->get_role_modules_model(false)->RecordCreate($role_modules);
+            if (count($role_modules) >= 3) {
+                $r2 = $this->get_role_modules_model(false)->RecordCreate($role_modules);
+            }
         }
         $r3 = $this->get_role_module_menus_model(false)->where('role_id', $data['role_id'])->delete();
         foreach ($data['module_menus'] as $key => $role_module_menus) {
-            $r4 = $this->get_role_module_menus_model(false)->RecordCreate($role_module_menus);
+            if (count($role_module_menus) >= 5) {
+                $r4 = $this->get_role_module_menus_model(false)->RecordCreate($role_module_menus);
+            }
         }
         return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::OK, 'Role Modules & Menus Right Setup Successfull');
     }
@@ -609,7 +613,7 @@ class AdminPageController extends BaseController
                 "module_title" => "Staff Management",
                 "module_name" => "Staff Management",
                 "module_icon" => "mdi mdi-account-supervisor-outline",
-                "visibility" => true,
+                "visibility" => check_module_access('STAFF_MANAGEMENT'),
                 "menus" => [
                     [
                         "title" => "Designation",

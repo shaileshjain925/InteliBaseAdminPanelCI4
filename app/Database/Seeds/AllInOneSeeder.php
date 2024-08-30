@@ -12,13 +12,13 @@ class AllInOneSeeder extends Seeder
     public function run()
     {
         $f = $this->get_function_model();
-        // Countries Seeder
-        $errors['countries'] = $f->create_update($this->get_countries_model(false), $this->countries_data());
-        // States Seeder
-        $errors['states'] = $f->create_update($this->get_states_model(false), $this->states_data());
-        // Cities Seeder
-        $errors['cities'] = $f->create_update($this->get_cities_model(false), $this->cities_data());
-        // Designations Seeder
+        // // Countries Seeder
+        // $errors['countries'] = $f->create_update($this->get_countries_model(false), $this->countries_data());
+        // // States Seeder
+        // $errors['states'] = $f->create_update($this->get_states_model(false), $this->states_data());
+        // // Cities Seeder
+        // $errors['cities'] = $f->create_update($this->get_cities_model(false), $this->cities_data());
+        // // Designations Seeder
         $errors['designations'] = $f->create_update($this->get_designations_model(false), $this->designations_data());
         // Modules Seeder
         $errors['modules'] = $f->create_update($this->get_modules_model(false), $this->modules_data());
@@ -4620,24 +4620,22 @@ class AllInOneSeeder extends Seeder
     {
         $modules_data = [
             ['module_id' => 1, 'module_code' => 'ONE_TIME_SETUP', 'module_name' => 'One Time Setting', 'menus' => [
-                ['module_menu_id' => 101, 'menu_code' => 'COUNTRIES', 'menu_name' => 'Countries', 'menu_type' => 'master'],
+                ['module_menu_id' => 101, 'menu_code' => 'COUNTRIES', 'menu_name' => 'Countries', 'menu_type' => 'report'],
                 ['module_menu_id' => 102, 'menu_code' => 'STATE', 'menu_name' => 'State', 'menu_type' => 'master'],
                 ['module_menu_id' => 103, 'menu_code' => 'CITIES', 'menu_name' => 'Cities', 'menu_type' => 'master'],
             ]],
-            // ['module_id' => 2, 'module_code' => 'DASHBOARD', 'module_name' => 'Dashboards', 'menus' => [
-            //     ['module_menu_id' => 201, 'menu_code' => 'ADMIN_DASHBOARD', 'menu_name' => 'Admin Dashboard', 'menu_type' => 'master'],
-            //     ['module_menu_id' => 202, 'menu_code' => 'SALES_DASHBOARD', 'menu_name' => 'Sales Dashboard', 'menu_type' => 'master'],
-            //     ['module_menu_id' => 203, 'menu_code' => 'PURCHASE_DASHBOARD', 'menu_name' => 'Purchase Dashboard', 'menu_type' => 'master'],
-            //     ['module_menu_id' => 204, 'menu_code' => 'INVENTORY_DASHBOARD', 'menu_name' => 'Inventory Dashboard', 'menu_type' => 'master'],
-            //     ['module_menu_id' => 205, 'menu_code' => 'FINANCE_DASHBOARD', 'menu_name' => 'Finance Dashboard', 'menu_type' => 'master'],
-            //     ['module_menu_id' => 206, 'menu_code' => 'CRM_DASHBOARD', 'menu_name' => 'CRM Dashboard', 'menu_type' => 'master'],
-            // ]],
             ['module_id' => 3, 'module_code' => 'STAFF_MANAGEMENT', 'module_name' => 'Staff Management', 'menus' => [
                 ['module_menu_id' => 301, 'menu_code' => 'DESIGNATIONS', 'menu_name' => 'Designation', 'menu_type' => 'master'],
                 ['module_menu_id' => 302, 'menu_code' => 'ROLES', 'menu_name' => 'Roles', 'menu_type' => 'master'],
                 ['module_menu_id' => 303, 'menu_code' => 'STAFF', 'menu_name' => 'Staff', 'menu_type' => 'master'],
+                ['module_menu_id' => 304, 'menu_code' => 'ROLESMODULENEMUACCESS', 'menu_name' => 'Role Module & Menu Access', 'menu_type' => 'config'],
+                ['module_menu_id' => 305, 'menu_code' => 'USERDATAACCESS', 'menu_name' => 'User Data Access', 'menu_type' => 'config'],
             ]],
-            ['module_id' => 4, 'module_code' => 'INVENTORY', 'module_name' => 'Inventory'],
+            ['module_id' => 4, 'module_code' => 'INVENTORY', 'module_name' => 'Inventory', 'menus' => [
+                ['module_menu_id' => 401, 'menu_code' => 'CATEGORY', 'menu_name' => 'Category', 'menu_type' => 'transaction'],
+                ['module_menu_id' => 402, 'menu_code' => 'GROUPTYPE', 'menu_name' => 'Group Type', 'menu_type' => 'transaction'],
+                ['module_menu_id' => 403, 'menu_code' => 'GROUP', 'menu_name' => 'Group', 'menu_type' => 'transaction'],
+            ]],
             ['module_id' => 5, 'module_code' => 'PURCHASE', 'module_name' => 'Purchase'],
             ['module_id' => 6, 'module_code' => 'SALES', 'module_name' => 'Sales'],
             ['module_id' => 7, 'module_code' => 'FINANCE', 'module_name' => 'Finance'],
