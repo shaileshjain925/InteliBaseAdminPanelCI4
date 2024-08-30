@@ -566,6 +566,9 @@ class FunctionModel extends Model
                         // Trim the value if it is a string
                         if (is_string($value)) {
                             $value = trim($value);
+                            if (empty($value)) {
+                                unset($data['data'][$key]);
+                            }
                         }
                     }
                 }
@@ -582,6 +585,9 @@ class FunctionModel extends Model
                 // Trim the value if it is a string
                 if (is_string($value)) {
                     $value = trim($value);
+                    if (empty($value)) {
+                        unset($data['data'][$key]);
+                    }
                 }
             }
         }

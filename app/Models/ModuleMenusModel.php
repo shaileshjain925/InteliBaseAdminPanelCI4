@@ -75,7 +75,8 @@ class ModuleMenusModel extends FunctionModel
             IFNULL(role_module_menus.print, 0) as 'print',
             IFNULL(role_module_menus.export, 0) as 'export',
             IFNULL(role_module_menus.bulk_delete, 0) as 'bulk_delete',
-            IFNULL(role_module_menus.back_days_data_allowed, 0) as 'back_days_data_allowed'
+            IFNULL(role_module_menus.back_days_data_allowed, 0) as 'back_days_data_allowed',
+            IFNULL(role_module_menus.back_days_data_edit_allowed, 0) as 'back_days_data_edit_allowed'
         ");
 
         $this->join("modules", "modules.module_id = module_menus.module_id", "left");
