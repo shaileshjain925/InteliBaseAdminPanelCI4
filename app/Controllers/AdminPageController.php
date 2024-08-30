@@ -463,7 +463,7 @@ class AdminPageController extends BaseController
             }
         }
         unset($return_data['noModuleRightsSelected']);
-        $return_data['module_menus'] = $this->get_role_module_menus_model()->role_module_menus_data($data['role_id'], array_column($modules, 'module_id'));
+        $return_data['module_menus'] = $this->get_module_menus_model()->role_module_menus_data($data['role_id'], array_column($modules, 'module_id'));
         foreach ($return_data['module_menus'] as $item) {
             $return_data['modules'][$item['module_name']][$item['menu_type']][] = $item;
         }
