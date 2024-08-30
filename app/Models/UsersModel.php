@@ -171,12 +171,21 @@ class UsersModel extends FunctionModel
                 case 'hierarchy':
                     $data['user_ids'] = $this->getHierarchyUserIds($user_data['user_ids']);
                     break;
+                case 'all':
+                    $data['user_ids'] = null;
+                    break;
             }
             // Modules
-            $data['modules'] = $this->get_role_modules_model()->where('role_modules.role_id', $data['role_id'])->findAll();
+            $data['modules'] = $this->get_role_modules_model()->select('role_modules.*')->autoJoin(true)->where('role_modules.role_id', $data['role_id'])->findAll() ?? null;
             // Module Menus
-            $data['module_menus'] = 
-            $data['user_ids'] = $user_data['user_id'];
+            $data['module_menus'] = $this->get_role_module_menus_model()->select('role_module_menus.*')->autoJoin(true)->where('role_module_menus.role_id', $data['role_id'])->findAll() ?? null;
+            // User Data Access
+            $user_data_access = $this->get_user_data_access_model()->where('user_id', $data['user_id'])->findAll() ?? null;
+            if (!empty($user_data_access)) {
+                $user_data_access_type_wise = TransformMultiRowArray($user_data_access, 'user_data_access_type', 'record_id');
+                $data = array_merge($data, $user_data_access_type_wise);
+            }
+            return $data;
         } else {
             return $data;
         };

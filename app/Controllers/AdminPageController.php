@@ -65,7 +65,7 @@ class AdminPageController extends BaseController
         if (isset($_SESSION['ref_user_type']) && $_SESSION['ref_user_type'] == UserType::SuperAdmin->value) {
             $user_data['data'] = $this->get_users_model(false)->find($user_id);
             $user_data['data']['ref_user_type'] = UserType::SuperAdmin->value;
-            $user_data['data']['_access_rights']['user_ids'] = $this->get_users_model(false)->getUserIdsForLoginSession($user_data);
+            $user_data['data']['_access_rights'] = $this->get_users_model(false)->getUserLoginSessionAccessRights($user_data);
             $session_data = $user_data['data'];
             $session_data['logged_in'] = true;
             // Session
