@@ -26,6 +26,12 @@
                                             <li class="mb-0"><a class=" waves-effect" href="<?= base_url(route_to('log_list_page')) ?>"> <i class="icon_theme_color_1 bx bx-grid-small"></i> <span>Log</span></a></li>
                                         </ul>
                                     <?php endif; ?>
+                                    <div class="accordion-body py-0">
+                                    <?php if (check_menu_access('BUSINESSTYPE', 'view')): ?>
+                                        <ul class="right_sidebar_ul px-0 mt-2 m-0">
+                                            <li class="mb-0"><a class=" waves-effect" href="<?= base_url(route_to('business_types_list_page')) ?>"> <i class="icon_theme_color_1 bx bx-grid-small"></i> <span>BusinessType</span></a></li>
+                                        </ul>
+                                        <?php endif; ?>
                                     <?php if (check_menu_access('COUNTRIES', 'view')): ?>
                                         <ul class="right_sidebar_ul px-0 mt-2 m-0">
                                             <li class="mb-0"><a class=" waves-effect" href="<?= base_url(route_to('country_list_page')) ?>"> <i class="icon_theme_color_1 bx bx-grid-small"></i> <span>Countries</span></a></li>

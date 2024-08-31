@@ -17,6 +17,7 @@ use App\Models\LogsModel;
 use App\Models\GroupTypeModel;
 use App\Models\GroupModel;
 use App\Models\UserDataAccessModel;
+use App\Models\BusinessTypeModel;
 
 use App\Models\CategoryModel;
 trait CommonTraits
@@ -149,6 +150,15 @@ trait CommonTraits
     public static function get_category_model(...$variable)
     {
         return new CategoryModel(...$variable);
+    }
+
+    /**
+     * Return Model Instance
+     * @return BusinessTypeModel
+     */
+    public static function get_business_types_model(...$variable)
+    {
+        return new BusinessTypeModel(...$variable);
     }
 
 }

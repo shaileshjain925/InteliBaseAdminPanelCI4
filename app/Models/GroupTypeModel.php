@@ -8,13 +8,13 @@ use App\Traits\CommonTraits;
 class GroupTypeModel extends FunctionModel
 {
     use CommonTraits;
-    protected $table            = 'group_type';
+    protected $table            = 'group_types';
     protected $primaryKey       = 'group_type_id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['group_type_id', 'group_type_name','group_type_image', 'group_type_description', 'is_active'];
+    protected $allowedFields    = ['group_type_id', 'group_type_name','group_type_code','group_type_image', 'group_type_description', 'is_active'];
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
 
@@ -33,8 +33,9 @@ class GroupTypeModel extends FunctionModel
     // Validation
     protected $validationRules = [
         'group_type_id' => 'permit_empty',
-        'group_type_name' => 'required|max_length[255]|is_unique[group_type.group_type_name,group_type_id,{group_type_id}]',
+        'group_type_name' => 'required|max_length[255]|is_unique[group_types.group_type_name,group_type_id,{group_type_id}]',
         'group_type_description' => 'permit_empty',
+        'group_type_code'=>'required|max_length[5]|is_unique[group_types.group_type_code,group_type_id,{group_type_id}]',
         'group_type_image' => 'permit_empty',
         'group_type_alt_text' => 'permit_empty',
         'is_active' => 'permit_empty|in_list[0,1]'
@@ -51,7 +52,12 @@ class GroupTypeModel extends FunctionModel
         'is_active' => [
             'required' => 'Is active status is required.',
             'in_list' => 'Must be 0 or 1.'
-        ]
+        ],
+        'group_type_code' => [
+            'required' => 'group type code is required.',
+            'max_length' => 'Max 5 characters allowed.',
+            'is_unique' => 'This group type code is all ready exists.'
+        ],
     ];
     
     protected $skipValidation       = false;

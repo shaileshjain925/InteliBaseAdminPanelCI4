@@ -437,6 +437,32 @@ class AdminApiController extends BaseController
     {
         return $this->api_delete($this->get_category_model());
     }
+    // Business Types -------------------------------------------------------------------------------------------------------
+    /** */
+    public function business_types_get_api()
+    {
+        return $this->api_get($this->get_business_types_model());
+    }
+    /** */
+    public function business_types_list_api()
+    {
+        return $this->api_list($this->get_business_types_model());
+    }
+    /** */
+    public function business_types_create_api()
+    {
+        return $this->api_create($this->get_business_types_model());
+    }
+    /** */
+    public function business_types_update_api()
+    {
+        return $this->api_update($this->get_business_types_model());
+    }
+    /** */
+    public function business_types_delete_api()
+    {
+        return $this->api_delete($this->get_business_types_model());
+    }
     // UserDataAccess -------------------------------------------------------------------------------------------------------
     /** */
     public function user_data_access_create_api()

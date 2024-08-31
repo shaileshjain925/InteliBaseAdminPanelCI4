@@ -23,10 +23,15 @@ class GroupType extends Migration
                 'type' => 'TEXT',
                 'NULL' => true
             ],
+            'group_type_code' => [
+                'type' => 'VARCHAR',
+                'constraint' => 255,
+            ],
             'group_type_image' => [
                 'type' => 'VARCHAR',
                 'constraint' => 255,
             ],
+        
             'is_active' => [
                 'type' => 'BOOLEAN',
                 'default' => true,
@@ -36,11 +41,11 @@ class GroupType extends Migration
         ]);
         $this->forge->addPrimaryKey('group_type_id');
         $this->forge->addUniqueKey('group_type_name');
-        $this->forge->createTable('group_type', true);
+        $this->forge->createTable('group_types', true);
     }
 
     public function down()
     {
-        $this->forge->dropTable('group_type', true);
+        $this->forge->dropTable('group_types', true);
     }
 }

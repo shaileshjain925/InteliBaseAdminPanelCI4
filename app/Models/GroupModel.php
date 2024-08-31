@@ -8,13 +8,13 @@ use App\Traits\CommonTraits;
 class GroupModel extends FunctionModel
 {
     use CommonTraits;
-    protected $table            = 'group';
+    protected $table            = 'groups';
     protected $primaryKey       = 'group_id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['group_id', 'group_type_id','group_name', 'group_image'];
+    protected $allowedFields    = ['group_id', 'group_type_id','group_name', 'group_code','group_image'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -35,7 +35,8 @@ class GroupModel extends FunctionModel
         'group_id' => 'permit_empty',
         'group_name' => 'required|max_length[255]',
         'group_description' => 'permit_empty',
-        'group_type_id' => 'required|is_not_unique[group_type.group_type_id]',
+        'group_code'=>'required|max_length[5]|is_unique[groups.group_code,group_id,{group_id}]',
+        'group_type_id' => 'required|is_not_unique[group_types.group_type_id]',
         'is_active' => 'permit_empty|in_list[0,1]',
         'group_image' => 'permit_empty',
         'group_alt_text' => 'permit_empty'
@@ -52,6 +53,11 @@ class GroupModel extends FunctionModel
             'required' => 'group type ID is required.',
             'integer' => 'Must be an integer.',
             'is_not_unique' => 'Selected group type does not exist.'
+        ],
+        'group_code' => [
+            'required' => 'group code is required.',
+            'max_length' => 'Max 5 characters allowed.',
+            'is_unique' => 'This group code is all ready exists.'
         ],
         'is_active' => [
             'required' => 'Is active status is required.',

@@ -94,6 +94,12 @@ if (!in_array($file_extension, $extensions)) {
             $routes->get('CreateUpdate/(:num)', 'AdminPageController::group_create_update_page/$1');
             $routes->post('View', 'AdminPageController::group_view_component', ['as' => 'group_view_component']);
         });
+        $routes->group('BusinessType', function ($routes) {
+            $routes->get('List', 'AdminPageController::business_types_list_page', ['as' => 'business_types_list_page']);
+            $routes->get('CreateUpdate', 'AdminPageController::business_types_create_update_page', ['as' => 'business_types_create_update_page']);
+            $routes->get('CreateUpdate/(:num)', 'AdminPageController::business_types_create_update_page/$1');
+            $routes->post('View', 'AdminPageController::business_types_view_component', ['as' => 'business_types_view_component']);
+        });
         $routes->group('FileUpload', function ($routes) {
             $routes->post('ImageUpload', 'AdminApiController::ImageUpload', ['as' => 'file_upload_image_api']);
             $routes->post('ImageDelete', 'AdminApiController::deleteImage', ['as' => 'file_delete_image_api']);
@@ -196,6 +202,13 @@ if (!in_array($file_extension, $extensions)) {
                 $routes->post("group_create_api", "AdminApiController::group_create_api", ['as' => 'group_create_api']);
                 $routes->post("group_update_api", "AdminApiController::group_update_api", ['as' => 'group_update_api']);
                 $routes->post("group_delete_api", "AdminApiController::group_delete_api", ['as' => 'group_delete_api']);
+            });
+            $routes->group('business_types', function ($routes) {
+                $routes->post("business_types_get_api", "AdminApiController::business_types_get_api", ['as' => 'business_types_get_api']);
+                $routes->post("business_types_list_api", "AdminApiController::business_types_list_api", ['as' => 'business_types_list_api']);
+                $routes->post("business_types_create_api", "AdminApiController::business_types_create_api", ['as' => 'business_types_create_api']);
+                $routes->post("business_types_update_api", "AdminApiController::business_types_update_api", ['as' => 'business_types_update_api']);
+                $routes->post("business_types_delete_api", "AdminApiController::business_types_delete_api", ['as' => 'business_types_delete_api']);
             });
             $routes->group('user_data_access', function ($routes) {
                 $routes->post("user_data_access_get_api", "AdminApiController::user_data_access_get_api", ['as' => 'user_data_access_get_api']);

@@ -29,6 +29,7 @@
     var datatable_print = '<?= (check_menu_access('GROUP', 'print')) ?>';
     var print_allowed = '<?= (check_menu_access('GROUP', 'print')) ?>';
     var DeleteApiUrl = "<?= base_url(route_to('group_delete_api')) ?>"
+    var group_ids = JSON.parse('<?= get_user_data_access('groups', true) ?>');
 
     function group_delete(group_id) {
         deleteRow({
@@ -121,15 +122,20 @@
             };
         }
     }
+    var filter = {}
+    filter._autojoin = "F";
+    filter._select = "*";
+    filter['_whereIn'] = [{
+        "fieldname": "groups-group_id",
+        "value": group_ids
+    }]
 
-    function fetchTableData(parameter = {}) {
-        parameter._autojoin = 'F';
-        parameter._select = '*';
+    function fetchTableData() {
         DataTableInitialized(
             'group_table', // table_id
             "<?= base_url(route_to('group_list_api')) ?>", // url
             'POST', // method
-            parameter, // parameter
+            filter, // parameter
             successDataTableCallbackFunction // dataTableSuccessCallBack
         );
     }

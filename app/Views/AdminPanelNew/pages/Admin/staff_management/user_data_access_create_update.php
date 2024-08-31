@@ -10,18 +10,6 @@
 
         </div>
     </div>
-    <div class="row">
-        <div class="col">
-            <label for="users" class="">User States Access</label>
-            <select name="states[]" id="states" multiple></select>
-        </div>
-    </div>
-
-    <div class="form_submit_div text-center mt-4">
-        <button type="button" class="submit_btn waves-effect waves-light me-1" onclick="submitFormWithAjax('user_access_data_from',true,true,successCallback,errorCallback)">
-            Save
-        </button>
-    </div>
 </form>
 <script>
     function successCallback(response) {
@@ -41,11 +29,7 @@
     <?php else: ?>
         var selected_groups = null;
     <?php endif; ?>
-    <?php if (isset($states) && !empty($states)): ?>
-        var selected_states = JSON.parse('<?= json_encode($states) ?>');
-    <?php else: ?>
-        var selected_states = null;
-    <?php endif; ?>
+   
 
     $(document).ready(function() {
         var groups_api_parameter = {
@@ -57,13 +41,6 @@
             }, "<?= base_url(route_to('group_list_api')) ?>", groups_api_parameter, "group_id", "group_name_with_group_type",
             selected_groups, 'group_type_name')
 
-        var states_api_parameter = {
-            "_autojoin": "Y",
-            "_select": "*,CONCAT(states.state_name,' (',countries.country_name,')') as state_name_with_country"
-        };
-        initializeSelectize('states', {
-                placeholder: "Select states"
-            }, "<?= base_url(route_to('state_list_api')) ?>", states_api_parameter, "state_id", "state_name_with_country",
-            selected_states, 'country_name')
+       
     });
 </script>

@@ -19,7 +19,11 @@
                             <input type="text" class="form-control" name="group_type_name" id="group_type_name" value="<?= @$group_type_name ?>" placeholder="Group Type Name" />
                             <span class="error-message" id="error-group_type_name"></span>
                         </div>
-
+                        <div class="mb-3 col-md-4">
+                            <label class="mb-2 form-label">Group Type Code</label>
+                            <input type="text" class="form-control" name="group_type_code" id="group_type_code" value="<?= @$group_type_code ?>" placeholder="Group Type Code" />
+                            <span class="error-message" id="error-group_type_code"></span>
+                        </div>
                         <div class="mb-3 col-md-4">
                             <label class="mb-2 form-label">Group Type Description</label>
                             <input type="text" class="form-control" name="group_type_description" id="group_type_description" value="<?= @$group_type_description ?>" placeholder="Group Type Description" />

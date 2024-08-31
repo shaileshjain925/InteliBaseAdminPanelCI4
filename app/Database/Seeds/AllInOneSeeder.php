@@ -4624,6 +4624,7 @@ class AllInOneSeeder extends Seeder
                 ['module_menu_id' => 102, 'menu_code' => 'STATE', 'menu_name' => 'State', 'menu_type' => 'master'],
                 ['module_menu_id' => 103, 'menu_code' => 'CITIES', 'menu_name' => 'Cities', 'menu_type' => 'master'],
                 ['module_menu_id' => 104, 'menu_code' => 'LOG', 'menu_name' => 'Log', 'menu_type' => 'report'],
+                ['module_menu_id' => 105, 'menu_code' => 'BUSINESSTYPE', 'menu_name' => 'Business Type', 'menu_type' => 'master'],
             ]],
             ['module_id' => 3, 'module_code' => 'STAFF_MANAGEMENT', 'module_name' => 'Staff Management', 'is_dashboard' => true, 'menus' => [
                 ['module_menu_id' => 301, 'menu_code' => 'DESIGNATIONS', 'menu_name' => 'Designation', 'menu_type' => 'master'],

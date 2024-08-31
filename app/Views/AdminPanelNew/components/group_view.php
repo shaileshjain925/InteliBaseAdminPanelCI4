@@ -26,6 +26,13 @@
         </div>
         <div class="mb-3 col-md-6">
             <div class="view_div">
+                <label class="form-label text-capitalize">Group Code</label>
+                <span class="ms-3"><?= @$group_code?></span>
+            </div>
+</div>
+         
+        <div class="mb-3 col-md-12">
+            <div class="view_div">
                 <label class="form-label text-capitalize">Group Description</label>
                 <span class="ms-3"><?= @$group_description ?></span>
             </div>

@@ -28,7 +28,11 @@
                             <input type="text" class="form-control" name="group_name" id="group_name" value="<?= @$group_name ?>" placeholder="Group Name" />
                             <span class="error-message" id="error-group_name"></span>
                         </div>
-                        
+                        <div class="mb-3 col-md-4">
+                            <label class="mb-2 form-label">Group Code</label>
+                            <input type="text" class="form-control" name="group_code" id="group_code" value="<?= @$group_code ?>" placeholder="Group Code" />
+                            <span class="error-message" id="error-group_code"></span>
+                        </div>
                         <div class="mb-3 col-md-4">
                             <label class="mb-2 form-label">Group Description</label>
                             <input type="text" class="form-control" name="group_description" id="group_description" value="<?= @$group_description ?>" placeholder="Group Description" />

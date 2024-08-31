@@ -28,6 +28,10 @@ class Group extends Migration
                 'type' => 'TEXT',
                 'NULL' => true
             ],
+            'group_code' => [
+                'type' => 'VARCHAR',
+                'constraint' => 255,
+            ],
             'group_image' => [
                 'type' => 'VARCHAR', 
                 'constraint' => 255, 
@@ -41,12 +45,12 @@ class Group extends Migration
         ]);
 
         $this->forge->addPrimaryKey('group_id');
-        $this->forge->addForeignKey('group_type_id', 'group_type', 'group_type_id','CASCADE','CASCADE');
-        $this->forge->createTable('group',true);
+        $this->forge->addForeignKey('group_type_id', 'group_types', 'group_type_id','CASCADE','CASCADE');
+        $this->forge->createTable('groups',true);
     }
 
     public function down()
     {
-        $this->forge->dropTable('group',true);
+        $this->forge->dropTable('groups',true);
     }
 }
