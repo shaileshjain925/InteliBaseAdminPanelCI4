@@ -29,7 +29,6 @@
     var print_allowed = '<?= (check_menu_access('STAFF', 'print')) ?>';
     var DeleteApiUrl = "<?= base_url(route_to('user_delete_api')) ?>"
     var user_ids = JSON.parse('<?= getUserIds(true) ?>');
-    console.log(group_ids);
 
     function user_delete(user_id) {
         deleteRow({
