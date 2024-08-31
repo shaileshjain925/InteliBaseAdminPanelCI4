@@ -125,107 +125,108 @@
                                     </td>
                                     <td>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][dashboard]" <?= $module['dashboard'] ? 'checked' : '' ?>>
+                                            <input id="dashboard-<?php echo $module['module_id']; ?>" type="checkbox" class="form-check-input text-center <?= $module['is_dashboard'] ? '' : 'd-none' ?>" title="Dashboard View Permission" name="modules[<?= $key ?>][dashboard]" <?= $module['dashboard'] ? 'checked' : '' ?> <?= $module['is_dashboard'] ? '' : 'disabled' ?>>
+                                            <input data-module-id="dashboard-<?php echo $module['module_id']; ?>" type="radio" class="form-check-input text-center <?= $module['is_dashboard'] ? '' : 'd-none' ?>" title="Primary Dashboard" for="modules[<?= $key ?>][dashboard]" name="primary_dashboard" value="<?= $module['module_id'] ?>" <?= $module['is_primary_dashboard'] ? 'checked' : '' ?> <?= $module['is_dashboard'] ? '' : 'disabled' ?>>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][master_view]" <?= $module['master_view'] ? 'checked' : '' ?>>
+                                            <input title="Master View Permission" type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][master_view]" <?= $module['master_view'] ? 'checked' : '' ?>>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][master_create]" <?= $module['master_create'] ? 'checked' : '' ?>>
+                                            <input title="Master Create Permission" type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][master_create]" <?= $module['master_create'] ? 'checked' : '' ?>>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][master_edit]" <?= $module['master_edit'] ? 'checked' : '' ?>>
+                                            <input title="Master Edit Permission" type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][master_edit]" <?= $module['master_edit'] ? 'checked' : '' ?>>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][master_approval]" <?= $module['master_approval'] ? 'checked' : '' ?>>
+                                            <input title="Master Approval Permission" type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][master_approval]" <?= $module['master_approval'] ? 'checked' : '' ?>>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][master_delete]" <?= $module['master_delete'] ? 'checked' : '' ?>>
+                                            <input title="Master Delete Permission" type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][master_delete]" <?= $module['master_delete'] ? 'checked' : '' ?>>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][master_print]" <?= $module['master_print'] ? 'checked' : '' ?>>
+                                            <input title="Master Print Permission" type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][master_print]" <?= $module['master_print'] ? 'checked' : '' ?>>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][master_export]" <?= $module['master_export'] ? 'checked' : '' ?>>
+                                            <input title="Master Export Permission" type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][master_export]" <?= $module['master_export'] ? 'checked' : '' ?>>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][master_bulk_delete]" <?= $module['master_bulk_delete'] ? 'checked' : '' ?>>
+                                            <input title="Master Bulk Delete Permission" type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][master_bulk_delete]" <?= $module['master_bulk_delete'] ? 'checked' : '' ?>>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][transaction_view]" <?= $module['transaction_view'] ? 'checked' : '' ?>>
+                                            <input title="Transaction View Permission" type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][transaction_view]" <?= $module['transaction_view'] ? 'checked' : '' ?>>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][transaction_create]" <?= $module['transaction_create'] ? 'checked' : '' ?>>
+                                            <input title="Transaction Create Permission" type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][transaction_create]" <?= $module['transaction_create'] ? 'checked' : '' ?>>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][transaction_edit]" <?= $module['transaction_edit'] ? 'checked' : '' ?>>
+                                            <input title="Transaction Edit Permission" type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][transaction_edit]" <?= $module['transaction_edit'] ? 'checked' : '' ?>>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][transaction_approval]" <?= $module['transaction_approval'] ? 'checked' : '' ?>>
+                                            <input title="transaction Approval Permission" type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][transaction_approval]" <?= $module['transaction_approval'] ? 'checked' : '' ?>>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][transaction_delete]" <?= $module['transaction_delete'] ? 'checked' : '' ?>>
+                                            <input title="Transaction Delete Permission" type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][transaction_delete]" <?= $module['transaction_delete'] ? 'checked' : '' ?>>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][transaction_print]" <?= $module['transaction_print'] ? 'checked' : '' ?>>
+                                            <input title="Transaction Print Permission" type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][transaction_print]" <?= $module['transaction_print'] ? 'checked' : '' ?>>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][transaction_export]" <?= $module['transaction_export'] ? 'checked' : '' ?>>
+                                            <input title="Transaction Export Permission" type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][transaction_export]" <?= $module['transaction_export'] ? 'checked' : '' ?>>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][transaction_bulk_delete]" <?= $module['transaction_bulk_delete'] ? 'checked' : '' ?>>
+                                            <input title="Transaction Bulk Delete Permission" type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][transaction_bulk_delete]" <?= $module['transaction_bulk_delete'] ? 'checked' : '' ?>>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][report_view]" <?= $module['report_view'] ? 'checked' : '' ?>>
+                                            <input title="Report View Permission" type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][report_view]" <?= $module['report_view'] ? 'checked' : '' ?>>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][report_print]" <?= $module['report_print'] ? 'checked' : '' ?>>
+                                            <input title="Report Print Permission" type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][report_print]" <?= $module['report_print'] ? 'checked' : '' ?>>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][report_export]" <?= $module['report_export'] ? 'checked' : '' ?>>
+                                            <input title="Report Export Permission" type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][report_export]" <?= $module['report_export'] ? 'checked' : '' ?>>
                                         </div>
                                     </td>
                                     <td>
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][config_view]" <?= $module['config_view'] ? 'checked' : '' ?>>
+                                            <input title="Config View Permission" type="checkbox" class="form-check-input text-center" name="modules[<?= $key ?>][config_view]" <?= $module['config_view'] ? 'checked' : '' ?>>
                                         </div>
                                     </td>
                                 </tr>
@@ -247,6 +248,20 @@
     </div>
 </form>
 <script>
+    $('input[type="radio"]').on('click', function() {
+        var moduleId = $(this).data('module-id'); // Get the associated checkbox ID
+        if ($(this).prop('checked')) {
+            $('#' + moduleId).prop('checked', true); // Check the corresponding checkbox
+        }
+    });
+    $('input[type="radio"]').on('mousedown', function(e) {
+        if ($(this).prop('checked')) {
+            $(this).one('click', function() {
+                $(this).prop('checked', false);
+            });
+        }
+    });
+
     function getMenus() {
         $('#role_module_menus_form').attr('action', '<?= base_url(route_to('role_module_menus_component')) ?>');
         submitFormWithAjax('role_module_menus_form', true, true, moduleSuccessCallback, moduleErrorCallback)

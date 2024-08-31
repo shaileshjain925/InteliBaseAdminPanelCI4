@@ -11,9 +11,11 @@
                 <a href="<?= @$_previous_path ?>">
                     <button class="btn export_btn me-3" type="button"><i class="fas fa-backward"></i></button>
                 </a>
-                <a href="<?= base_url(route_to('group_type_create_update_page')) ?>">
-                    <button class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add GroupType</button>
-                </a>
+                <?php if (check_menu_access('GROUPTYPE', 'create')): ?>
+                    <a href="<?= base_url(route_to('group_type_create_update_page')) ?>">
+                        <button class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add GroupType</button>
+                    </a>
+                <?php endif; ?>
             </div>
             <div class="table-responsive">
                 <table id="group_type_table" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle"></table>
@@ -23,32 +25,36 @@
 </div>
 
 <script>
-     var DeleteApiUrl = "<?= base_url(route_to('group_type_delete_api')) ?>"
+    var datatable_export = '<?= (check_menu_access('GROUPTYPE', 'export')) ?>';
+    var datatable_print = '<?= (check_menu_access('GROUPTYPE', 'print')) ?>';
+    var print_allowed = '<?= (check_menu_access('GROUPTYPE', 'print')) ?>';
+    var DeleteApiUrl = "<?= base_url(route_to('group_type_delete_api')) ?>"
 
-function group_type_delete(group_type_id) {
-    deleteRow({
-            "group_type_id": group_type_id
-        }).then((response) => {
-            fetchTableData()
-        })
-        .catch((error) => {
-            console.error("Deletion failed or cancelled:", error);
+    function group_type_delete(group_type_id) {
+        deleteRow({
+                "group_type_id": group_type_id
+            }).then((response) => {
+                fetchTableData()
+            })
+            .catch((error) => {
+                console.error("Deletion failed or cancelled:", error);
+            });
+    }
+
+    function group_type_view(group_type_id) {
+        $.ajax({
+            type: "post",
+            url: "<?= base_url(route_to('group_type_view_component')) ?>",
+            data: {
+                group_type_id: group_type_id
+            },
+            success: function(response) {
+                $("#right_floating_div").html("");
+                $("#right_floating_div").html(response);
+            }
         });
-}
+    }
 
-function group_type_view(group_type_id) {
-    $.ajax({
-        type: "post",
-        url: "<?= base_url(route_to('group_type_view_component')) ?>",
-        data: {
-            group_type_id: group_type_id
-        },
-        success: function(response) {
-            $("#right_floating_div").html("");
-            $("#right_floating_div").html(response);
-        }
-    });
-}
     function successCallback(response) {
         if (response.status == 200 || response.status == 201) {
             $(".offcanvas button[data-bs-dismiss='offcanvas']").click();
@@ -64,7 +70,7 @@ function group_type_view(group_type_id) {
         var columns = [{
                 title: "ID",
                 data: "group_type_id",
-    
+
             },
             {
                 title: "Group Type Name",
@@ -82,17 +88,20 @@ function group_type_view(group_type_id) {
                             <button class="text-white btn btn-sm btn-info" onclick="group_type_view(${row.group_type_id})" data-bs-toggle="offcanvas" data-bs-target="#right_floating_div" aria-controls="right_floating_div">
                                 <i class="fa fa-eye"></i>
                             </button>
-                            
-                            <a href="<?= base_url(route_to('group_type_create_update_page')) ?>/${row.group_type_id}" class="text-white btn btn-sm btn-success">
-                                <i class="bx bx-edit-alt"></i>
-                            </a>
-                            <button class="text-white btn btn-sm btn-danger" onclick="group_type_delete(${row.group_type_id})">
-                                <i class="bx bx-trash-alt"></i>
-                            </button>
+                            <?php if (check_menu_access('GROUPTYPE', 'edit')): ?>
+                                <a href="<?= base_url(route_to('group_type_create_update_page')) ?>/${row.group_type_id}" class="text-white btn btn-sm btn-success">
+                                    <i class="bx bx-edit-alt"></i>
+                                </a>
+                            <?php endif; ?>
+                            <?php if (check_menu_access('GROUPTYPE', 'delete')): ?>
+                                <button class="text-white btn btn-sm btn-danger" onclick="group_type_delete(${row.group_type_id})">
+                                    <i class="bx bx-trash-alt"></i>
+                                </button>
+                            <?php endif; ?>
                         `;
                 }
             }
-           
+
         ];
         if (response.status == 200) {
             return {

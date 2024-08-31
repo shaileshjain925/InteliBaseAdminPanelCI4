@@ -29,18 +29,10 @@ if (!in_array($file_extension, $extensions)) {
         $routes->get('LoginByOther/(:any)', 'AdminPageController::LoginByOther/$1', ['as' => 'LoginByOther']);
         $routes->get('', 'AdminPageController::default_dashboard_page', ['as' => 'default_dashboard_page']);
         $routes->group('Dashboard', function ($routes) {
-            $routes->get('SuperAdmin', 'AdminPageController::super_admin_dashboard_page', ['as' => 'super_admin_dashboard_page']);
-            $routes->get('Admin', 'AdminPageController::admin_dashboard_page', ['as' => 'admin_dashboard_page']);
-            $routes->get('Sales', 'AdminPageController::sales_dashboard_page', ['as' => 'sales_dashboard_page']);
-            $routes->get('Purchase', 'AdminPageController::purchase_dashboard_page', ['as' => 'purchase_dashboard_page']);
-            $routes->get('Finance', 'AdminPageController::finance_dashboard_page', ['as' => 'finance_dashboard_page']);
-            $routes->get('CRM', 'AdminPageController::crm_dashboard_page', ['as' => 'crm_dashboard_page']);
-        });
-        $routes->group('Dummy', function ($routes) {
-            $routes->get('List', 'AdminPageController::dummy_list_page', ['as' => 'dummy_list_page']);
-            $routes->get('CreateUpdate', 'AdminPageController::dummy_create_update_page', ['as' => 'dummy_create_update_page']);
-            $routes->get('CreateUpdate/(:num)', 'AdminPageController::dummy_create_update_page/$1');
-            $routes->post('View', 'AdminPageController::dummy_view_component', ['as' => 'dummy_view_component']);
+            $routes->get('Overview', 'AdminPageController::overview_dashboard_page', ['as' => 'overview_dashboard_page']);
+            $routes->get('StaffManagement', 'AdminPageController::staff_management_dashboard_page', ['as' => 'staff_management_dashboard_page']);
+            $routes->get('Inventory', 'AdminPageController::inventory_dashboard_page', ['as' => 'inventory_dashboard_page']);
+            $routes->get('Starter', 'AdminPageController::starter_dashboard_page', ['as' => 'starter_dashboard_page']);
         });
         $routes->group('StaffManagement', function ($routes) {
             $routes->group('Staff', function ($routes) {

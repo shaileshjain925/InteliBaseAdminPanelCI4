@@ -169,7 +169,7 @@ class UsersModel extends FunctionModel
                     $data['user_ids'] = [$user_data['user_id']];
                     break;
                 case 'hierarchy':
-                    $data['user_ids'] = $this->getHierarchyUserIds($user_data['user_ids']);
+                    $data['user_ids'] = $this->getHierarchyUserIds($user_data['user_id']);
                     break;
                 case 'all':
                     $data['user_ids'] = null;

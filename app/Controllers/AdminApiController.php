@@ -5,7 +5,6 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\Response;
 use ApiResponseStatusCode;
-use UserType;
 
 class AdminApiController extends BaseController
 {
@@ -546,8 +545,8 @@ class AdminApiController extends BaseController
         if ($user_data['data']['is_active'] == 0) {
             return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::BAD_REQUEST, "Account Is Inactive");
         }
-        if ($user_data['data']['user_type'] == UserType::SuperAdmin->value) {
-            $user_data['data']['ref_user_type'] = UserType::SuperAdmin->value;
+        if ($user_data['data']['user_type'] == "super_admin") {
+            $user_data['data']['ref_user_type'] = "super_admin";
         }
         $user_data['data']['_access_rights'] = $this->get_users_model(false)->getUserLoginSessionAccessRights($user_data['data']);
         $session_data = $user_data['data'];

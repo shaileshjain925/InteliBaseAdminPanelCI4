@@ -11,7 +11,9 @@
                 <a href="<?= @$_previous_path ?>">
                     <button class="btn export_btn me-3" type="button"><i class="fas fa-backward"></i></button>
                 </a>
-                <button onclick="OpenCreateUpdateRoleInSweetAlert('', onSuccess, onFail)" class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add Role</button>
+                <?php if (check_menu_access('ROLES', 'create')): ?>
+                    <button onclick="OpenCreateUpdateRoleInSweetAlert('', onSuccess, onFail)" class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add Role</button>
+                <?php endif; ?>
             </div>
             <div class="table-responsive">
                 <table id="table" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle"></table>
@@ -20,6 +22,10 @@
     </div>
 </div>
 <script>
+    var datatable_export = '<?= (check_menu_access('ROLES', 'export')) ?>';
+    var datatable_print = '<?= (check_menu_access('ROLES', 'print')) ?>';
+    var print_allowed = '<?= (check_menu_access('ROLES', 'print')) ?>';
+
     var DeleteApiUrl = "<?= base_url(route_to('role_delete_api')) ?>"
 
     function OpenCreateUpdateRoleInSweetAlert(role_name = '', onSuccess, onFail, role_id = '') {
@@ -69,26 +75,30 @@
                 data: "role_name",
                 visible: true,
             },
-            {
-                "title": "Rights",
-                "data": null,
-                "render": function(data, type, row) {
-                    return `
-                            <a href="<?=base_url(route_to('role_module_menus',''))?>${row.role_id}" class="text-white btn btn-sm btn-info">Role Module & Menu Access Rights</a>
+            <?php if (check_menu_access('ROLESMODULENEMUACCESS', 'view')): ?> {
+                    "title": "Rights",
+                    "data": null,
+                    "render": function(data, type, row) {
+                        return `
+                        <a href="<?= base_url(route_to('role_module_menus', '')) ?>${row.role_id}" class="text-white btn btn-sm btn-info">Role Module & Menu Access Rights</a>
                         `;
-                }
-            },
-            {
+                    }
+                },
+            <?php endif; ?> {
                 "title": "Actions",
                 "data": null,
                 "render": function(data, type, row) {
                     return `
-                            <button class="text-white btn btn-sm btn-success" onclick="OpenCreateUpdateRoleInSweetAlert('${row.role_name}', onSuccess, onFail, '${row.role_id}')">
-                                <i class="bx bx-edit-alt"></i>
-                            </button>
-                            <button class="text-white btn btn-sm btn-danger" onclick="role_delete(${row.role_id})">
-                                <i class="bx bx-trash-alt"></i>
-                            </button>
+                            <?php if (check_menu_access('ROLES', 'edit')): ?>
+                                <button class="text-white btn btn-sm btn-success" onclick="OpenCreateUpdateRoleInSweetAlert('${row.role_name}', onSuccess, onFail, '${row.role_id}')">
+                                    <i class="bx bx-edit-alt"></i>
+                                </button>
+                            <?php endif; ?>
+                            <?php if (check_menu_access('ROLES', 'delete')): ?>
+                                <button class="text-white btn btn-sm btn-danger" onclick="role_delete(${row.role_id})">
+                                    <i class="bx bx-trash-alt"></i>
+                                </button>
+                            <?php endif; ?>
                         `;
                 }
             }

@@ -182,14 +182,14 @@ class FunctionModel extends Model
                 if (array_key_exists('_whereIn', $filter) && !empty($filter['_whereIn'] && is_array($filter['_whereIn']))) {
                     foreach ($filter['_whereIn'] as $key => $fields) {
                         # code...
-                        if (array_key_exists('fieldname', $fields) && array_key_exists('value', $fields)) {
+                        if (array_key_exists('fieldname', $fields) && array_key_exists('value', $fields) && !empty($fields['value'])) {
                             $this->whereIn(str_replace('-', '.', $fields['fieldname']), $fields['value']);
                         }
                     }
                     unset($filter['_whereIn']);
                 }
                 // Where Not In
-                if (array_key_exists('_whereNotIn', $filter) && !empty($filter['_whereNotIn'] && is_array($filter['_whereNotIn']))) {
+                if (array_key_exists('_whereNotIn', $filter) && !empty($filter['_whereNotIn'] && is_array($filter['_whereNotIn'])) && !empty($fields['value'])) {
                     foreach ($filter['_whereNotIn'] as $key => $fields) {
                         # code...
                         if (array_key_exists('fieldname', $fields) && array_key_exists('value', $fields)) {

@@ -21,6 +21,10 @@
 </div>
 
 <script>
+    var datatable_export = '<?= (check_menu_access('LOG', 'export')) ?>';
+    var datatable_print = '<?= (check_menu_access('LOG', 'print')) ?>';
+    var print_allowed = '<?= (check_menu_access('LOG', 'print')) ?>';
+
     function successCallback(response) {
         if (response.status == 200 || response.status == 201) {
             $(".offcanvas button[data-bs-dismiss='offcanvas']").click();

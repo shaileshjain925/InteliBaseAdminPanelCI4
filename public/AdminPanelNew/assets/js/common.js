@@ -788,11 +788,18 @@ function DataTableInitialized(
         headers
       )
         .then(function (data) {
+          var buttonsArray = ["colvis"]; // Base buttons
+          if (datatable_export) {
+            buttonsArray.push("copy", "csv", "excel", "pdf"); // Add export buttons if allowed
+          }
+          if (datatable_print) {
+            buttonsArray.push("print"); // Add print button if allowed
+          }
           var dataTable = $("#" + table_id).DataTable({
             data: data.rowData,
             columns: data.columns,
             dom: "Bfrtip", // Add the Buttons extension elements
-            buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
+            buttons: buttonsArray,
             initComplete: function () {
               if (typeof afterTableViewCallbackFunction === "function") {
                 afterTableViewCallbackFunction(data);
@@ -934,3 +941,31 @@ function timeAgo(datetime) {
     return seconds <= 1 ? "just now" : `${seconds} seconds ago`;
   }
 }
+function checkPrintAccess() {
+  if (!print_allowed) {
+    // Block Ctrl + P
+    $(document).on('keydown', function (event) {
+      if (event.ctrlKey && event.key === 'p') {
+        event.preventDefault(); // Prevent the default print dialog
+        alert("Printing is disabled on this page.");
+      }
+    });
+
+    // Block the browser's print function
+    window.onbeforeprint = function () {
+      alert("Printing is disabled on this page.");
+      return false;
+    };
+
+    // Override the window.print function
+    window.print = function () {
+      alert("Printing is disabled on this page.");
+      return false;
+    };
+  }
+}
+
+// Call the function to check and enforce print access
+checkPrintAccess();
+
+// Call the function to check and enforce print access

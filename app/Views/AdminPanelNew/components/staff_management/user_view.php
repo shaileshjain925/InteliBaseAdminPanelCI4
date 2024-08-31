@@ -1,7 +1,6 @@
 <div class="offcanvas-header pb-0">
     <div class="">
-        <h5 id="Add_New_clientLabel">View <?= UserType::from($user_type)->name ?></h5>
-        <p class="new_form_p">Please fill the form to View <?= UserType::from($user_type)->name ?></p>
+        <h5 id="Add_New_clientLabel">View Staff</h5>
     </div>
     <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
 </div>
