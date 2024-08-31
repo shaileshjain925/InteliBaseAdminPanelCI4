@@ -132,11 +132,9 @@
                 </div>
 
                 <div class="dropdown d-inline-block">
-                    <?php if (isset($_SESSION['user_type']) && ($_SESSION['user_type'] == UserType::SuperAdmin->value || $_SESSION['user_type'] == UserType::Admin->value)) : ?>
-                        <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-                            <i class="mdi mdi-settings-outline"></i>
-                        </button>
-                    <?php endif; ?>
+                    <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                        <i class="mdi mdi-settings-outline"></i>
+                    </button>
                 </div>
 
             </div>

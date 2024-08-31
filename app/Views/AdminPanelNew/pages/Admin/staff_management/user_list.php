@@ -11,9 +11,11 @@
                 <a href="<?= @$_previous_path ?>">
                     <button class="btn export_btn me-3" type="button"><i class="fas fa-backward"></i></button>
                 </a>
-                <a href="<?= base_url(route_to('staff_create_update_page')) ?>">
-                    <button class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add Staff</button>
-                </a>
+                <?php if (check_menu_access('STAFF', 'create')): ?>
+                    <a href="<?= base_url(route_to('staff_create_update_page')) ?>">
+                        <button class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add Staff</button>
+                    </a>
+                <?php endif; ?>
             </div>
             <div class="table-responsive">
                 <table id="table" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle"></table>
@@ -22,7 +24,11 @@
     </div>
 </div>
 <script>
+    var datatable_export = '<?= (check_menu_access('STAFF', 'export')) ?>';
+    var datatable_print = '<?= (check_menu_access('STAFF', 'print')) ?>';
+    var print_allowed = '<?= (check_menu_access('STAFF', 'print')) ?>';
     var DeleteApiUrl = "<?= base_url(route_to('user_delete_api')) ?>"
+    var user_ids = JSON.parse('<?= getUserIds(true) ?>');
 
     function user_delete(user_id) {
         deleteRow({
@@ -142,19 +148,18 @@
                 data: "designation_name",
                 visible: true,
             },
-
-            {
-                title: "Active",
-                data: "is_active",
-                render: function(data, type, row) {
-                    var checked = data == 1 ? 'checked' : '';
-                    return `
-            <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="isActiveSwitch_${row.user_id}" ${checked} onchange="change_is_active(event, ${row.user_id})">
-            </div>`;
-                }
-            },
-            {
+            <?php if (check_menu_access('STAFF', 'edit')): ?> {
+                    title: "Active",
+                    data: "is_active",
+                    render: function(data, type, row) {
+                        var checked = data == 1 ? 'checked' : '';
+                        return `
+                        <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="isActiveSwitch_${row.user_id}" ${checked} onchange="change_is_active(event, ${row.user_id})">
+                        </div>`;
+                    }
+                },
+            <?php endif; ?> {
                 title: "Address",
                 data: "user_address",
                 visible: false,
@@ -192,34 +197,38 @@
                     return `<img class="image-fluid" style="height:auto; width:100px" onclick="enlargeImage(event)" src="<?= base_url() ?>${row.user_aadhaar_card_image}">`;
                 }
             },
-            {
-                "title": "Access",
-                "data": null,
-                "render": function(data, type, row) {
-                    return `
-                            <a href="<?= base_url('Admin/StaffManagement/Staff/user_data_access_create_update') ?>/${row.user_id}/${row.user_name}" class="text-white btn btn-sm btn-info">User Data Access</a>
+            <?php if (check_menu_access('USERDATAACCESS', 'view')): ?> {
+                    "title": "Access",
+                    "data": null,
+                    "render": function(data, type, row) {
+                        return `
+                        <a href="<?= base_url('Admin/StaffManagement/Staff/user_data_access_create_update') ?>/${row.user_id}/${row.user_name}" class="text-white btn btn-sm btn-info">User Data Access</a>
                         `;
-                }
-            },
-            {
+                    }
+                },
+            <?php endif; ?> {
                 "title": "Actions",
                 "data": null,
                 "render": function(data, type, row) {
                     return `
-                            <a href="<?= base_url(route_to('LoginByOther', '')) ?>/${row.user_id}" class="text-white btn btn-sm btn-warning">
-                                Login
-                            </a>
+                            <?php if ($_SESSION['user_type'] == 'super_admin'): ?>
+                                <a href="<?= base_url(route_to('LoginByOther', '')) ?>/${row.user_id}" class="text-white btn btn-sm btn-warning">
+                                    Login
+                                </a>
+                            <?php endif; ?>
                             <button class="text-white btn btn-sm btn-info" onclick="user_view(${row.user_id})" data-bs-toggle="offcanvas" data-bs-target="#right_floating_div" aria-controls="right_floating_div">
                                 <i class="fa fa-eye"></i>
                             </button>
-                            
-                            <a href="<?= base_url(route_to('staff_create_update_page')) ?>/${row.user_id}" class="text-white btn btn-sm btn-success">
-                                <i class="bx bx-edit-alt"></i>
-                            </a>
-                            <button class="text-white btn btn-sm btn-danger" onclick="user_delete(${row.user_id})">
-                                <i class="bx bx-trash-alt"></i>
-                            </button>
-
+                            <?php if (check_menu_access('STAFF', 'edit')): ?>
+                                <a href="<?= base_url(route_to('staff_create_update_page')) ?>/${row.user_id}" class="text-white btn btn-sm btn-success">
+                                    <i class="bx bx-edit-alt"></i>
+                                </a>
+                            <?php endif; ?>
+                            <?php if (check_menu_access('STAFF', 'delete')): ?>
+                                <button class="text-white btn btn-sm btn-danger" onclick="user_delete(${row.user_id})">
+                                    <i class="bx bx-trash-alt"></i>
+                                </button>
+                            <?php endif; ?>
                         `;
                 }
             }
@@ -242,7 +251,11 @@
     var filter = {}
     filter._autojoin = "Y";
     filter._select = "*";
-    // filter['user-reporting_to_user_id'] = '<#?= $_SESSION['user_id'] ?>';
+    filter['_whereIn'] = [{
+        "fieldname": "users-user_id",
+        "value": user_ids
+    }]
+
     function fetchData() {
         DataTableInitialized('table', '<?= base_url(route_to('user_list_api')) ?>', "POST", filter, dataTableSuccessCallBack, {}, afterTableViewCallbackFunction)
     }

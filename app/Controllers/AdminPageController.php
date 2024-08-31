@@ -7,7 +7,6 @@ use App\Controllers\BaseController;
 use App\Database\Seeds\AllInOneSeeder;
 use App\Traits\CommonTraits;
 use Config\Database;
-use UserType;
 
 class AdminPageController extends BaseController
 {
@@ -15,30 +14,65 @@ class AdminPageController extends BaseController
 
     public function default_dashboard_page()
     {
-        return $this->super_admin_dashboard_page();
-        // switch (getUserType()) {
-        //     case UserType::SuperAdmin->value:
-        //         return $this->super_admin_dashboard_page();
-        //         break;
-        //     case UserType::Admin->value:
-        //         return $this->admin_dashboard_page();
-        //         break;
-        //     case UserType::SalesManager->value:
-        //         return $this->sales_dashboard_page();
-        //         break;
-        //     case UserType::SalesExecutive->value:
-        //         return $this->sales_dashboard_page();
-        //         break;
-        //     case UserType::Purchase->value:
-        //         return $this->purchase_dashboard_page();
-        //         break;
-        //     case UserType::Finance->value:
-        //         return $this->finance_dashboard_page();
-        //         break;
-        //     case UserType::CRM->value:
-        //         return $this->crm_dashboard_page();
-        //         break;
-        // }
+        if ($_SESSION['user_type'] == 'super_admin' || $_SESSION['user_type'] == 'admin') {
+            return $this->overview_dashboard_page();
+        } else {
+            $primary_dashboard_module_code = null;
+            if (isset($_SESSION['_access_rights']['modules'])) {
+                foreach ($_SESSION['_access_rights']['modules'] as $module) {
+                    if ($module['is_primary_dashboard']) {
+                        $primary_dashboard_module_code = $module['module_code'];
+                    }
+                }
+            }
+
+            switch ($primary_dashboard_module_code) {
+                case 'STAFF_MANAGEMENT':
+                    return $this->staff_management_dashboard_page();
+                    break;
+                case 'INVENTORY':
+                    return $this->inventory_dashboard_page();
+                    break;
+                default:
+                    return $this->starter_dashboard_page();
+                    break;
+            }
+        }
+    }
+    public function overview_dashboard_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Overview Dashboard';
+        $theme_data['_page_title'] = 'Overview Dashboard';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Dashboard/overview_dashboard';
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    // Staff Management Dashboard
+    public function staff_management_dashboard_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Staff Management Dashboard';
+        $theme_data['_page_title'] = 'Staff Management Dashboard';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Dashboard/staff_management_dashboard';
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    // Inventory Dashboard
+    public function inventory_dashboard_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Inventory Dashboard';
+        $theme_data['_page_title'] = 'Inventory Dashboard';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Dashboard/inventory_dashboard';
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    // Blank dashboard
+    public function starter_dashboard_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Super Admin Dashboard';
+        $theme_data['_page_title'] = 'Super Admin Admin Dashboard';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Dashboard/starter_dashboard';
+        return view('AdminPanelNew/partials/main', $theme_data);
     }
     public function seeder_run()
     {
@@ -62,9 +96,9 @@ class AdminPageController extends BaseController
     }
     public function LoginByOther($user_id)
     {
-        if (isset($_SESSION['ref_user_type']) && $_SESSION['ref_user_type'] == UserType::SuperAdmin->value) {
+        if (isset($_SESSION['ref_user_type']) && $_SESSION['ref_user_type'] == "super_admin") {
             $user_data['data'] = $this->get_users_model(false)->find($user_id);
-            $user_data['data']['ref_user_type'] = UserType::SuperAdmin->value;
+            $user_data['data']['ref_user_type'] = "super_admin";
             $user_data['data']['_access_rights'] = $this->get_users_model(false)->getUserLoginSessionAccessRights($user_data['data']);
             $session_data = $user_data['data'];
             $session_data['logged_in'] = true;
@@ -228,7 +262,7 @@ class AdminPageController extends BaseController
         if (!empty($user_id)) {
             $theme_data = array_merge($theme_data, ['user_id' => $user_id]);
         }
-        $theme_data['user_type'] = UserType::SuperAdmin->value;
+        $theme_data['user_type'] = "super_admin";
         $theme_data['_form_type'] = 'component';
         $theme_data['_previous_path'] = base_url(route_to($theme_data['user_type'] . '_list_page'));
         return view('AdminPanelNew/partials/main', $theme_data);
@@ -255,59 +289,12 @@ class AdminPageController extends BaseController
         if (!empty($user_id)) {
             $theme_data = array_merge($theme_data, ['user_id' => $user_id]);
         }
-        $theme_data['user_type'] = UserType::SuperAdmin->value;
+        $theme_data['user_type'] = "super_admin";
         $theme_data['_form_type'] = 'component';
         $theme_data['_previous_path'] = base_url(route_to($theme_data['user_type'] . '_list_page'));
         return view('AdminPanelNew/partials/main', $theme_data);
     }
-    public function super_admin_dashboard_page()
-    {
-        $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Super Admin Dashboard';
-        $theme_data['_page_title'] = 'Super Admin Admin Dashboard';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Dashboard/super_admin_dashboard';
-        return view('AdminPanelNew/partials/main', $theme_data);
-    }
-    public function admin_dashboard_page()
-    {
-        $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Admin Dashboard';
-        $theme_data['_page_title'] = 'Admin Dashboard';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Dashboard/admin_dashboard';
-        return view('AdminPanelNew/partials/main', $theme_data);
-    }
-    public function sales_dashboard_page()
-    {
-        $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Sales Dashboard';
-        $theme_data['_page_title'] = 'Sales Dashboard';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Dashboard/sales_dashboard';
-        return view('AdminPanelNew/partials/main', $theme_data);
-    }
-    public function purchase_dashboard_page()
-    {
-        $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Purchase Dashboard';
-        $theme_data['_page_title'] = 'Purchase Dashboard';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Dashboard/purchase_dashboard';
-        return view('AdminPanelNew/partials/main', $theme_data);
-    }
-    public function finance_dashboard_page()
-    {
-        $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Finance Dashboard';
-        $theme_data['_page_title'] = 'Finance Dashboard';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Dashboard/finance_dashboard';
-        return view('AdminPanelNew/partials/main', $theme_data);
-    }
-    public function crm_dashboard_page()
-    {
-        $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'CRM Dashboard';
-        $theme_data['_page_title'] = 'CRM Dashboard';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Dashboard/crm_dashboard';
-        return view('AdminPanelNew/partials/main', $theme_data);
-    }
+
     public function group_type_list_page()
     {
         $theme_data = $this->admin_panel_common_data();
@@ -433,7 +420,7 @@ class AdminPageController extends BaseController
     }
     public function staff_view_component()
     {
-        $theme_data['user_type'] = UserType::SuperAdmin->value;
+        $theme_data['user_type'] = "super_admin";
         $data = getRequestData($this->request, 'ARRAY');
         $theme_data = array_merge($theme_data, $this->get_users_model()->autoJoin()->select("users.*")->find($data['user_id']));
         return view('AdminPanelNew/components/staff_management/user_view', $theme_data);
@@ -483,10 +470,18 @@ class AdminPageController extends BaseController
             return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::BAD_REQUEST, "Please Select Any Module's Permission First");
         }
         $modules = [];
+        $is_dashboard_access = false;
+        $primary_dashboard_module_id = $data['primary_dashboard'] ?? null;
         foreach ($data['modules'] as $module) {
             if (count($module) >= 3) {
                 $modules[] = $module;
             }
+            if (isset($module['dashboard'])) {
+                $is_dashboard_access = true;
+            }
+        }
+        if ($is_dashboard_access && empty($primary_dashboard_module_id)) {
+            return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::BAD_REQUEST, 'Please Select Primary Dashboard');
         }
         unset($return_data['noModuleRightsSelected']);
         $return_data['module_menus'] = $this->get_module_menus_model()->role_module_menus_data($data['role_id'], array_column($modules, 'module_id'));
@@ -504,6 +499,9 @@ class AdminPageController extends BaseController
         $r1 = $this->get_role_modules_model(false)->where('role_id', $data['role_id'])->delete();
         foreach ($data['modules'] as $key => $role_modules) {
             if (count($role_modules) >= 3) {
+                if (isset($data['primary_dashboard']) && $role_modules['module_id'] == $data['primary_dashboard']) {
+                    $role_modules['is_primary_dashboard'] = 1;
+                }
                 $r2 = $this->get_role_modules_model(false)->RecordCreate($role_modules);
             }
         }
@@ -572,40 +570,28 @@ class AdminPageController extends BaseController
                 "visibility" => true,
                 "menus" => [
                     [
-                        "title" => "Super Admin",
-                        "url" => base_url(route_to('super_admin_dashboard_page')),
+                        "title" => "Overview",
+                        "url" => base_url(route_to('overview_dashboard_page')),
                         "badge_count" => 0,
-                        "visibility" => true,
+                        "visibility" => check_dashboard_access(),
                     ],
                     [
-                        "title" => "Admin",
-                        "url" => base_url(route_to('admin_dashboard_page')),
+                        "title" => "Staff Management",
+                        "url" => base_url(route_to('staff_management_dashboard_page')),
                         "badge_count" => 0,
-                        "visibility" => true,
+                        "visibility" => check_dashboard_access('STAFF_MANAGEMENT'),
                     ],
                     [
-                        "title" => "Sales",
-                        "url" => base_url(route_to('sales_dashboard_page')),
+                        "title" => "Inventory",
+                        "url" => base_url(route_to('inventory_dashboard_page')),
                         "badge_count" => 0,
-                        "visibility" => true,
+                        "visibility" => check_dashboard_access('INVENTORY'),
                     ],
                     [
-                        "title" => "Purchase",
-                        "url" => base_url(route_to('purchase_dashboard_page')),
+                        "title" => "Starter",
+                        "url" => base_url(route_to('starter_dashboard_page')),
                         "badge_count" => 0,
-                        "visibility" => true,
-                    ],
-                    [
-                        "title" => "Finance",
-                        "url" => base_url(route_to('finance_dashboard_page')),
-                        "badge_count" => 0,
-                        "visibility" => true,
-                    ],
-                    [
-                        "title" => "CRM",
-                        "url" => base_url(route_to('crm_dashboard_page')),
-                        "badge_count" => 0,
-                        "visibility" => true,
+                        "visibility" => check_dashboard_access('starter'),
                     ],
                 ]
             ],
@@ -619,19 +605,19 @@ class AdminPageController extends BaseController
                         "title" => "Designation",
                         "url" => base_url(route_to('designation_list_page')),
                         "badge_count" => 0,
-                        "visibility" => true,
+                        "visibility" => check_menu_access('DESIGNATIONS', 'view'),
                     ],
                     [
                         "title" => "Role",
                         "url" => base_url(route_to('role_list_page')),
                         "badge_count" => 0,
-                        "visibility" => true,
+                        "visibility" => check_menu_access('ROLES', 'view'),
                     ],
                     [
                         "title" => "Staff",
                         "url" => base_url(route_to('staff_list_page')),
                         "badge_count" => 0,
-                        "visibility" => true,
+                        "visibility" => check_menu_access('STAFF', 'view'),
                     ],
                 ]
             ],
@@ -639,115 +625,90 @@ class AdminPageController extends BaseController
                 "module_title" => "Sales",
                 "module_name" => "Sales",
                 "module_icon" => "mdi mdi-account-supervisor-outline",
-                "visibility" => true,
-                "menus" => [
-                    [
-                        "title" => "Customer",
-                        "url" => base_url(route_to('dummy_list_page')),
-                        "badge_count" => 0,
-                        "visibility" => true,
-                    ],
-                    [
-                        "title" => "Sales Enquiry",
-                        "url" => base_url(route_to('dummy_list_page')),
-                        "badge_count" => 0,
-                        "visibility" => true,
-                    ],
-                    [
-                        "title" => "Sales Quotation",
-                        "url" => base_url(route_to('dummy_list_page')),
-                        "badge_count" => 0,
-                        "visibility" => true,
-                    ],
-                    [
-                        "title" => "Sales Order",
-                        "url" => base_url(route_to('dummy_list_page')),
-                        "badge_count" => 0,
-                        "visibility" => true,
-                    ],
-                ]
+                "visibility" => check_module_access('SALES'),
+                "menus" => [],
             ],
             [
                 "module_title" => "Purchase",
                 "module_name" => "Purchase",
                 "module_icon" => "mdi mdi-account-supervisor-outline",
-                "visibility" => true,
-                "menus" => [
-                    [
-                        "title" => "Vendor",
-                        "url" => base_url(route_to('dummy_list_page')),
-                        "badge_count" => 0,
-                        "visibility" => true,
-                    ],
-                    [
-                        "title" => "Purchase Enquiry",
-                        "url" => base_url(route_to('dummy_list_page')),
-                        "badge_count" => 0,
-                        "visibility" => true,
-                    ],
-                    [
-                        "title" => "Purchase Quotation",
-                        "url" => base_url(route_to('dummy_list_page')),
-                        "badge_count" => 0,
-                        "visibility" => true,
-                    ],
-                ]
+                "visibility" => check_module_access('PURCHASE'),
+                "menus" => []
             ],
             [
                 "module_title" => "Inventory",
                 "module_name" => "Inventory",
                 "module_icon" => "mdi mdi-account-supervisor-outline",
-                "visibility" => true,
+                "visibility" => check_module_access('INVENTORY'),
                 "menus" => [
                     [
                         "title" => "Category",
                         "url" => base_url(route_to('category_list_page')),
                         "badge_count" => 0,
-                        "visibility" => true,
+                        "visibility" => check_menu_access('CATEGORY', 'view'),
                     ],
                     [
                         "title" => "Group Type",
                         "url" => base_url(route_to('group_type_list_page')),
                         "badge_count" => 0,
-                        "visibility" => true,
-                    ],
-                    [
-                        "title" => "Group Type",
-                        "url" => base_url(route_to('group_type_list_page')),
-                        "badge_count" => 0,
-                        "visibility" => true,
+                        "visibility" => check_menu_access('GROUPTYPE', 'view'),
                     ],
                     [
                         "title" => "Group",
                         "url" => base_url(route_to('group_list_page')),
                         "badge_count" => 0,
-                        "visibility" => true,
-                    ],
-                    [
-                        "title" => "Brand",
-                        "url" => base_url(route_to('dummy_list_page')),
-                        "badge_count" => 0,
-                        "visibility" => true,
-                    ],
-                    [
-                        "title" => "HSN",
-                        "url" => base_url(route_to('dummy_list_page')),
-                        "badge_count" => 0,
-                        "visibility" => true,
-                    ],
-                    [
-                        "title" => "Product",
-                        "url" => base_url(route_to('dummy_list_page')),
-                        "badge_count" => 0,
-                        "visibility" => true,
-                    ],
-                    [
-                        "title" => "Price List",
-                        "url" => base_url(route_to('dummy_list_page')),
-                        "badge_count" => 0,
-                        "visibility" => true,
+                        "visibility" => check_menu_access('GROUP', 'view'),
                     ],
                 ]
+            ],
+            [
+                "module_title" => "Finance",
+                "module_name" => "Finance",
+                "module_icon" => "mdi mdi-account-supervisor-outline",
+                "visibility" => check_module_access('FINANCE'),
+                "menus" => [],
+            ],
+            [
+                "module_title" => "CRM",
+                "module_name" => "CRM",
+                "module_icon" => "mdi mdi-account-supervisor-outline",
+                "visibility" => check_module_access('CRM'),
+                "menus" => [],
+            ],
+            [
+                "module_title" => "Part Maintenance",
+                "module_name" => "Part Maintenance",
+                "module_icon" => "mdi mdi-account-supervisor-outline",
+                "visibility" => check_module_access('PART_MAINTENANCE'),
+                "menus" => [],
+            ],
+            [
+                "module_title" => "HR",
+                "module_name" => "HR",
+                "module_icon" => "mdi mdi-account-supervisor-outline",
+                "visibility" => check_module_access('HR'),
+                "menus" => [],
+            ],
+            [
+                "module_title" => "SCM",
+                "module_name" => "SCM",
+                "module_icon" => "mdi mdi-account-supervisor-outline",
+                "visibility" => check_module_access('SCM'),
+                "menus" => [],
+            ],
+            [
+                "module_title" => "Warehouse",
+                "module_name" => "Warehouse",
+                "module_icon" => "mdi mdi-account-supervisor-outline",
+                "visibility" => check_module_access('WH'),
+                "menus" => [],
+            ],
+            [
+                "module_title" => "Logistics",
+                "module_name" => "Logistics",
+                "module_icon" => "mdi mdi-account-supervisor-outline",
+                "visibility" => check_module_access('LOGISTICS'),
+                "menus" => [],
             ],
         ];
         return $menuArray;

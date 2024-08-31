@@ -4,7 +4,6 @@ namespace App\Database\Migrations;
 
 use App\Traits\CommonTraits;
 use CodeIgniter\Database\Migration;
-use UserType;
 
 class UserTable extends Migration
 {

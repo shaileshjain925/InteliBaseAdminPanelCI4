@@ -11,7 +11,9 @@
                 <a href="<?= @$_previous_path ?>">
                     <button class="btn export_btn me-3" type="button"><i class="fas fa-backward"></i></button>
                 </a>
-                <button onclick="OpenCreateUpdateDesignationInSweetAlert('', onSuccess, onFail)" class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add Designation</button>
+                <?php if (check_menu_access('DESIGNATIONS', 'create')): ?>
+                    <button onclick="OpenCreateUpdateDesignationInSweetAlert('', onSuccess, onFail)" class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add Designation</button>
+                <?php endif; ?>
             </div>
             <div class="table-responsive">
                 <table id="table" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle"></table>
@@ -20,6 +22,9 @@
     </div>
 </div>
 <script>
+    var datatable_export = '<?= (check_menu_access('DESIGNATIONS', 'export')) ?>';
+    var datatable_print = '<?= (check_menu_access('DESIGNATIONS', 'print')) ?>';
+    var print_allowed = '<?= (check_menu_access('DESIGNATIONS', 'print')) ?>';
     var DeleteApiUrl = "<?= base_url(route_to('designation_delete_api')) ?>"
 
     function OpenCreateUpdateDesignationInSweetAlert(designation_name = '', onSuccess, onFail, designation_id = '') {
@@ -73,12 +78,17 @@
                 "data": null,
                 "render": function(data, type, row) {
                     return `
+                    
+                        <?php if (check_menu_access('DESIGNATIONS', 'edit')): ?>
                             <button class="text-white btn btn-sm btn-success" onclick="OpenCreateUpdateDesignationInSweetAlert('${row.designation_name}', onSuccess, onFail, '${row.designation_id}')">
                                 <i class="bx bx-edit-alt"></i>
                             </button>
+                        <?php endif; ?>
+                        <?php if (check_menu_access('DESIGNATIONS', 'delete')): ?>
                             <button class="text-white btn btn-sm btn-danger" onclick="designation_delete(${row.designation_id})">
                                 <i class="bx bx-trash-alt"></i>
                             </button>
+                        <?php endif; ?>
                         `;
                 }
             }

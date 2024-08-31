@@ -14,7 +14,7 @@ class ModulesModel extends FunctionModel
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields = ['module_id', 'module_code', 'module_name', 'created_at', 'updated_at'];
+    protected $allowedFields = ['module_id', 'module_code', 'module_name', 'is_dashboard', 'created_at', 'updated_at'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -58,7 +58,9 @@ class ModulesModel extends FunctionModel
         $this->select('
             modules.module_id,
             modules.module_name,
+            IFNULL(modules.is_dashboard, 0) as is_dashboard,
             IFNULL(role_modules.dashboard, 0) as dashboard,
+            IFNULL(role_modules.is_primary_dashboard, 0) as is_primary_dashboard,
             IFNULL(role_modules.master_view, 0) as master_view,
             IFNULL(role_modules.master_create, 0) as master_create,
             IFNULL(role_modules.master_edit, 0) as master_edit,

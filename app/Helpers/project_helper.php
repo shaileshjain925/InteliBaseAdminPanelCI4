@@ -3,35 +3,6 @@
 
 use PhpOffice\PhpSpreadsheet\Calculation\Logical\Boolean;
 
-enum UserType: string
-{
-    case SuperAdmin = 'super_admin';
-    case Admin = 'admin';
-    case SalesManager = 'staff';
-    case SalesExecutive = 'sales_executive';
-    case Purchase = 'purchase';
-    case Finance = 'finance';
-    case CRM = 'crm';
-}
-
-function checkUserType($user_type = null): bool
-{
-    if (!empty($user_type)) {
-        $result = (isset($_SESSION['user_type']) && $_SESSION['user_type'] == $user_type) ? true : false;
-    } else {
-        $result =  (isset($_SESSION['user_type']) && !empty($_SESSION['user_type'])) ? true : false;
-    }
-    return $result;
-}
-function getUserType(): string|null
-{
-    $result = (isset($_SESSION['user_type']) && !empty($_SESSION['user_type'])) ? $_SESSION['user_type'] : null;
-    return $result;
-}
-function UserTypeInList($user_type_array)
-{
-    return in_array(getUserType(), $user_type_array);
-}
 function CreateUpdateAlias($variable)
 {
     return (empty($variable)) ? "Create" : "Update";
@@ -66,12 +37,46 @@ function check_module_access(string $module_code): bool
         return in_array($module_code, $module_codes);
     }
 }
+function check_dashboard_access($module_code = null)
+{
+
+    if ($_SESSION['user_type'] == 'super_admin' || $_SESSION['user_type'] == 'admin') {
+        return ($module_code != 'starter') ? true : false;
+    }
+    $modules = isset($_SESSION['_access_rights']['modules']) ? $_SESSION['_access_rights']['modules'] : null;
+    if (empty($modules)) {
+        return ($module_code == 'starter') ? true : false;
+    } else {
+        foreach ($modules as $key => $module) {
+            if ($module_code == $module['module_code'] && $module['is_primary_dashboard'] == 1) {
+                return true;
+            }
+        }
+        return ($module_code == 'starter') ? true : false;
+    }
+}
+
 function check_menu_access(string $menu_code, $access_type): bool
 {
     if ($_SESSION['user_type'] == 'super_admin') {
         return true;
+    } else {
+        if (empty($menu_code)) {
+            return ($_SESSION['user_type'] == 'super_admin' || $_SESSION['user_type'] == 'admin') ? true : false;
+        } else {
+            $module_menus = isset($_SESSION['_access_rights']['module_menus']) ? $_SESSION['_access_rights']['module_menus'] : null;
+            if (empty($module_menus)) {
+                return false;
+            } else {
+                foreach ($module_menus as $key => $menus) {
+                    if ($menu_code == $menus['menu_code'] && isset($menus[$access_type]) && $menus[$access_type] == 1) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
     }
-    return true;
 }
 function back_date_view_access(string $menu_code, $date_required = false): string|int|null
 {
@@ -86,6 +91,14 @@ function back_date_edit_access(string $menu_code, $date_required = false): strin
         return null;
     }
     return null;
+}
+function getUserIds(bool $encode_json = false): string|array|null
+{
+    if ($encode_json) {
+        return json_encode($_SESSION['_access_rights']['user_ids'] ?? []);
+    } else {
+        return $_SESSION['_access_rights']['user_ids'];
+    }
 }
 function get_data_access($access_type): array|null
 {

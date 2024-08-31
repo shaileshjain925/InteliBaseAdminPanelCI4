@@ -11,9 +11,11 @@
                 <a href="<?= @$_previous_path ?>">
                     <button class="btn export_btn me-3" type="button"><i class="fas fa-backward"></i></button>
                 </a>
-                <a href="<?= base_url(route_to('state_create_update_page')) ?>">
-                    <button class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add State</button>
-                </a>
+                <?php if (check_menu_access('STATES', 'create')): ?>
+                    <a href="<?= base_url(route_to('state_create_update_page')) ?>">
+                        <button class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add State</button>
+                    </a>
+                <?php endif; ?>
             </div>
             <div class="table-responsive">
                 <table id="state_table" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle"></table>
@@ -23,32 +25,37 @@
 </div>
 
 <script>
+    var datatable_export = '<?= (check_menu_access('STATES', 'export')) ?>';
+    var datatable_print = '<?= (check_menu_access('STATES', 'print')) ?>';
+    var print_allowed = '<?= (check_menu_access('STATES', 'print')) ?>';
+
     var DeleteApiUrl = "<?= base_url(route_to('state_delete_api')) ?>"
 
-function state_delete(state_id) {
-    deleteRow({
-            "state_id": state_id
-        }).then((response) => {
-            fetchData()
-        })
-        .catch((error) => {
-            console.error("Deletion failed or cancelled:", error);
-        });
-}
+    function state_delete(state_id) {
+        deleteRow({
+                "state_id": state_id
+            }).then((response) => {
+                fetchData()
+            })
+            .catch((error) => {
+                console.error("Deletion failed or cancelled:", error);
+            });
+    }
 
-function state_view(state_id) {
-    $.ajax({
-        type: "post",
-        url: "<?= base_url(route_to('state_view_component')) ?>",
-        data: {
-            state_id: state_id
-        },
-        success: function(response) {
-            $("#right_floating_div").html("");
-            $("#right_floating_div").html(response);
-        }
-    });
-}
+    function state_view(state_id) {
+        $.ajax({
+            type: "post",
+            url: "<?= base_url(route_to('state_view_component')) ?>",
+            data: {
+                state_id: state_id
+            },
+            success: function(response) {
+                $("#right_floating_div").html("");
+                $("#right_floating_div").html(response);
+            }
+        });
+    }
+
     function successCallback(response) {
         if (response.status == 200 || response.status == 201) {
             $(".offcanvas button[data-bs-dismiss='offcanvas']").click();
@@ -91,14 +98,17 @@ function state_view(state_id) {
                             <button class="text-white btn btn-sm btn-info" onclick="state_view(${row.state_id})" data-bs-toggle="offcanvas" data-bs-target="#right_floating_div" aria-controls="right_floating_div">
                                 <i class="fa fa-eye"></i>
                             </button>
-                            
-                            <a href="<?= base_url(route_to('state_create_update_page')) ?>/${row.state_id}" class="text-white btn btn-sm btn-success">
+                            <?php if (check_menu_access('STATES', 'edit')): ?>
+                                <a href="<?= base_url(route_to('state_create_update_page')) ?>/${row.state_id}" class="text-white btn btn-sm btn-success">
                                 <i class="bx bx-edit-alt"></i>
-                            </a>
-                            <button class="text-white btn btn-sm btn-danger" onclick="state_delete(${row.state_id})">
-                                <i class="bx bx-trash-alt"></i>
-                            </button>
-                        `;
+                                </a>
+                             <?php endif; ?>
+                            <?php if (check_menu_access('STATES', 'delete')): ?>
+                                <button class="text-white btn btn-sm btn-danger" onclick="state_delete(${row.state_id})">
+                                    <i class="bx bx-trash-alt"></i>
+                                </button>
+                            <?php endif; ?>
+    `;
                 }
             }
         ];

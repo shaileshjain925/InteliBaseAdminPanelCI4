@@ -11,9 +11,11 @@
                 <a href="<?= @$_previous_path ?>">
                     <button class="btn export_btn me-3" type="button"><i class="fas fa-backward"></i></button>
                 </a>
-                <a href="<?= base_url(route_to('group_create_update_page')) ?>">
-                    <button class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add Group</button>
-                </a>
+                <?php if (check_menu_access('GROUP', 'create')): ?>
+                    <a href="<?= base_url(route_to('group_create_update_page')) ?>">
+                        <button class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add Group</button>
+                    </a>
+                <?php endif; ?>
             </div>
             <div class="table-responsive">
                 <table id="group_table" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle"></table>
@@ -23,32 +25,36 @@
 </div>
 
 <script>
-     var DeleteApiUrl = "<?= base_url(route_to('group_delete_api')) ?>"
+    var datatable_export = '<?= (check_menu_access('GROUP', 'export')) ?>';
+    var datatable_print = '<?= (check_menu_access('GROUP', 'print')) ?>';
+    var print_allowed = '<?= (check_menu_access('GROUP', 'print')) ?>';
+    var DeleteApiUrl = "<?= base_url(route_to('group_delete_api')) ?>"
 
-function group_delete(group_id) {
-    deleteRow({
-            "group_id": group_id
-        }).then((response) => {
-            fetchTableData()
-        })
-        .catch((error) => {
-            console.error("Deletion failed or cancelled:", error);
+    function group_delete(group_id) {
+        deleteRow({
+                "group_id": group_id
+            }).then((response) => {
+                fetchTableData()
+            })
+            .catch((error) => {
+                console.error("Deletion failed or cancelled:", error);
+            });
+    }
+
+    function group_view(group_id) {
+        $.ajax({
+            type: "post",
+            url: "<?= base_url(route_to('group_view_component')) ?>",
+            data: {
+                group_id: group_id
+            },
+            success: function(response) {
+                $("#right_floating_div").html("");
+                $("#right_floating_div").html(response);
+            }
         });
-}
+    }
 
-function group_view(group_id) {
-    $.ajax({
-        type: "post",
-        url: "<?= base_url(route_to('group_view_component')) ?>",
-        data: {
-            group_id: group_id
-        },
-        success: function(response) {
-            $("#right_floating_div").html("");
-            $("#right_floating_div").html(response);
-        }
-    });
-}
     function successCallback(response) {
         if (response.status == 200 || response.status == 201) {
             $(".offcanvas button[data-bs-dismiss='offcanvas']").click();
@@ -64,7 +70,7 @@ function group_view(group_id) {
         var columns = [{
                 title: "ID",
                 data: "group_id",
-    
+
             },
             {
                 title: "Group Name",
@@ -86,17 +92,20 @@ function group_view(group_id) {
                             <button class="text-white btn btn-sm btn-info" onclick="group_view(${row.group_id})" data-bs-toggle="offcanvas" data-bs-target="#right_floating_div" aria-controls="right_floating_div">
                                 <i class="fa fa-eye"></i>
                             </button>
-                            
-                            <a href="<?= base_url(route_to('group_create_update_page')) ?>/${row.group_id}" class="text-white btn btn-sm btn-success">
+                            <?php if (check_menu_access('GROUP', 'edit')): ?>
+                                <a href="<?= base_url(route_to('group_create_update_page')) ?>/${row.group_id}" class="text-white btn btn-sm btn-success">
                                 <i class="bx bx-edit-alt"></i>
-                            </a>
-                            <button class="text-white btn btn-sm btn-danger" onclick="group_delete(${row.group_id})">
+                                </a>
+                            <?php endif; ?>
+                            <?php if (check_menu_access('GROUP', 'delete')): ?>
+                                <button class="text-white btn btn-sm btn-danger" onclick="group_delete(${row.group_id})">
                                 <i class="bx bx-trash-alt"></i>
-                            </button>
+                                </button>
+                            <?php endif; ?>
                         `;
                 }
             }
-           
+
         ];
         if (response.status == 200) {
             return {

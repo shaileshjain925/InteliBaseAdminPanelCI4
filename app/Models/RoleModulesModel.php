@@ -15,8 +15,8 @@ class RoleModulesModel extends FunctionModel
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields = ['role_module_id', 'role_id', 'module_id', 'dashboard', 'master_view', 'master_create', 'master_edit', 'master_approval', 'master_delete', 'master_print', 'master_export', 'master_bulk_delete', 'transaction_view', 'transaction_create', 'transaction_edit', 'transaction_approval', 'transaction_delete', 'transaction_print', 'transaction_export', 'transaction_bulk_delete', 'report_view', 'report_print', 'report_export', 'config_view', 'created_at', 'updated_at'];
-    protected $booleanFields = ['dashboard', 'master_view', 'master_create', 'master_edit', 'master_approval', 'master_delete', 'master_print', 'master_export', 'master_bulk_delete', 'transaction_view', 'transaction_create', 'transaction_edit', 'transaction_approval', 'transaction_delete', 'transaction_print', 'transaction_export', 'transaction_bulk_delete', 'report_view', 'report_print', 'report_export', 'config_view'];
+    protected $allowedFields = ['role_module_id', 'role_id', 'module_id', 'dashboard', 'is_primary_dashboard', 'master_view', 'master_create', 'master_edit', 'master_approval', 'master_delete', 'master_print', 'master_export', 'master_bulk_delete', 'transaction_view', 'transaction_create', 'transaction_edit', 'transaction_approval', 'transaction_delete', 'transaction_print', 'transaction_export', 'transaction_bulk_delete', 'report_view', 'report_print', 'report_export', 'config_view', 'created_at', 'updated_at'];
+    protected $booleanFields = ['dashboard', 'is_primary_dashboard', 'master_view', 'master_create', 'master_edit', 'master_approval', 'master_delete', 'master_print', 'master_export', 'master_bulk_delete', 'transaction_view', 'transaction_create', 'transaction_edit', 'transaction_approval', 'transaction_delete', 'transaction_print', 'transaction_export', 'transaction_bulk_delete', 'report_view', 'report_print', 'report_export', 'config_view'];
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
 
@@ -51,7 +51,7 @@ class RoleModulesModel extends FunctionModel
         parent::__construct();
         if ($joinRequired) {
             $this->addParentJoin('role_id', $this->get_roles_model(), 'left', ['role_name']);
-            $this->addParentJoin('module_id', $this->get_modules_model(), 'left', ['module_name','module_code']);
+            $this->addParentJoin('module_id', $this->get_modules_model(), 'left', ['module_name', 'module_code', 'is_dashboard']);
         }
     }
 }

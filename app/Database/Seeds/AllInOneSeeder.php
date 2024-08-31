@@ -4619,32 +4619,33 @@ class AllInOneSeeder extends Seeder
     protected function modules_data()
     {
         $modules_data = [
-            ['module_id' => 1, 'module_code' => 'ONE_TIME_SETUP', 'module_name' => 'One Time Setting', 'menus' => [
-                ['module_menu_id' => 101, 'menu_code' => 'COUNTRIES', 'menu_name' => 'Countries', 'menu_type' => 'report'],
+            ['module_id' => 1, 'module_code' => 'ONE_TIME_SETUP', 'module_name' => 'One Time Setting', 'is_dashboard' => false, 'menus' => [
+                ['module_menu_id' => 101, 'menu_code' => 'COUNTRIES', 'menu_name' => 'Countries', 'menu_type' => 'master'],
                 ['module_menu_id' => 102, 'menu_code' => 'STATE', 'menu_name' => 'State', 'menu_type' => 'master'],
                 ['module_menu_id' => 103, 'menu_code' => 'CITIES', 'menu_name' => 'Cities', 'menu_type' => 'master'],
+                ['module_menu_id' => 104, 'menu_code' => 'LOG', 'menu_name' => 'Log', 'menu_type' => 'report'],
             ]],
-            ['module_id' => 3, 'module_code' => 'STAFF_MANAGEMENT', 'module_name' => 'Staff Management', 'menus' => [
+            ['module_id' => 3, 'module_code' => 'STAFF_MANAGEMENT', 'module_name' => 'Staff Management', 'is_dashboard' => true, 'menus' => [
                 ['module_menu_id' => 301, 'menu_code' => 'DESIGNATIONS', 'menu_name' => 'Designation', 'menu_type' => 'master'],
                 ['module_menu_id' => 302, 'menu_code' => 'ROLES', 'menu_name' => 'Roles', 'menu_type' => 'master'],
                 ['module_menu_id' => 303, 'menu_code' => 'STAFF', 'menu_name' => 'Staff', 'menu_type' => 'master'],
                 ['module_menu_id' => 304, 'menu_code' => 'ROLESMODULENEMUACCESS', 'menu_name' => 'Role Module & Menu Access', 'menu_type' => 'config'],
                 ['module_menu_id' => 305, 'menu_code' => 'USERDATAACCESS', 'menu_name' => 'User Data Access', 'menu_type' => 'config'],
             ]],
-            ['module_id' => 4, 'module_code' => 'INVENTORY', 'module_name' => 'Inventory', 'menus' => [
+            ['module_id' => 4, 'module_code' => 'INVENTORY', 'module_name' => 'Inventory', 'is_dashboard' => true, 'menus' => [
                 ['module_menu_id' => 401, 'menu_code' => 'CATEGORY', 'menu_name' => 'Category', 'menu_type' => 'transaction'],
                 ['module_menu_id' => 402, 'menu_code' => 'GROUPTYPE', 'menu_name' => 'Group Type', 'menu_type' => 'transaction'],
                 ['module_menu_id' => 403, 'menu_code' => 'GROUP', 'menu_name' => 'Group', 'menu_type' => 'transaction'],
             ]],
-            ['module_id' => 5, 'module_code' => 'PURCHASE', 'module_name' => 'Purchase'],
-            ['module_id' => 6, 'module_code' => 'SALES', 'module_name' => 'Sales'],
-            ['module_id' => 7, 'module_code' => 'FINANCE', 'module_name' => 'Finance'],
-            ['module_id' => 8, 'module_code' => 'CRM', 'module_name' => 'CRM'],
-            ['module_id' => 9, 'module_code' => 'PART_MAINTENANCE', 'module_name' => 'Product Maintenance'],
-            ['module_id' => 10, 'module_code' => 'HR', 'module_name' => 'HR'],
-            ['module_id' => 11, 'module_code' => 'SCM', 'module_name' => 'SCM'],
-            ['module_id' => 12, 'module_code' => 'WH', 'module_name' => 'Warehouse'],
-            ['module_id' => 13, 'module_code' => 'LOGISTICS', 'module_name' => 'Logistics'],
+            ['module_id' => 5, 'module_code' => 'PURCHASE', 'module_name' => 'Purchase', 'is_dashboard' => true],
+            ['module_id' => 6, 'module_code' => 'SALES', 'module_name' => 'Sales', 'is_dashboard' => true],
+            ['module_id' => 7, 'module_code' => 'FINANCE', 'module_name' => 'Finance', 'is_dashboard' => true],
+            ['module_id' => 8, 'module_code' => 'CRM', 'module_name' => 'CRM', 'is_dashboard' => true],
+            ['module_id' => 9, 'module_code' => 'PART_MAINTENANCE', 'module_name' => 'Product Maintenance', 'is_dashboard' => true],
+            ['module_id' => 10, 'module_code' => 'HR', 'module_name' => 'HR', 'is_dashboard' => true],
+            ['module_id' => 11, 'module_code' => 'SCM', 'module_name' => 'SCM', 'is_dashboard' => true],
+            ['module_id' => 12, 'module_code' => 'WH', 'module_name' => 'Warehouse', 'is_dashboard' => true],
+            ['module_id' => 13, 'module_code' => 'LOGISTICS', 'module_name' => 'Logistics', 'is_dashboard' => true],
         ];
         return $modules_data;
     }
