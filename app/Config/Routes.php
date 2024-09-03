@@ -14,7 +14,7 @@ $extensions = ['js', 'css', 'img', 'map', 'jpg', 'jpeg', 'png', 'gif', 'webp', '
 // Extract file extension using pathinfo
 $file_extension = pathinfo($php_self, PATHINFO_EXTENSION);
 function encodeArray($array)
-{
+{ 
     $serializedArray = serialize($array);
     return urlencode($serializedArray);
 }
