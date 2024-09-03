@@ -122,7 +122,8 @@ nb-configuration.xml
 
 # Visual Studio Code
 .vscode/
-
+# Ovi Panel
+.ovi-knowns/
 /results/
 /phpunit*.xml
 /.phpunit.*.cache
