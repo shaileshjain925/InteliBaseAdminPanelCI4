@@ -359,83 +359,109 @@ class AdminApiController extends BaseController
     {
         return $this->api_list($this->get_logs_model());
     }
-    // GroupType -------------------------------------------------------------------------------------------------------
+    // ItemBrands -------------------------------------------------------------------------------------------------------
     /** */
-    public function group_type_get_api()
+    public function item_brand_get_api()
     {
-        return $this->api_get($this->get_group_type_model());
+        return $this->api_get($this->get_item_brand_model());
     }
     /** */
-    public function group_type_list_api()
+    public function item_brand_list_api()
     {
-        return $this->api_list($this->get_group_type_model());
+        return $this->api_list($this->get_item_brand_model());
     }
     /** */
-    public function group_type_create_api()
+    public function item_brand_create_api()
     {
-        return $this->api_create($this->get_group_type_model());
+        return $this->api_create($this->get_item_brand_model());
     }
     /** */
-    public function group_type_update_api()
+    public function item_brand_update_api()
     {
-        return $this->api_update($this->get_group_type_model());
+        return $this->api_update($this->get_item_brand_model());
     }
     /** */
-    public function group_type_delete_api()
+    public function item_brand_delete_api()
     {
-        return $this->api_delete($this->get_group_type_model());
+        return $this->api_delete($this->get_item_brand_model());
+    }
+    // ItemGroups -------------------------------------------------------------------------------------------------------
+    /** */
+    public function item_group_get_api()
+    {
+        return $this->api_get($this->get_item_group_model());
+    }
+    /** */
+    public function item_group_list_api()
+    {
+        return $this->api_list($this->get_item_group_model());
+    }
+    /** */
+    public function item_group_create_api()
+    {
+        return $this->api_create($this->get_item_group_model());
+    }
+    /** */
+    public function item_group_update_api()
+    {
+        return $this->api_update($this->get_item_group_model());
+    }
+    /** */
+    public function item_group_delete_api()
+    {
+        return $this->api_delete($this->get_item_group_model());
     }
     // Group -------------------------------------------------------------------------------------------------------
     /** */
-    public function group_get_api()
+    public function item_sub_group_get_api()
     {
-        return $this->api_get($this->get_group_model());
+        return $this->api_get($this->get_item_sub_group_model());
     }
     /** */
-    public function group_list_api()
+    public function item_sub_group_list_api()
     {
-        return $this->api_list($this->get_group_model());
+        return $this->api_list($this->get_item_sub_group_model());
     }
     /** */
-    public function group_create_api()
+    public function item_sub_group_create_api()
     {
-        return $this->api_create($this->get_group_model());
+        return $this->api_create($this->get_item_sub_group_model());
     }
     /** */
-    public function group_update_api()
+    public function item_sub_group_update_api()
     {
-        return $this->api_update($this->get_group_model());
+        return $this->api_update($this->get_item_sub_group_model());
     }
     /** */
-    public function group_delete_api()
+    public function item_sub_group_delete_api()
     {
-        return $this->api_delete($this->get_group_model());
+        return $this->api_delete($this->get_item_sub_group_model());
     }
-    // Category -------------------------------------------------------------------------------------------------------
+    // ItemCategory -------------------------------------------------------------------------------------------------------
     /** */
-    public function category_get_api()
+    public function item_category_get_api()
     {
-        return $this->api_get($this->get_category_model());
-    }
-    /** */
-    public function category_list_api()
-    {
-        return $this->api_list($this->get_category_model());
+        return $this->api_get($this->get_item_category_model());
     }
     /** */
-    public function category_create_api()
+    public function item_category_list_api()
     {
-        return $this->api_create($this->get_category_model());
+        return $this->api_list($this->get_item_category_model());
     }
     /** */
-    public function category_update_api()
+    public function item_category_create_api()
     {
-        return $this->api_update($this->get_category_model());
+        return $this->api_create($this->get_item_category_model());
     }
     /** */
-    public function category_delete_api()
+    public function item_category_update_api()
     {
-        return $this->api_delete($this->get_category_model());
+        return $this->api_update($this->get_item_category_model());
+    }
+    /** */
+    public function item_category_delete_api()
+    {
+        return $this->api_delete($this->get_item_category_model());
     }
     // Business Types -------------------------------------------------------------------------------------------------------
     /** */
@@ -604,7 +630,7 @@ class AdminApiController extends BaseController
         // Define validation rules for 'username', 'password', 'confirm-password', 'otp'
         $validation->setRules([
             'file' => "required",
-            'for' => "in_list[user,group_type,group]",
+            'for' => "in_list[user,item_brand,item_group,item_sub_group]",
         ]);
         if ($validation->run($requestedData) === false) {
             // Return validation failed response
@@ -622,11 +648,14 @@ class AdminApiController extends BaseController
             case 'user':
                 $folderPath .= "uploads/user/";
                 break;
-            case 'group_type':
-                $folderPath .= "uploads/group_type/";
+            case 'item_brand':
+                $folderPath .= "uploads/item_brand/";
                 break;
-            case 'group':
-                $folderPath .= "uploads/group/";
+            case 'item_group':
+                $folderPath .= "uploads/item_group/";
+                break;
+            case 'item_sub_group':
+                $folderPath .= "uploads/item_sub_group/";
                 break;
         }
         $errorMessage = "";

@@ -4,48 +4,53 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class GroupType extends Migration
+class ItemSubGroups extends Migration
 {
     public function up()
     {
         $this->forge->addField([
-            'group_type_id' => [
+            'item_sub_group_id' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
-            'group_type_name' => [
+            'item_sub_group_name' => [
                 'type' => 'VARCHAR',
                 'constraint' => 255,
             ],
-            'group_type_description' => [
+            'item_group_id' => [
+                'type' => 'INT',
+                'constraint' => 11,
+                'unsigned' => true,
+            ],
+            'item_sub_group_description' => [
                 'type' => 'TEXT',
                 'NULL' => true
             ],
-            'group_type_code' => [
+            'item_sub_group_code' => [
                 'type' => 'VARCHAR',
                 'constraint' => 255,
             ],
-            'group_type_image' => [
+            'item_sub_group_image' => [
                 'type' => 'VARCHAR',
                 'constraint' => 255,
             ],
-        
-            'is_active' => [
+            'item_sub_group_is_active' => [
                 'type' => 'BOOLEAN',
                 'default' => true,
             ],
             'created_at datetime default current_timestamp',
             'updated_at datetime default current_timestamp on update current_timestamp',
         ]);
-        $this->forge->addPrimaryKey('group_type_id');
-        $this->forge->addUniqueKey('group_type_name');
-        $this->forge->createTable('group_types', true);
+
+        $this->forge->addPrimaryKey('item_sub_group_id');
+        $this->forge->addForeignKey('item_group_id', 'item_groups', 'item_group_id', 'CASCADE', 'CASCADE');
+        $this->forge->createTable('item_sub_groups', true);
     }
 
     public function down()
     {
-        $this->forge->dropTable('group_types', true);
+        $this->forge->dropTable('item_sub_groups', true);
     }
 }

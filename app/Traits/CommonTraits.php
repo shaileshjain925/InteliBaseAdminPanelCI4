@@ -14,12 +14,13 @@ use App\Models\RoleModuleMenusModel;
 use App\Models\RoleModulesModel;
 use App\Models\RolesModel;
 use App\Models\LogsModel;
-use App\Models\GroupTypeModel;
-use App\Models\GroupModel;
 use App\Models\UserDataAccessModel;
 use App\Models\BusinessTypeModel;
+use App\Models\ItemBrandsModel;
+use App\Models\ItemCategoriesModel;
+use App\Models\ItemGroupsModel;
+use App\Models\ItemSubGroupsModel;
 
-use App\Models\CategoryModel;
 trait CommonTraits
 {
     /**
@@ -118,21 +119,29 @@ trait CommonTraits
     {
         return new LogsModel(...$variable);
     }
- /**
+    /**
      * Return Model Instance
-     * @return GroupTypeModel
+     * @return ItemBrandsModel
      */
-    public static function get_group_type_model(...$variable)
+    public static function get_item_brand_model(...$variable)
     {
-        return new GroupTypeModel(...$variable);
+        return new ItemBrandsModel(...$variable);
     }
     /**
      * Return Model Instance
-     * @return GroupModel
+     * @return ItemGroupsModel
      */
-    public static function get_group_model(...$variable)
+    public static function get_item_group_model(...$variable)
     {
-        return new GroupModel(...$variable);
+        return new ItemGroupsModel(...$variable);
+    }
+    /**
+     * Return Model Instance
+     * @return ItemSubGroupsModel
+     */
+    public static function get_item_sub_group_model(...$variable)
+    {
+        return new ItemSubGroupsModel(...$variable);
     }
     /**
      * Return Model Instance
@@ -142,14 +151,14 @@ trait CommonTraits
     {
         return new UserDataAccessModel(...$variable);
     }
-    
-      /**
+
+    /**
      * Return Model Instance
-     * @return CategoryModel
+     * @return ItemCategoriesModel
      */
-    public static function get_category_model(...$variable)
+    public static function get_item_category_model(...$variable)
     {
-        return new CategoryModel(...$variable);
+        return new ItemCategoriesModel(...$variable);
     }
 
     /**
@@ -160,5 +169,4 @@ trait CommonTraits
     {
         return new BusinessTypeModel(...$variable);
     }
-
 }

@@ -2,20 +2,21 @@
 
 namespace App\Models;
 
-use CodeIgniter\Model;
+use App\Models\FunctionModel;
 use App\Traits\CommonTraits;
 
-class CategoryModel extends FunctionModel
+class ItemCategoriesModel extends FunctionModel
 {
     use CommonTraits;
 
-    protected $table            = 'categories';
-    protected $primaryKey       = 'category_id';
+    protected $table            = 'item_categories';
+    protected $primaryKey       = 'item_category_id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['category_id', 'category_name'];
+    protected $allowedFields    = ['item_category_id', 'item_category_name'];
+    protected $messageAlias = 'Item Category';
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -32,10 +33,15 @@ class CategoryModel extends FunctionModel
 
     // Validation
     protected $validationRules      = [
-        'category_id' => "permit_empty",
-        'category_name' => "required",
+        'item_category_id' => "permit_empty",
+        'item_category_name' => "required|is_unique[item_categories.item_category_name,item_category_id,{item_category_id}]",
     ];
-    protected $validationMessages   = [];
+    protected $validationMessages   = [
+        'item_category_name' => [
+            'required'   => "Category Name is required.",
+            'is_unique'  => "Category Name already exists.",
+        ],
+    ];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 

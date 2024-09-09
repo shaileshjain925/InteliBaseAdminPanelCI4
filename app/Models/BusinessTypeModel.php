@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use CodeIgniter\Model;
+use App\Models\FunctionModel;
 use App\Traits\CommonTraits;
+
 class BusinessTypeModel extends FunctionModel
 {
     use CommonTraits;
@@ -13,7 +14,7 @@ class BusinessTypeModel extends FunctionModel
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['business_type_id','business_type_name'];
+    protected $allowedFields    = ['business_type_id', 'business_type_name'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -30,7 +31,7 @@ class BusinessTypeModel extends FunctionModel
 
     // Validation
     protected $validationRules      = [
-         "business_type_id" => "permit_empty",
+        "business_type_id" => "permit_empty",
         "business_type_name" => "required|is_unique[business_types.business_type_name,business_type_id,{business_type_id}]"
     ];
     protected $validationMessages   = [];

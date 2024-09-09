@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use CodeIgniter\Model;
+use App\Models\FunctionModel;
 use App\Traits\CommonTraits;
+
 class UserDataAccessModel extends FunctionModel
 {
     use CommonTraits;
@@ -13,7 +14,7 @@ class UserDataAccessModel extends FunctionModel
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['user_data_access_id','user_data_access_type','user_id','record_id'];
+    protected $allowedFields    = ['user_data_access_id', 'user_data_access_type', 'user_id', 'record_id'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -51,5 +52,4 @@ class UserDataAccessModel extends FunctionModel
             $this->addParentJoin('user_id', $this->get_users_model(), 'left', ['user_name']);
         }
     }
-
 }

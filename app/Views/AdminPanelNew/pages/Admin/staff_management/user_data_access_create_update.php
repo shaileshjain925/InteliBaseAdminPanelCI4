@@ -34,12 +34,12 @@
     $(document).ready(function() {
         var groups_api_parameter = {
             "_autojoin": "Y",
-            "_select": "*,CONCAT(group.group_name,' (',group_type.group_type_name,')') as group_name_with_group_type"
+            "_select": "*,CONCAT(group.group_name,' (',item_group.item_group_name,')') as group_name_with_item_group"
         };
         initializeSelectize('groups', {
                 placeholder: "Select Groups"
-            }, "<?= base_url(route_to('group_list_api')) ?>", groups_api_parameter, "group_id", "group_name_with_group_type",
-            selected_groups, 'group_type_name')
+            }, "<?= base_url(route_to('group_list_api')) ?>", groups_api_parameter, "group_id", "group_name_with_item_group",
+            selected_groups, 'item_group_name')
 
        
     });

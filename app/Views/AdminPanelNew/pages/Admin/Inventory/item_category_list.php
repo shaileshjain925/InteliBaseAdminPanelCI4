@@ -11,8 +11,8 @@
                 <a href="<?= @$_previous_path ?>">
                     <button class="btn export_btn me-3" type="button"><i class="fas fa-backward"></i></button>
                 </a>
-                <?php if (check_menu_access('CATEGORY', 'create')): ?>
-                    <button onclick="OpenCreateUpdateCategoryInSweetAlert('', onSuccess, onFail)" class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add Category</button>
+                <?php if (check_menu_access('ITEM_CATEGORY', 'create')): ?>
+                    <button onclick="OpenCreateUpdateItemCategoryInSweetAlert('', onSuccess, onFail)" class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add Item Category</button>
                 <?php endif; ?>
             </div>
             <div class="table-responsive">
@@ -22,31 +22,31 @@
     </div>
 </div>
 <script>
-    var datatable_export = '<?= (check_menu_access('CATEGORY', 'export')) ?>';
-    var datatable_print = '<?= (check_menu_access('CATEGORY', 'print')) ?>';
-    var print_allowed = '<?= (check_menu_access('CATEGORY', 'print')) ?>';
-    var DeleteApiUrl = "<?= base_url(route_to('category_delete_api')) ?>";
+    var datatable_export = '<?= (check_menu_access('ITEM_CATEGORY', 'export')) ?>';
+    var datatable_print = '<?= (check_menu_access('ITEM_CATEGORY', 'print')) ?>';
+    var print_allowed = '<?= (check_menu_access('ITEM_CATEGORY', 'print')) ?>';
+    var DeleteApiUrl = "<?= base_url(route_to('item_category_delete_api')) ?>";
 
-    function OpenCreateUpdateCategoryInSweetAlert(category_name = '', onSuccess, onFail, category_id = '') {
+    function OpenCreateUpdateItemCategoryInSweetAlert(item_category_name = '', onSuccess, onFail, item_category_id = '') {
         Swal.fire({
-            title: category_id ? 'Update category' : 'Create category',
+            title: item_category_id ? 'Update item_category' : 'Create item_category',
             html: `
-            <form id="categoryForm" class="mb-3">
+            <form id="item_categoryForm" class="mb-3">
                 <div class="mb-3">
-                    <label for="category_name" class="form-label">Category Name</label>
-                    <input type="text" class="form-control" id="category_name" value="${category_name}" required>
+                    <label for="item_category_name" class="form-label">Item Category Name</label>
+                    <input type="text" class="form-control" id="item_category_name" value="${item_category_name}" required>
                 </div>
-                <input type="hidden" id="category_id" value="${category_id}">
+                <input type="hidden" id="item_category_id" value="${item_category_id}">
             </form>
         `,
             showCancelButton: true,
-            confirmButtonText: category_id ? 'Update' : 'Create',
+            confirmButtonText: item_category_id ? 'Update' : 'Create',
             preConfirm: () => {
-                const category_name = document.getElementById('category_name').value;
-                if (!category_name) return Swal.showValidationMessage('Enter category name');
+                const item_category_name = document.getElementById('item_category_name').value;
+                if (!item_category_name) return Swal.showValidationMessage('Enter item_category name');
                 return {
-                    category_name,
-                    category_id: document.getElementById('category_id').value
+                    item_category_name,
+                    item_category_id: document.getElementById('item_category_id').value
                 };
             }
         }).then((result) => {
@@ -55,9 +55,9 @@
         });
     }
 
-    function category_delete(category_id) {
+    function item_category_delete(item_category_id) {
         deleteRow({
-                "category_id": category_id
+                "item_category_id": item_category_id
             }).then((response) => {
                 fetchData()
             })
@@ -69,8 +69,8 @@
 
     function dataTableSuccessCallBack(response) {
         var columns = [{
-                title: "Category name",
-                data: "category_name",
+                title: "Item Category name",
+                data: "item_category_name",
                 visible: true,
             },
             {
@@ -78,13 +78,13 @@
                 "data": null,
                 "render": function(data, type, row) {
                     return `
-                    <?php if (check_menu_access('CATEGORY', 'edit')): ?>
-                            <button class="text-white btn btn-sm btn-success" onclick="OpenCreateUpdateCategoryInSweetAlert('${row.category_name}', onSuccess, onFail, '${row.category_id}')">
+                    <?php if (check_menu_access('ITEM_CATEGORY', 'edit')): ?>
+                            <button class="text-white btn btn-sm btn-success" onclick="OpenCreateUpdateItemCategoryInSweetAlert('${row.item_category_name}', onSuccess, onFail, '${row.item_category_id}')">
                                 <i class="bx bx-edit-alt"></i>
                             </button>
                     <?php endif; ?>
-                    <?php if (check_menu_access('CATEGORY', 'delete')): ?>
-                            <button class="text-white btn btn-sm btn-danger" onclick="category_delete(${row.category_id})">
+                    <?php if (check_menu_access('ITEM_CATEGORY', 'delete')): ?>
+                            <button class="text-white btn btn-sm btn-danger" onclick="item_category_delete(${row.item_category_id})">
                                 <i class="bx bx-trash-alt"></i>
                             </button>
                     <?php endif; ?>
@@ -112,23 +112,23 @@
     filter._select = "*";
 
     function fetchData() {
-        DataTableInitialized('table', '<?= base_url(route_to('category_list_api')) ?>', "POST", filter, dataTableSuccessCallBack, {})
+        DataTableInitialized('table', '<?= base_url(route_to('item_category_list_api')) ?>', "POST", filter, dataTableSuccessCallBack, {})
     }
 
     function onSuccess(data) {
-        var category_create_update_api_url = data.category_id ?
-            "<?= base_url(route_to('category_update_api')) ?>" :
-            "<?= base_url(route_to('category_create_api')) ?>";
+        var item_category_create_update_api_url = data.item_category_id ?
+            "<?= base_url(route_to('item_category_update_api')) ?>" :
+            "<?= base_url(route_to('item_category_create_api')) ?>";
         debugger;
-        if (!data.category_id) {
+        if (!data.item_category_id) {
             data = {
-                "category_name": data.category_name
+                "item_category_name": data.item_category_name
             };
         }
 
         $.ajax({
             type: "POST",
-            url: category_create_update_api_url,
+            url: item_category_create_update_api_url,
             data: data, // Assuming data is a plain object, jQuery will handle serialization
             success: function(response) {
                 if (response.status === 200 || response.status === 201) {
