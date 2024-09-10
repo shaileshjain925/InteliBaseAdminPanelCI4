@@ -11,29 +11,28 @@
                 <a href="<?= @$_previous_path ?>">
                     <button class="btn export_btn me-3" type="button"><i class="fas fa-backward"></i></button>
                 </a>
-                <?php if (check_menu_access('GROUP', 'create')): ?>
-                    <a href="<?= base_url(route_to('group_create_update_page')) ?>">
-                        <button class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add Group</button>
+                <?php if (check_menu_access('GROUPTYPE', 'create')): ?>
+                    <a href="<?= base_url(route_to('item_group_create_update_page')) ?>">
+                        <button class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add Item Groups</button>
                     </a>
                 <?php endif; ?>
             </div>
             <div class="table-responsive">
-                <table id="group_table" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle"></table>
+                <table id="item_group_table" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle"></table>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    var datatable_export = '<?= (check_menu_access('GROUP', 'export')) ?>';
-    var datatable_print = '<?= (check_menu_access('GROUP', 'print')) ?>';
-    var print_allowed = '<?= (check_menu_access('GROUP', 'print')) ?>';
-    var DeleteApiUrl = "<?= base_url(route_to('group_delete_api')) ?>"
-    var group_ids = JSON.parse('<?= get_user_data_access('groups', true) ?>');
+    var datatable_export = '<?= (check_menu_access('GROUPTYPE', 'export')) ?>';
+    var datatable_print = '<?= (check_menu_access('GROUPTYPE', 'print')) ?>';
+    var print_allowed = '<?= (check_menu_access('GROUPTYPE', 'print')) ?>';
+    var DeleteApiUrl = "<?= base_url(route_to('item_group_delete_api')) ?>"
 
-    function group_delete(group_id) {
+    function item_group_delete(item_group_id) {
         deleteRow({
-                "group_id": group_id
+                "item_group_id": item_group_id
             }).then((response) => {
                 fetchTableData()
             })
@@ -42,12 +41,12 @@
             });
     }
 
-    function group_view(group_id) {
+    function item_group_view(item_group_id) {
         $.ajax({
             type: "post",
-            url: "<?= base_url(route_to('group_view_component')) ?>",
+            url: "<?= base_url(route_to('item_group_view_component')) ?>",
             data: {
-                group_id: group_id
+                item_group_id: item_group_id
             },
             success: function(response) {
                 $("#right_floating_div").html("");
@@ -70,37 +69,43 @@
     function successDataTableCallbackFunction(response) {
         var columns = [{
                 title: "ID",
-                data: "group_id",
+                data: "item_group_id",
 
             },
             {
-                title: "Group Name",
-                data: "group_name"
+                title: "Item Group Name",
+                data: "item_group_name"
             },
             {
-                title: "Group Type Name",
-                data: "group_type_name"
+                title: "Description",
+                data: "item_group_description"
             },
             {
-                title: "Group Description",
-                data: "group_description"
+                title: "Image",
+                data: "item_group_image",
+                "render": function(data, type, row) {
+                    return `
+                            <img id="item_group_image_display" name="item_group_image_display" onclick="enlargeImage(event)"
+                                src="<?= base_url() ?>${data}" height="80">
+                        `;
+                }
             },
             {
                 "title": "Actions",
                 "data": null,
                 "render": function(data, type, row) {
                     return `
-                            <button class="text-white btn btn-sm btn-info" onclick="group_view(${row.group_id})" data-bs-toggle="offcanvas" data-bs-target="#right_floating_div" aria-controls="right_floating_div">
+                            <button class="text-white btn btn-sm btn-info" onclick="item_group_view(${row.item_group_id})" data-bs-toggle="offcanvas" data-bs-target="#right_floating_div" aria-controls="right_floating_div">
                                 <i class="fa fa-eye"></i>
                             </button>
-                            <?php if (check_menu_access('GROUP', 'edit')): ?>
-                                <a href="<?= base_url(route_to('group_create_update_page')) ?>/${row.group_id}" class="text-white btn btn-sm btn-success">
-                                <i class="bx bx-edit-alt"></i>
+                            <?php if (check_menu_access('GROUPTYPE', 'edit')): ?>
+                                <a href="<?= base_url(route_to('item_group_create_update_page')) ?>/${row.item_group_id}" class="text-white btn btn-sm btn-success">
+                                    <i class="bx bx-edit-alt"></i>
                                 </a>
                             <?php endif; ?>
-                            <?php if (check_menu_access('GROUP', 'delete')): ?>
-                                <button class="text-white btn btn-sm btn-danger" onclick="group_delete(${row.group_id})">
-                                <i class="bx bx-trash-alt"></i>
+                            <?php if (check_menu_access('GROUPTYPE', 'delete')): ?>
+                                <button class="text-white btn btn-sm btn-danger" onclick="item_group_delete(${row.item_group_id})">
+                                    <i class="bx bx-trash-alt"></i>
                                 </button>
                             <?php endif; ?>
                         `;
@@ -122,20 +127,15 @@
             };
         }
     }
-    var filter = {}
-    filter._autojoin = "F";
-    filter._select = "*";
-    filter['_whereIn'] = [{
-        "fieldname": "groups-group_id",
-        "value": group_ids
-    }]
 
-    function fetchTableData() {
+    function fetchTableData(parameter = {}) {
+        parameter._autojoin = 'F';
+        parameter._select = '*';
         DataTableInitialized(
-            'group_table', // table_id
-            "<?= base_url(route_to('group_list_api')) ?>", // url
+            'item_group_table', // table_id
+            "<?= base_url(route_to('item_group_list_api')) ?>", // url
             'POST', // method
-            filter, // parameter
+            parameter, // parameter
             successDataTableCallbackFunction // dataTableSuccessCallBack
         );
     }

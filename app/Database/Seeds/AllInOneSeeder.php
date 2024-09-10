@@ -13,12 +13,12 @@ class AllInOneSeeder extends Seeder
     {
         $f = $this->get_function_model();
         // Countries Seeder
-        $errors['countries'] = $f->create_update($this->get_countries_model(false), $this->countries_data());
-        // States Seeder
-        $errors['states'] = $f->create_update($this->get_states_model(false), $this->states_data());
-        // Cities Seeder
-        $errors['cities'] = $f->create_update($this->get_cities_model(false), $this->cities_data());
-        // Designations Seeder
+        // $errors['countries'] = $f->create_update($this->get_countries_model(false), $this->countries_data());
+        // // States Seeder
+        // $errors['states'] = $f->create_update($this->get_states_model(false), $this->states_data());
+        // // Cities Seeder
+        // $errors['cities'] = $f->create_update($this->get_cities_model(false), $this->cities_data());
+        // // Designations Seeder
         $errors['designations'] = $f->create_update($this->get_designations_model(false), $this->designations_data());
         // Modules Seeder
         $errors['modules'] = $f->create_update($this->get_modules_model(false), $this->modules_data());
@@ -4634,9 +4634,11 @@ class AllInOneSeeder extends Seeder
                 ['module_menu_id' => 305, 'menu_code' => 'USERDATAACCESS', 'menu_name' => 'User Data Access', 'menu_type' => 'config'],
             ]],
             ['module_id' => 4, 'module_code' => 'INVENTORY', 'module_name' => 'Inventory', 'is_dashboard' => true, 'menus' => [
-                ['module_menu_id' => 401, 'menu_code' => 'CATEGORY', 'menu_name' => 'Category', 'menu_type' => 'transaction'],
-                ['module_menu_id' => 402, 'menu_code' => 'GROUPTYPE', 'menu_name' => 'Group Type', 'menu_type' => 'transaction'],
-                ['module_menu_id' => 403, 'menu_code' => 'GROUP', 'menu_name' => 'Group', 'menu_type' => 'transaction'],
+                ['module_menu_id' => 401, 'menu_code' => 'ITEM_CATEGORY', 'menu_name' => 'Item Category', 'menu_type' => 'master'],
+                ['module_menu_id' => 402, 'menu_code' => 'ITEM_GROUP', 'menu_name' => 'Item Group', 'menu_type' => 'master'],
+                ['module_menu_id' => 403, 'menu_code' => 'ITEM_SUB_GROUP', 'menu_name' => 'Item Sub Group', 'menu_type' => 'master'],
+                ['module_menu_id' => 404, 'menu_code' => 'ITEM_BRAND', 'menu_name' => 'Item Brand', 'menu_type' => 'master'],
+                ['module_menu_id' => 405, 'menu_code' => 'ITEM', 'menu_name' => 'Item', 'menu_type' => 'master'],
             ]],
             ['module_id' => 5, 'module_code' => 'PURCHASE', 'module_name' => 'Purchase', 'is_dashboard' => true],
             ['module_id' => 6, 'module_code' => 'SALES', 'module_name' => 'Sales', 'is_dashboard' => true],

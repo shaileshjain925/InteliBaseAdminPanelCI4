@@ -4,18 +4,18 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class Category extends Migration
+class ItemCategories extends Migration
 {
     public function up()
     {
         $this->forge->addField([
-            'category_id' => [
+            'item_category_id' => [
                 'type' => 'INT',
                 'constraint' => 11,
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
-            'category_name' => [
+            'item_category_name' => [
                 'type' => 'VARCHAR',
                 'constraint' => 255,
                 'null' => false
@@ -24,11 +24,11 @@ class Category extends Migration
             'updated_at datetime default current_timestamp on update current_timestamp',
         ]);
 
-        $this->forge->addPrimaryKey('category_id');
-        $this->forge->createTable('categories', true);
+        $this->forge->addPrimaryKey('item_category_id');
+        $this->forge->createTable('item_categories', true);
     }
     public function down()
     {
-        $this->forge->dropTable('categories', true);   
+        $this->forge->dropTable('item_categories', true);   
     }
 }

@@ -12,13 +12,13 @@
                     <button class="btn export_btn me-3" type="button"><i class="fas fa-backward"></i></button>
                 </a>
                 <?php if (check_menu_access('GROUPTYPE', 'create')): ?>
-                    <a href="<?= base_url(route_to('group_type_create_update_page')) ?>">
-                        <button class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add GroupType</button>
+                    <a href="<?= base_url(route_to('item_brand_create_update_page')) ?>">
+                        <button class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add Item Brands</button>
                     </a>
                 <?php endif; ?>
             </div>
             <div class="table-responsive">
-                <table id="group_type_table" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle"></table>
+                <table id="item_brand_table" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle"></table>
             </div>
         </div>
     </div>
@@ -28,11 +28,11 @@
     var datatable_export = '<?= (check_menu_access('GROUPTYPE', 'export')) ?>';
     var datatable_print = '<?= (check_menu_access('GROUPTYPE', 'print')) ?>';
     var print_allowed = '<?= (check_menu_access('GROUPTYPE', 'print')) ?>';
-    var DeleteApiUrl = "<?= base_url(route_to('group_type_delete_api')) ?>"
+    var DeleteApiUrl = "<?= base_url(route_to('item_brand_delete_api')) ?>"
 
-    function group_type_delete(group_type_id) {
+    function item_brand_delete(item_brand_id) {
         deleteRow({
-                "group_type_id": group_type_id
+                "item_brand_id": item_brand_id
             }).then((response) => {
                 fetchTableData()
             })
@@ -41,12 +41,12 @@
             });
     }
 
-    function group_type_view(group_type_id) {
+    function item_brand_view(item_brand_id) {
         $.ajax({
             type: "post",
-            url: "<?= base_url(route_to('group_type_view_component')) ?>",
+            url: "<?= base_url(route_to('item_brand_view_component')) ?>",
             data: {
-                group_type_id: group_type_id
+                item_brand_id: item_brand_id
             },
             success: function(response) {
                 $("#right_floating_div").html("");
@@ -69,32 +69,42 @@
     function successDataTableCallbackFunction(response) {
         var columns = [{
                 title: "ID",
-                data: "group_type_id",
+                data: "item_brand_id",
 
             },
             {
-                title: "Group Type Name",
-                data: "group_type_name"
+                title: "Item Brand Name",
+                data: "item_brand_name"
             },
             {
                 title: "Description",
-                data: "group_type_description"
+                data: "item_brand_description"
+            },
+            {
+                title: "Image",
+                data: "item_brand_image",
+                "render": function(data, type, row) {
+                    return `
+                            <img id="item_brand_image_display" name="item_brand_image_display" onclick="enlargeImage(event)"
+                                src="<?= base_url() ?>${data}" height="80">
+                        `;
+                }
             },
             {
                 "title": "Actions",
                 "data": null,
                 "render": function(data, type, row) {
                     return `
-                            <button class="text-white btn btn-sm btn-info" onclick="group_type_view(${row.group_type_id})" data-bs-toggle="offcanvas" data-bs-target="#right_floating_div" aria-controls="right_floating_div">
+                            <button class="text-white btn btn-sm btn-info" onclick="item_brand_view(${row.item_brand_id})" data-bs-toggle="offcanvas" data-bs-target="#right_floating_div" aria-controls="right_floating_div">
                                 <i class="fa fa-eye"></i>
                             </button>
                             <?php if (check_menu_access('GROUPTYPE', 'edit')): ?>
-                                <a href="<?= base_url(route_to('group_type_create_update_page')) ?>/${row.group_type_id}" class="text-white btn btn-sm btn-success">
+                                <a href="<?= base_url(route_to('item_brand_create_update_page')) ?>/${row.item_brand_id}" class="text-white btn btn-sm btn-success">
                                     <i class="bx bx-edit-alt"></i>
                                 </a>
                             <?php endif; ?>
                             <?php if (check_menu_access('GROUPTYPE', 'delete')): ?>
-                                <button class="text-white btn btn-sm btn-danger" onclick="group_type_delete(${row.group_type_id})">
+                                <button class="text-white btn btn-sm btn-danger" onclick="item_brand_delete(${row.item_brand_id})">
                                     <i class="bx bx-trash-alt"></i>
                                 </button>
                             <?php endif; ?>
@@ -122,8 +132,8 @@
         parameter._autojoin = 'F';
         parameter._select = '*';
         DataTableInitialized(
-            'group_type_table', // table_id
-            "<?= base_url(route_to('group_type_list_api')) ?>", // url
+            'item_brand_table', // table_id
+            "<?= base_url(route_to('item_brand_list_api')) ?>", // url
             'POST', // method
             parameter, // parameter
             successDataTableCallbackFunction // dataTableSuccessCallBack

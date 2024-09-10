@@ -294,109 +294,132 @@ class AdminPageController extends BaseController
         $theme_data['_previous_path'] = base_url(route_to($theme_data['user_type'] . '_list_page'));
         return view('AdminPanelNew/partials/main', $theme_data);
     }
-    public function category_list_page()
+    public function item_brand_list_page()
     {
         $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Category List';
-        $theme_data['_page_title'] = 'Category List';
+        $theme_data['_meta_title'] = 'Item Brand List';
+        $theme_data['_page_title'] = 'Item Brand List';
         $theme_data['_breadcrumb1'] = 'Dashboard';
-        $theme_data['_breadcrumb2'] = 'Category List';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Inventory/category_list';
+        $theme_data['_breadcrumb2'] = 'Item Brand List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Inventory/item_brand_list';
         $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
         return view('AdminPanelNew/partials/main', $theme_data);
     }
-    public function category_create_update_page($user_id = null)
+    public function item_brand_create_update_page($item_brand_id = null)
     {
         $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Category ' . CreateUpdateAlias($user_id);
-        $theme_data['_page_title'] = 'Category ' . CreateUpdateAlias($user_id);
-        $theme_data['_breadcrumb1'] = 'Category List';
-        $theme_data['_breadcrumb2'] = 'Category ' . CreateUpdateAlias($user_id);
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Inventory/category_create_update';
-        if (!empty($user_id)) {
-            $theme_data = array_merge($theme_data, ['user_id' => $user_id]);
+        $theme_data['_meta_title'] = 'Item Brand ' . CreateUpdateAlias($item_brand_id);
+        $theme_data['_page_title'] = 'Item Brand ' . CreateUpdateAlias($item_brand_id);
+        $theme_data['_breadcrumb1'] = 'Item Brand List';
+        $theme_data['_breadcrumb2'] = 'Item Brand ' . CreateUpdateAlias($item_brand_id);
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Inventory/item_brand_create_update';
+        if (!empty($item_brand_id)) {
+            $theme_data = array_merge($theme_data, $this->get_item_brand_model()->find($item_brand_id) ?? []);
         }
-        $theme_data['user_type'] = "super_admin";
-        $theme_data['_form_type'] = 'component';
-        $theme_data['_previous_path'] = base_url(route_to($theme_data['user_type'] . '_list_page'));
+        $theme_data['_previous_path'] = base_url(route_to('item_brand_list_page'));
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function item_brand_view_component()
+    {
+        $data = getRequestData($this->request, 'ARRAY');
+        $filter = [
+            '_autojoin' => "F",
+            '_select' => "*",
+            'item_brand_id' => $data['item_brand_id'],
+        ];
+        $item_brand_data = $this->get_item_brand_model()->RecordList($filter);
+        if ($item_brand_data['status'] == ApiResponseStatusCode::OK && !empty($item_brand_data['data'])) {
+            return view('AdminPanelNew/components/item_brand_view', $item_brand_data['data'][0]);
+        }
+        return "<h1>Item Brand Record Not Found</h1>";
+    }
+    public function item_category_list_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Item Category List';
+        $theme_data['_page_title'] = 'Item Category List';
+        $theme_data['_breadcrumb1'] = 'Dashboard';
+        $theme_data['_breadcrumb2'] = 'Item Category List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Inventory/item_category_list';
+        $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
         return view('AdminPanelNew/partials/main', $theme_data);
     }
 
-    public function group_type_list_page()
+    public function item_group_list_page()
     {
         $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Group Type List';
-        $theme_data['_page_title'] = 'Group Type List';
+        $theme_data['_meta_title'] = 'Item Group List';
+        $theme_data['_page_title'] = 'Item Group List';
         $theme_data['_breadcrumb1'] = 'Dashboard';
-        $theme_data['_breadcrumb2'] = 'Group Type List';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Inventory/group_type_list';
+        $theme_data['_breadcrumb2'] = 'Item Group List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Inventory/item_group_list';
         $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
         return view('AdminPanelNew/partials/main', $theme_data);
     }
-    public function group_type_create_update_page($group_type_id = null)
+    public function item_group_create_update_page($item_group_id = null)
     {
         $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Group Type ' . CreateUpdateAlias($group_type_id);
-        $theme_data['_page_title'] = 'Group Type ' . CreateUpdateAlias($group_type_id);
-        $theme_data['_breadcrumb1'] = 'Group Type List';
-        $theme_data['_breadcrumb2'] = 'Group Type ' . CreateUpdateAlias($group_type_id);
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Inventory/group_type_create_update';
-        if (!empty($group_type_id)) {
-            $theme_data = array_merge($theme_data, $this->get_group_type_model()->find($group_type_id) ?? []);
+        $theme_data['_meta_title'] = 'Item Group ' . CreateUpdateAlias($item_group_id);
+        $theme_data['_page_title'] = 'Item Group ' . CreateUpdateAlias($item_group_id);
+        $theme_data['_breadcrumb1'] = 'Item Group List';
+        $theme_data['_breadcrumb2'] = 'Item Group ' . CreateUpdateAlias($item_group_id);
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Inventory/item_group_create_update';
+        if (!empty($item_group_id)) {
+            $theme_data = array_merge($theme_data, $this->get_item_group_model()->find($item_group_id) ?? []);
         }
-        $theme_data['_previous_path'] = base_url(route_to('group_type_list_page'));
+        $theme_data['_previous_path'] = base_url(route_to('item_group_list_page'));
         return view('AdminPanelNew/partials/main', $theme_data);
     }
-    public function group_type_view_component()
+    public function item_group_view_component()
     {
         $data = getRequestData($this->request, 'ARRAY');
         $filter = [
             '_autojoin' => "F",
             '_select' => "*",
-            'group_type_id' => $data['group_type_id'],
+            'item_group_id' => $data['item_group_id'],
         ];
-        $group_type_data = $this->get_group_type_model()->RecordList($filter);
-        if ($group_type_data['status'] == ApiResponseStatusCode::OK && !empty($group_type_data['data'])) {
-            return view('AdminPanelNew/components/group_type_view', $group_type_data['data'][0]);
+        $item_group_data = $this->get_item_group_model()->RecordList($filter);
+        if ($item_group_data['status'] == ApiResponseStatusCode::OK && !empty($item_group_data['data'])) {
+            return view('AdminPanelNew/components/item_group_view', $item_group_data['data'][0]);
         }
-        return "<h1>Group Type Record Not Found</h1>";
+        return "<h1>Item Group Record Not Found</h1>";
     }
-    public function group_list_page()
+    public function item_sub_group_list_page()
     {
         $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Group List';
-        $theme_data['_page_title'] = 'Group List';
+        $theme_data['_meta_title'] = 'Item Sub Group List';
+        $theme_data['_page_title'] = 'Item Sub Group List';
         $theme_data['_breadcrumb1'] = 'Dashboard';
-        $theme_data['_breadcrumb2'] = 'Group List';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Inventory/group_list';
+        $theme_data['_breadcrumb2'] = 'Item Sub Group List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Inventory/item_sub_group_list';
         $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
         return view('AdminPanelNew/partials/main', $theme_data);
     }
-    public function group_create_update_page($group_id = null)
+    public function item_sub_group_create_update_page($item_sub_group_id = null)
     {
         $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Group ' . CreateUpdateAlias($group_id);
-        $theme_data['_page_title'] = 'Group ' . CreateUpdateAlias($group_id);
-        $theme_data['_breadcrumb1'] = 'Group List';
-        $theme_data['_breadcrumb2'] = 'Group ' . CreateUpdateAlias($group_id);
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Inventory/group_create_update';
-        if (!empty($group_id)) {
-            $theme_data = array_merge($theme_data, $this->get_group_model()->find($group_id) ?? []);
+        $theme_data['_meta_title'] = 'Item Sub Group ' . CreateUpdateAlias($item_sub_group_id);
+        $theme_data['_page_title'] = 'Item Sub Group ' . CreateUpdateAlias($item_sub_group_id);
+        $theme_data['_breadcrumb1'] = 'Item Sub Group List';
+        $theme_data['_breadcrumb2'] = 'Item Sub Group ' . CreateUpdateAlias($item_sub_group_id);
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Inventory/item_sub_group_create_update';
+        if (!empty($item_sub_group_id)) {
+            $theme_data = array_merge($theme_data, $this->get_item_sub_group_model()->find($item_sub_group_id) ?? []);
         }
-        $theme_data['_previous_path'] = base_url(route_to('group_list_page'));
+        $theme_data['_previous_path'] = base_url(route_to('item_sub_group_list_page'));
         return view('AdminPanelNew/partials/main', $theme_data);
     }
-    public function group_view_component()
+    public function item_sub_group_view_component()
     {
         $data = getRequestData($this->request, 'ARRAY');
         $filter = [
             '_autojoin' => "F",
             '_select' => "*",
-            'group_id' => $data['group_id'],
+            'item_sub_group_id' => $data['item_sub_group_id'],
         ];
-        $group_data = $this->get_group_model()->RecordList($filter);
-        if ($group_data['status'] == ApiResponseStatusCode::OK && !empty($group_data['data'])) {
-            return view('AdminPanelNew/components/group_view', $group_data['data'][0]);
+        $item_sub_group_data = $this->get_item_sub_group_model()->RecordList($filter);
+        if ($item_sub_group_data['status'] == ApiResponseStatusCode::OK && !empty($item_sub_group_data['data'])) {
+            return view('AdminPanelNew/components/item_sub_group_view', $item_sub_group_data['data'][0]);
         }
         return "<h1>Group Record Not Found</h1>";
     }
@@ -669,22 +692,28 @@ class AdminPageController extends BaseController
                 "visibility" => check_module_access('INVENTORY'),
                 "menus" => [
                     [
-                        "title" => "Category",
-                        "url" => base_url(route_to('category_list_page')),
+                        "title" => "Item Brands",
+                        "url" => base_url(route_to('item_brand_list_page')),
                         "badge_count" => 0,
-                        "visibility" => check_menu_access('CATEGORY', 'view'),
+                        "visibility" => check_menu_access('ITEM_BRAND', 'view'),
                     ],
                     [
-                        "title" => "Group Type",
-                        "url" => base_url(route_to('group_type_list_page')),
+                        "title" => "Item Groups",
+                        "url" => base_url(route_to('item_group_list_page')),
                         "badge_count" => 0,
-                        "visibility" => check_menu_access('GROUPTYPE', 'view'),
+                        "visibility" => check_menu_access('ITEM_GROUP', 'view'),
                     ],
                     [
-                        "title" => "Group",
-                        "url" => base_url(route_to('group_list_page')),
+                        "title" => "Item Sub Groups",
+                        "url" => base_url(route_to('item_sub_group_list_page')),
                         "badge_count" => 0,
-                        "visibility" => check_menu_access('GROUP', 'view'),
+                        "visibility" => check_menu_access('ITEM_SUB_GROUP', 'view'),
+                    ],
+                    [
+                        "title" => "Item Categories",
+                        "url" => base_url(route_to('item_category_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => check_menu_access('ITEM_CATEGORY', 'view'),
                     ],
                 ]
             ],
