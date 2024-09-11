@@ -189,7 +189,7 @@ class FunctionModel extends Model
                     unset($filter['_whereIn']);
                 }
                 // Where Not In
-                if (array_key_exists('_whereNotIn', $filter) && !empty($filter['_whereNotIn'] && is_array($filter['_whereNotIn'])) && !empty($fields['value'])) {
+                if (array_key_exists('_whereNotIn', $filter) && !empty($filter['_whereNotIn'] && is_array($filter['_whereNotIn']))) {
                     foreach ($filter['_whereNotIn'] as $key => $fields) {
                         # code...
                         if (array_key_exists('fieldname', $fields) && array_key_exists('value', $fields)) {
