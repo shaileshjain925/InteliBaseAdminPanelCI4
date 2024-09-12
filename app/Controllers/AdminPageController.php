@@ -486,6 +486,49 @@ class AdminPageController extends BaseController
         $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
         return view('AdminPanelNew/partials/main', $theme_data);
     }
+    public function item_uqc_list_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Item UQC List';
+        $theme_data['_page_title'] = 'Item UQC List';
+        $theme_data['_breadcrumb1'] = 'Dashboard';
+        $theme_data['_breadcrumb2'] = 'Item UQC List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/OneTimeSetting/item_uqc_list';
+        $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function item_hsn_list_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Item HSN List';
+        $theme_data['_page_title'] = 'Item HSN List';
+        $theme_data['_breadcrumb1'] = 'Dashboard';
+        $theme_data['_breadcrumb2'] = 'Item HSN List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Inventory/item_hsn_list';
+        $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function item_list_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Item List';
+        $theme_data['_page_title'] = 'Item List';
+        $theme_data['_breadcrumb1'] = 'Dashboard';
+        $theme_data['_breadcrumb2'] = 'Item List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Inventory/item_list';
+        $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function item_view_component() {}
+    public function item_create_update_component()
+    {
+        $data = getRequestData($this->request, 'ARRAY');
+        $item_data = [];
+        if (isset($data['item_id']) && !empty($data['item_id'])) {
+            $item_data = $this->get_item_model()->find($data['item_id']);
+        }
+        return view('AdminPanelNew/components/inventory/item_create_update', $item_data['data']);
+    }
     public function role_module_menus($role_id)
     {
         $theme_data = $this->admin_panel_common_data();
@@ -692,28 +735,40 @@ class AdminPageController extends BaseController
                 "visibility" => check_module_access('INVENTORY'),
                 "menus" => [
                     [
-                        "title" => "Item Brands",
+                        "title" => "Item Brand",
                         "url" => base_url(route_to('item_brand_list_page')),
                         "badge_count" => 0,
                         "visibility" => check_menu_access('ITEM_BRAND', 'view'),
                     ],
                     [
-                        "title" => "Item Groups",
+                        "title" => "Item Group",
                         "url" => base_url(route_to('item_group_list_page')),
                         "badge_count" => 0,
                         "visibility" => check_menu_access('ITEM_GROUP', 'view'),
                     ],
                     [
-                        "title" => "Item Sub Groups",
+                        "title" => "Item Sub Group",
                         "url" => base_url(route_to('item_sub_group_list_page')),
                         "badge_count" => 0,
                         "visibility" => check_menu_access('ITEM_SUB_GROUP', 'view'),
                     ],
                     [
-                        "title" => "Item Categories",
+                        "title" => "Item Category",
                         "url" => base_url(route_to('item_category_list_page')),
                         "badge_count" => 0,
                         "visibility" => check_menu_access('ITEM_CATEGORY', 'view'),
+                    ],
+                    [
+                        "title" => "Item HSN",
+                        "url" => base_url(route_to('item_hsn_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => check_menu_access('ITEM_HSN', 'view'),
+                    ],
+                    [
+                        "title" => "Item",
+                        "url" => base_url(route_to('item_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => check_menu_access('ITEM', 'view'),
                     ],
                 ]
             ],

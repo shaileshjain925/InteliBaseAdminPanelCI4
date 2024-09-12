@@ -27,12 +27,6 @@ class CreateItemsTable extends Migration
                 'null' => true,
                 'unsigned' => true
             ],
-            'item_group_id' => [
-                'type' => 'INT',
-                'constraint' => 11,
-                'null' => true,
-                'unsigned' => true
-            ],
             'item_sub_group_id' => [
                 'type' => 'INT',
                 'constraint' => 11,
@@ -129,16 +123,14 @@ class CreateItemsTable extends Migration
                 'type' => 'TEXT',
                 'null' => true
             ],
-            'item_uom_id' => [
-                'type' => 'INT',
+            'item_uqc_id' => [
+                'type' => 'VARCHAR',
                 'constraint' => 11,
-                'unsigned' => true,
                 'null' => false
             ],
-            'item_pack_uom_id' => [
-                'type' => 'INT',
+            'item_pack_uqc_id' => [
+                'type' => 'VARCHAR',
                 'constraint' => 11,
-                'unsigned' => true,
                 'null' => true
             ],
             'item_pack_conversion' => [
@@ -190,15 +182,13 @@ class CreateItemsTable extends Migration
         $this->forge->addKey('item_id', true);
 
         // Adding Foreign Keys
-        $this->forge->addForeignKey('item_brand_id', 'brands', 'id', 'CASCADE', 'SET NULL');
-        $this->forge->addForeignKey('item_category_id', 'categories', 'id', 'CASCADE', 'SET NULL');
-        $this->forge->addForeignKey('item_group_id', 'groups', 'id', 'CASCADE', 'SET NULL');
-        $this->forge->addForeignKey('item_sub_group_id', 'sub_groups', 'id', 'CASCADE', 'SET NULL');
-        $this->forge->addForeignKey('item_hsn_id', 'hsn', 'id', 'CASCADE', 'SET NULL');
-        $this->forge->addForeignKey('item_uom_id', 'uom', 'id', 'CASCADE', 'NO ACTION');
-        $this->forge->addForeignKey('item_pack_uom_id', 'uom', 'id', 'CASCADE', 'SET NULL');
-        $this->forge->addForeignKey('item_user_id', 'users', 'id', 'CASCADE', 'NO ACTION');
-
+        $this->forge->addForeignKey('item_brand_id', 'item_brands', 'item_brand_id', 'CASCADE', 'RESTRICT');
+        $this->forge->addForeignKey('item_category_id', 'item_categories', 'item_category_id', 'CASCADE', 'RESTRICT');
+        $this->forge->addForeignKey('item_sub_group_id', 'item_sub_groups', 'item_sub_group_id', 'CASCADE', 'RESTRICT');
+        $this->forge->addForeignKey('item_hsn_id', 'item_hsn', 'item_hsn_id', 'CASCADE', 'RESTRICT');
+        $this->forge->addForeignKey('item_uqc_id', 'item_uqc', 'item_uqc_id', 'CASCADE', 'RESTRICT');
+        $this->forge->addForeignKey('item_pack_uqc_id', 'item_uqc', 'item_uqc_id', 'CASCADE', 'RESTRICT');
+        $this->forge->addForeignKey('item_user_id', 'users', 'user_id', 'CASCADE', 'RESTRICT');
         // Creating the table
         $this->forge->createTable('items', true);
     }

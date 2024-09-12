@@ -19,16 +19,18 @@ class AllInOneSeeder extends Seeder
         // // Cities Seeder
         // $errors['cities'] = $f->create_update($this->get_cities_model(false), $this->cities_data());
         // // Designations Seeder
-        $errors['designations'] = $f->create_update($this->get_designations_model(false), $this->designations_data());
+        // $errors['designations'] = $f->create_update($this->get_designations_model(false), $this->designations_data());
         // Modules Seeder
         $errors['modules'] = $f->create_update($this->get_modules_model(false), $this->modules_data());
         // Menus Seeder
         $menus = array_merge(...array_map(fn($m) => array_map(fn($menu) => $menu + ['module_id' => $m['module_id']], $m['menus'] ?? []), $this->modules_data()));
         $errors['module_menus'] = $f->create_update($this->get_module_menus_model(false), $menus);
         // Roles Seeder
-        $errors['roles'] = $f->create_update($this->get_roles_model(false), $this->roles_data());
+        // $errors['roles'] = $f->create_update($this->get_roles_model(false), $this->roles_data());
         // User Seeder
-        $errors['users'] = $f->create_update($this->get_users_model(false), $this->users_data());
+        // $errors['users'] = $f->create_update($this->get_users_model(false), $this->users_data());
+        // Item UQC
+        $errors['item_uqc'] = $f->create_update($this->get_item_uqc_model(false), $this->item_uqc());
         print_r($errors);
     }
     protected function countries_data()
@@ -4625,6 +4627,7 @@ class AllInOneSeeder extends Seeder
                 ['module_menu_id' => 103, 'menu_code' => 'CITIES', 'menu_name' => 'Cities', 'menu_type' => 'master'],
                 ['module_menu_id' => 104, 'menu_code' => 'LOG', 'menu_name' => 'Log', 'menu_type' => 'report'],
                 ['module_menu_id' => 105, 'menu_code' => 'BUSINESSTYPE', 'menu_name' => 'Business Type', 'menu_type' => 'master'],
+                ['module_menu_id' => 105, 'menu_code' => 'ITEM_UQC', 'menu_name' => 'Item UQC', 'menu_type' => 'master'],
             ]],
             ['module_id' => 3, 'module_code' => 'STAFF_MANAGEMENT', 'module_name' => 'Staff Management', 'is_dashboard' => true, 'menus' => [
                 ['module_menu_id' => 301, 'menu_code' => 'DESIGNATIONS', 'menu_name' => 'Designation', 'menu_type' => 'master'],
@@ -4638,7 +4641,8 @@ class AllInOneSeeder extends Seeder
                 ['module_menu_id' => 402, 'menu_code' => 'ITEM_GROUP', 'menu_name' => 'Item Group', 'menu_type' => 'master'],
                 ['module_menu_id' => 403, 'menu_code' => 'ITEM_SUB_GROUP', 'menu_name' => 'Item Sub Group', 'menu_type' => 'master'],
                 ['module_menu_id' => 404, 'menu_code' => 'ITEM_BRAND', 'menu_name' => 'Item Brand', 'menu_type' => 'master'],
-                ['module_menu_id' => 405, 'menu_code' => 'ITEM', 'menu_name' => 'Item', 'menu_type' => 'master'],
+                ['module_menu_id' => 405, 'menu_code' => 'ITEM_HSN', 'menu_name' => 'Item Hsn', 'menu_type' => 'master'],
+                ['module_menu_id' => 406, 'menu_code' => 'ITEM', 'menu_name' => 'Item', 'menu_type' => 'master'],
             ]],
             ['module_id' => 5, 'module_code' => 'PURCHASE', 'module_name' => 'Purchase', 'is_dashboard' => true],
             ['module_id' => 6, 'module_code' => 'SALES', 'module_name' => 'Sales', 'is_dashboard' => true],
@@ -4893,5 +4897,56 @@ class AllInOneSeeder extends Seeder
             ]
         ];
         return $user_data;
+    }
+    protected function item_uqc()
+    {
+        return [
+            ['item_uqc_id' => 'BAG', 'item_uqc_name' => 'BAGS'],
+            ['item_uqc_id' => 'BAL', 'item_uqc_name' => 'BALE'],
+            ['item_uqc_id' => 'BDL', 'item_uqc_name' => 'BUNDLES'],
+            ['item_uqc_id' => 'BKL', 'item_uqc_name' => 'BUCKLES'],
+            ['item_uqc_id' => 'BOU', 'item_uqc_name' => 'BILLION OF UNITS'],
+            ['item_uqc_id' => 'BOX', 'item_uqc_name' => 'BOX'],
+            ['item_uqc_id' => 'BTL', 'item_uqc_name' => 'BOTTLES'],
+            ['item_uqc_id' => 'BUN', 'item_uqc_name' => 'BUNCHES'],
+            ['item_uqc_id' => 'CAN', 'item_uqc_name' => 'CANS'],
+            ['item_uqc_id' => 'CCM', 'item_uqc_name' => 'CUBIC CENTIMETERS'],
+            ['item_uqc_id' => 'CMS', 'item_uqc_name' => 'CENTIMETERS'],
+            ['item_uqc_id' => 'CBM', 'item_uqc_name' => 'CUBIC METERS'],
+            ['item_uqc_id' => 'CTN', 'item_uqc_name' => 'CARTONS'],
+            ['item_uqc_id' => 'DOZ', 'item_uqc_name' => 'DOZENS'],
+            ['item_uqc_id' => 'DRM', 'item_uqc_name' => 'DRUMS'],
+            ['item_uqc_id' => 'GGK', 'item_uqc_name' => 'GREAT GROSS'],
+            ['item_uqc_id' => 'GMS', 'item_uqc_name' => 'GRAMMES'],
+            ['item_uqc_id' => 'GRS', 'item_uqc_name' => 'GROSS'],
+            ['item_uqc_id' => 'GYD', 'item_uqc_name' => 'GROSS YARDS'],
+            ['item_uqc_id' => 'KGS', 'item_uqc_name' => 'KILOGRAMS'],
+            ['item_uqc_id' => 'KLR', 'item_uqc_name' => 'KILOLITRE'],
+            ['item_uqc_id' => 'KME', 'item_uqc_name' => 'KILOMETRE'],
+            ['item_uqc_id' => 'LTR', 'item_uqc_name' => 'LITRES'],
+            ['item_uqc_id' => 'MLS', 'item_uqc_name' => 'MILLI LITRES'],
+            ['item_uqc_id' => 'MLT', 'item_uqc_name' => 'MILLILITRE'],
+            ['item_uqc_id' => 'MTR', 'item_uqc_name' => 'METERS'],
+            ['item_uqc_id' => 'MTS', 'item_uqc_name' => 'METRIC TON'],
+            ['item_uqc_id' => 'NOS', 'item_uqc_name' => 'NUMBERS'],
+            ['item_uqc_id' => 'OTH', 'item_uqc_name' => 'OTHERS'],
+            ['item_uqc_id' => 'PAC', 'item_uqc_name' => 'PACKS'],
+            ['item_uqc_id' => 'PCS', 'item_uqc_name' => 'PIECES'],
+            ['item_uqc_id' => 'PRS', 'item_uqc_name' => 'PAIRS'],
+            ['item_uqc_id' => 'QTL', 'item_uqc_name' => 'QUINTAL'],
+            ['item_uqc_id' => 'ROL', 'item_uqc_name' => 'ROLLS'],
+            ['item_uqc_id' => 'SET', 'item_uqc_name' => 'SETS'],
+            ['item_uqc_id' => 'SQF', 'item_uqc_name' => 'SQUARE FEET'],
+            ['item_uqc_id' => 'SQM', 'item_uqc_name' => 'SQUARE METERS'],
+            ['item_uqc_id' => 'SQY', 'item_uqc_name' => 'SQUARE YARDS'],
+            ['item_uqc_id' => 'TBS', 'item_uqc_name' => 'TABLETS'],
+            ['item_uqc_id' => 'TGM', 'item_uqc_name' => 'TEN GROSS'],
+            ['item_uqc_id' => 'THD', 'item_uqc_name' => 'THOUSANDS'],
+            ['item_uqc_id' => 'TON', 'item_uqc_name' => 'TONNES'],
+            ['item_uqc_id' => 'TUB', 'item_uqc_name' => 'TUBES'],
+            ['item_uqc_id' => 'UGS', 'item_uqc_name' => 'US GALLONS'],
+            ['item_uqc_id' => 'UNT', 'item_uqc_name' => 'UNITS'],
+            ['item_uqc_id' => 'YDS', 'item_uqc_name' => 'YARDS']
+        ];
     }
 }

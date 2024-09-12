@@ -19,7 +19,10 @@ use App\Models\BusinessTypeModel;
 use App\Models\ItemBrandsModel;
 use App\Models\ItemCategoriesModel;
 use App\Models\ItemGroupsModel;
+use App\Models\ItemHsnModel;
+use App\Models\ItemModel;
 use App\Models\ItemSubGroupsModel;
+use App\Models\ItemUqcModel;
 
 trait CommonTraits
 {
@@ -168,5 +171,30 @@ trait CommonTraits
     public static function get_business_types_model(...$variable)
     {
         return new BusinessTypeModel(...$variable);
+    }
+
+    /**
+     * Return Model Instance
+     * @return ItemHsnModel
+     */
+    public static function get_item_hsn_model(...$variable)
+    {
+        return new ItemHsnModel(...$variable);
+    }
+    /**
+     * Return Model Instance
+     * @return ItemUqcModel
+     */
+    public static function get_item_uqc_model(...$variable)
+    {
+        return new ItemUqcModel(...$variable);
+    }
+    /**
+     * Return Model Instance
+     * @return ItemModel
+     */
+    public static function get_item_model(...$variable)
+    {
+        return new ItemModel(...$variable);
     }
 }

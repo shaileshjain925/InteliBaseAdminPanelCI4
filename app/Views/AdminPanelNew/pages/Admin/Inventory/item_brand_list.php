@@ -11,7 +11,7 @@
                 <a href="<?= @$_previous_path ?>">
                     <button class="btn export_btn me-3" type="button"><i class="fas fa-backward"></i></button>
                 </a>
-                <?php if (check_menu_access('GROUPTYPE', 'create')): ?>
+                <?php if (check_menu_access('ITEM_GROUP', 'create')): ?>
                     <a href="<?= base_url(route_to('item_brand_create_update_page')) ?>">
                         <button class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add Item Brands</button>
                     </a>
@@ -25,9 +25,9 @@
 </div>
 
 <script>
-    var datatable_export = '<?= (check_menu_access('GROUPTYPE', 'export')) ?>';
-    var datatable_print = '<?= (check_menu_access('GROUPTYPE', 'print')) ?>';
-    var print_allowed = '<?= (check_menu_access('GROUPTYPE', 'print')) ?>';
+    var datatable_export = '<?= (check_menu_access('ITEM_GROUP', 'export')) ?>';
+    var datatable_print = '<?= (check_menu_access('ITEM_GROUP', 'print')) ?>';
+    var print_allowed = '<?= (check_menu_access('ITEM_GROUP', 'print')) ?>';
     var DeleteApiUrl = "<?= base_url(route_to('item_brand_delete_api')) ?>"
 
     function item_brand_delete(item_brand_id) {
@@ -98,12 +98,12 @@
                             <button class="text-white btn btn-sm btn-info" onclick="item_brand_view(${row.item_brand_id})" data-bs-toggle="offcanvas" data-bs-target="#right_floating_div" aria-controls="right_floating_div">
                                 <i class="fa fa-eye"></i>
                             </button>
-                            <?php if (check_menu_access('GROUPTYPE', 'edit')): ?>
+                            <?php if (check_menu_access('ITEM_GROUP', 'edit')): ?>
                                 <a href="<?= base_url(route_to('item_brand_create_update_page')) ?>/${row.item_brand_id}" class="text-white btn btn-sm btn-success">
                                     <i class="bx bx-edit-alt"></i>
                                 </a>
                             <?php endif; ?>
-                            <?php if (check_menu_access('GROUPTYPE', 'delete')): ?>
+                            <?php if (check_menu_access('ITEM_GROUP', 'delete')): ?>
                                 <button class="text-white btn btn-sm btn-danger" onclick="item_brand_delete(${row.item_brand_id})">
                                     <i class="bx bx-trash-alt"></i>
                                 </button>
