@@ -12,8 +12,7 @@ class ItemUqc extends Migration
             'item_uqc_id' => [
                 'type' => 'VARCHAR',
                 'constraint' => 11,
-                'unsigned' => true,
-                'auto_increment' => true,
+                'unique' => true
             ],
             'item_uqc_name' => [
                 'type' => 'VARCHAR',

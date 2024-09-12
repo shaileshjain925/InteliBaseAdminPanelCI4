@@ -463,6 +463,84 @@ class AdminApiController extends BaseController
     {
         return $this->api_delete($this->get_item_category_model());
     }
+    // Item UQC -------------------------------------------------------------------------------------------------------
+    /** */
+    public function item_uqc_get_api()
+    {
+        return $this->api_get($this->get_item_uqc_model());
+    }
+    /** */
+    public function item_uqc_list_api()
+    {
+        return $this->api_list($this->get_item_uqc_model());
+    }
+    /** */
+    public function item_uqc_create_api()
+    {
+        return $this->api_create($this->get_item_uqc_model());
+    }
+    /** */
+    public function item_uqc_update_api()
+    {
+        return $this->api_update($this->get_item_uqc_model());
+    }
+    /** */
+    public function item_uqc_delete_api()
+    {
+        return $this->api_delete($this->get_item_uqc_model());
+    }
+    // Item HSN -------------------------------------------------------------------------------------------------------
+    /** */
+    public function item_hsn_get_api()
+    {
+        return $this->api_get($this->get_item_hsn_model());
+    }
+    /** */
+    public function item_hsn_list_api()
+    {
+        return $this->api_list($this->get_item_hsn_model());
+    }
+    /** */
+    public function item_hsn_create_api()
+    {
+        return $this->api_create($this->get_item_hsn_model());
+    }
+    /** */
+    public function item_hsn_update_api()
+    {
+        return $this->api_update($this->get_item_hsn_model());
+    }
+    /** */
+    public function item_hsn_delete_api()
+    {
+        return $this->api_delete($this->get_item_hsn_model());
+    }
+    // Item -------------------------------------------------------------------------------------------------------
+    /** */
+    public function item_get_api()
+    {
+        return $this->api_get($this->get_item_model());
+    }
+    /** */
+    public function item_list_api()
+    {
+        return $this->api_list($this->get_item_model());
+    }
+    /** */
+    public function item_create_api()
+    {
+        return $this->api_create($this->get_item_model());
+    }
+    /** */
+    public function item_update_api()
+    {
+        return $this->api_update($this->get_item_model());
+    }
+    /** */
+    public function item_delete_api()
+    {
+        return $this->api_delete($this->get_item_model());
+    }
     // Business Types -------------------------------------------------------------------------------------------------------
     /** */
     public function business_types_get_api()

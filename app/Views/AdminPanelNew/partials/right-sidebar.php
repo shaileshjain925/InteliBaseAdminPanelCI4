@@ -27,36 +27,41 @@
                                         </ul>
                                     <?php endif; ?>
                                     <div class="accordion-body py-0">
-                                    <?php if (check_menu_access('BUSINESSTYPE', 'view')): ?>
-                                        <ul class="right_sidebar_ul px-0 mt-2 m-0">
-                                            <li class="mb-0"><a class=" waves-effect" href="<?= base_url(route_to('business_types_list_page')) ?>"> <i class="icon_theme_color_1 bx bx-grid-small"></i> <span>BusinessType</span></a></li>
-                                        </ul>
+                                        <?php if (check_menu_access('BUSINESSTYPE', 'view')): ?>
+                                            <ul class="right_sidebar_ul px-0 mt-2 m-0">
+                                                <li class="mb-0"><a class=" waves-effect" href="<?= base_url(route_to('business_types_list_page')) ?>"> <i class="icon_theme_color_1 bx bx-grid-small"></i> <span>BusinessType</span></a></li>
+                                            </ul>
                                         <?php endif; ?>
-                                    <?php if (check_menu_access('COUNTRIES', 'view')): ?>
-                                        <ul class="right_sidebar_ul px-0 mt-2 m-0">
-                                            <li class="mb-0"><a class=" waves-effect" href="<?= base_url(route_to('country_list_page')) ?>"> <i class="icon_theme_color_1 bx bx-grid-small"></i> <span>Countries</span></a></li>
-                                        </ul>
-                                    <?php endif; ?>
-                                    <?php if (check_menu_access('STATES', 'view')): ?>
-                                        <ul class="right_sidebar_ul px-0 mt-2 m-0">
-                                            <li class="mb-0"><a class=" waves-effect" href="<?= base_url(route_to('state_list_page')) ?>"> <i class="icon_theme_color_1 bx bx-grid-small"></i> <span>States</span></a></li>
-                                        </ul>
-                                    <?php endif; ?>
-                                    <?php if (check_menu_access('CITIES', 'view')): ?>
-                                        <ul class="right_sidebar_ul px-0 mt-2 m-0">
-                                            <li class="mb-0"><a class=" waves-effect" href="<?= base_url(route_to('city_list_page')) ?>"> <i class="icon_theme_color_1 bx bx-grid-small"></i> <span>Cities</span></a></li>
-                                        </ul>
-                                    <?php endif; ?>
+                                        <?php if (check_menu_access('COUNTRIES', 'view')): ?>
+                                            <ul class="right_sidebar_ul px-0 mt-2 m-0">
+                                                <li class="mb-0"><a class=" waves-effect" href="<?= base_url(route_to('country_list_page')) ?>"> <i class="icon_theme_color_1 bx bx-grid-small"></i> <span>Countries</span></a></li>
+                                            </ul>
+                                        <?php endif; ?>
+                                        <?php if (check_menu_access('STATES', 'view')): ?>
+                                            <ul class="right_sidebar_ul px-0 mt-2 m-0">
+                                                <li class="mb-0"><a class=" waves-effect" href="<?= base_url(route_to('state_list_page')) ?>"> <i class="icon_theme_color_1 bx bx-grid-small"></i> <span>States</span></a></li>
+                                            </ul>
+                                        <?php endif; ?>
+                                        <?php if (check_menu_access('CITIES', 'view')): ?>
+                                            <ul class="right_sidebar_ul px-0 mt-2 m-0">
+                                                <li class="mb-0"><a class=" waves-effect" href="<?= base_url(route_to('city_list_page')) ?>"> <i class="icon_theme_color_1 bx bx-grid-small"></i> <span>Cities</span></a></li>
+                                            </ul>
+                                        <?php endif; ?>
+                                        <?php if (check_menu_access('ITEM_UQC', 'view')): ?>
+                                            <ul class="right_sidebar_ul px-0 mt-2 m-0">
+                                                <li class="mb-0"><a class=" waves-effect" href="<?= base_url(route_to('item_uqc_list_page')) ?>"> <i class="icon_theme_color_1 bx bx-grid-small"></i> <span>Item UQC</span></a></li>
+                                            </ul>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
                             </div>
+                        <?php endif; ?>
                         </div>
-                    <?php endif; ?>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- /Right-bar -->
+    <!-- /Right-bar -->
 
-<!-- Right bar overlay-->
-<div class="rightbar-overlay"></div>
+    <!-- Right bar overlay-->
+    <div class="rightbar-overlay"></div>

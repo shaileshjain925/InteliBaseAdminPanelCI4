@@ -56,6 +56,9 @@ if (!in_array($file_extension, $extensions)) {
                 $routes->get('CreateUpdate/(:num)', 'AdminPageController::business_types_create_update_page/$1');
                 $routes->post('View', 'AdminPageController::business_types_view_component', ['as' => 'business_types_view_component']);
             });
+            $routes->group('ItemUQC', function ($routes) {
+                $routes->get('List', 'AdminPageController::item_uqc_list_page', ['as' => 'item_uqc_list_page']);
+            });
         });
         $routes->group('Dashboard', function ($routes) {
             $routes->get('Overview', 'AdminPageController::overview_dashboard_page', ['as' => 'overview_dashboard_page']);
@@ -108,6 +111,14 @@ if (!in_array($file_extension, $extensions)) {
             });
             $routes->group('ItemCategory', function ($routes) {
                 $routes->get('List', 'AdminPageController::item_category_list_page', ['as' => 'item_category_list_page']);
+            });
+            $routes->group('ItemHsn', function ($routes) {
+                $routes->get('List', 'AdminPageController::item_hsn_list_page', ['as' => 'item_hsn_list_page']);
+            });
+            $routes->group('Item', function ($routes) {
+                $routes->get('List', 'AdminPageController::item_list_page', ['as' => 'item_list_page']);
+                $routes->post('item_view_component', 'AdminPageController::item_view_component', ['as' => 'item_view_component']);
+                $routes->post('item_create_update_component', 'AdminPageController::item_create_update_component', ['as' => 'item_create_update_component']);
             });
         });
         $routes->group('FileUpload', function ($routes) {
@@ -218,6 +229,27 @@ if (!in_array($file_extension, $extensions)) {
                 $routes->post("item_sub_group_create_api", "AdminApiController::item_sub_group_create_api", ['as' => 'item_sub_group_create_api']);
                 $routes->post("item_sub_group_update_api", "AdminApiController::item_sub_group_update_api", ['as' => 'item_sub_group_update_api']);
                 $routes->post("item_sub_group_delete_api", "AdminApiController::item_sub_group_delete_api", ['as' => 'item_sub_group_delete_api']);
+            });
+            $routes->group('item_uqc', function ($routes) {
+                $routes->post("item_uqc_get_api", "AdminApiController::item_uqc_get_api", ['as' => 'item_uqc_get_api']);
+                $routes->post("item_uqc_list_api", "AdminApiController::item_uqc_list_api", ['as' => 'item_uqc_list_api']);
+                $routes->post("item_uqc_create_api", "AdminApiController::item_uqc_create_api", ['as' => 'item_uqc_create_api']);
+                $routes->post("item_uqc_update_api", "AdminApiController::item_uqc_update_api", ['as' => 'item_uqc_update_api']);
+                $routes->post("item_uqc_delete_api", "AdminApiController::item_uqc_delete_api", ['as' => 'item_uqc_delete_api']);
+            });
+            $routes->group('item_hsn', function ($routes) {
+                $routes->post("item_hsn_get_api", "AdminApiController::item_hsn_get_api", ['as' => 'item_hsn_get_api']);
+                $routes->post("item_hsn_list_api", "AdminApiController::item_hsn_list_api", ['as' => 'item_hsn_list_api']);
+                $routes->post("item_hsn_create_api", "AdminApiController::item_hsn_create_api", ['as' => 'item_hsn_create_api']);
+                $routes->post("item_hsn_update_api", "AdminApiController::item_hsn_update_api", ['as' => 'item_hsn_update_api']);
+                $routes->post("item_hsn_delete_api", "AdminApiController::item_hsn_delete_api", ['as' => 'item_hsn_delete_api']);
+            });
+            $routes->group('item', function ($routes) {
+                $routes->post("item_get_api", "AdminApiController::item_get_api", ['as' => 'item_get_api']);
+                $routes->post("item_list_api", "AdminApiController::item_list_api", ['as' => 'item_list_api']);
+                $routes->post("item_create_api", "AdminApiController::item_create_api", ['as' => 'item_create_api']);
+                $routes->post("item_update_api", "AdminApiController::item_update_api", ['as' => 'item_update_api']);
+                $routes->post("item_delete_api", "AdminApiController::item_delete_api", ['as' => 'item_delete_api']);
             });
             $routes->group('business_types', function ($routes) {
                 $routes->post("business_types_get_api", "AdminApiController::business_types_get_api", ['as' => 'business_types_get_api']);
