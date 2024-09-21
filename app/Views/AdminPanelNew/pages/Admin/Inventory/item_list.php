@@ -1,5 +1,5 @@
 <!-- -----------main page start----------- -->
-<div class="offcanvas offcanvas-end  vendor-offcanvas" tabindex="-1" id="right_floating_div">
+<div class="offcanvas offcanvas-end  vendor-offcanvas" style="overflow: scroll; width:850px!important" tabindex="-1" id="right_floating_div">
 </div>
 
 <div class="row new_table_div col-md-12">
@@ -12,7 +12,7 @@
                     <button class="btn export_btn me-3" type="button"><i class="fas fa-backward"></i></button>
                 </a>
                 <?php if (check_menu_access('ITEM', 'create')): ?>
-                    <button onclick="item_create_update()" class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add Item</button>
+                    <button onclick="item_create_update()" class="btn add_form_btn" data-bs-toggle="offcanvas" data-bs-target="#right_floating_div" aria-controls="right_floating_div"><i class="bx bx-plus me-2"></i>Add Item</button>
                 <?php endif; ?>
             </div>
             <div class="table-responsive">
@@ -64,8 +64,46 @@
             success: function(response) {
                 $("#right_floating_div").html("");
                 $("#right_floating_div").html(response);
+                initializeSelectFields();
             }
         });
+    }
+
+    function initializeSelectFields() {
+        initializeSelectize('item_uqc_id', {
+            placeholder: "Select Base Unit"
+        }, apiUrl = "<?= base_url(route_to('item_uqc_list_api')) ?>", {}, "item_uqc_id", "item_uqc_name")
+        initializeSelectize('item_pack_uqc_id', {
+            placeholder: "Select Pack Unit"
+        }, apiUrl = "<?= base_url(route_to('item_uqc_list_api')) ?>", {}, "item_uqc_id", "item_uqc_name")
+        initializeSelectize('item_brand_id', {
+            placeholder: "Select Brand"
+        }, apiUrl = "<?= base_url(route_to('item_brand_list_api')) ?>", {}, "item_brand_id", "item_brand_name")
+        initializeSelectize('item_category_id', {
+            placeholder: "Select Category"
+        }, apiUrl = "<?= base_url(route_to('item_category_list_api')) ?>", {}, "item_category_id", "item_category_name")
+        $sub_group_parameter = {
+            '_autojoin': 'y',
+            '_select': '*',
+        };
+        initializeSelectize('item_sub_group_id', {
+            placeholder: "Select sub_group"
+        }, apiUrl = "<?= base_url(route_to('item_sub_group_list_api')) ?>", $sub_group_parameter, "item_sub_group_id", "item_sub_group_name", "", "item_group_name")
+        hsn_parameter = {
+            '_select': '*,CONCAT(item_hsn_code," (",item_hsn_gst,"%)") as hsn_code_with_gst',
+        }
+        initializeSelectize('item_hsn_id', {
+            placeholder: "Select HSN / SAC"
+        }, apiUrl = "<?= base_url(route_to('item_hsn_list_api')) ?>", hsn_parameter, "item_hsn_id", "hsn_code_with_gst", "")
+        initializeSelectize('item_class', {
+            placeholder: "Select Item Class"
+        })
+        initializeSelectize('item_nature', {
+            placeholder: "Select Item Nature"
+        })
+        initializeSelectize('item_manufacturing_type', {
+            placeholder: "Select Manufacturing Type"
+        })
     }
 
     function successCallback(response) {

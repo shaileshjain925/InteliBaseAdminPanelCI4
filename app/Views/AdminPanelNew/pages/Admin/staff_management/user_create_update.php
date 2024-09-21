@@ -12,9 +12,6 @@
     <div class="offcanvas-body overflow-visible mt-2">
         <form id="user-form" method="post" enctype="multipart/form-data" class="custom-validation" action="<?= base_url(route_to((isset($user_id) && !empty($user_id) ? "user_update_api" : "user_create_api"))) ?>">
             <input type="hidden" name="user_id" id="user_id" value="<?= @$user_id ?>">
-            <input type="hidden" name="user_aadhaar_card_image" id="user_aadhaar_card_image" value="<?= @$user_aadhaar_card_image ?>">
-            <input type="hidden" name="user_image" id="user_image" value="<?= @$user_image ?>">
-
             <div class="row">
                 <!-- Personal Information Group -->
                 <div class="col-md-12">
@@ -164,6 +161,7 @@
                         <!-- User Image -->
                         <div class="mb-3 col-md-6">
                             <label class="mb-2 form-label">Staff Image</label>
+                            <input type="hidden" name="user_image" id="user_image" value="<?= @$user_image ?>">
                             <div class="d-flex align-items-center">
                                 <img class="image-fluid" style="height:auto; width:100px" id="user_image_display" onclick="enlargeImage(event)" src="<?= (isset($user_image) && !empty($user_image)) ? base_url($user_image) : "" ?>">
                                 <?php if (isset($user_image) && !empty($user_image)) : ?>
@@ -177,6 +175,7 @@
                         <!-- Aadhaar Card Image -->
                         <div class="mb-3 col-md-6">
                             <label class="mb-2 form-label">Staff Aadhaar Image</label>
+                            <input type="hidden" name="user_aadhaar_card_image" id="user_aadhaar_card_image" value="<?= @$user_aadhaar_card_image ?>">
                             <div class="d-flex align-items-center">
                                 <img class="image-fluid" style="height:auto; width:100px" id="user_aadhaar_card_image_display" onclick="enlargeImage(event)" src="<?= (isset($user_aadhaar_card_image) && !empty($user_aadhaar_card_image)) ? base_url($user_aadhaar_card_image) : "" ?>">
                                 <?php if (isset($user_aadhaar_card_image) && !empty($user_aadhaar_card_image)) : ?>

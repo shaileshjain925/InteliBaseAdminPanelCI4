@@ -522,12 +522,12 @@ class AdminPageController extends BaseController
     public function item_view_component() {}
     public function item_create_update_component()
     {
-        $data = getRequestData($this->request, 'ARRAY');
+        $data = getRequestData($this->request, 'ARRAY') ?? [];
         $item_data = [];
-        if (isset($data['item_id']) && !empty($data['item_id'])) {
+        if (!empty($data) && isset($data['item_id'])) {
             $item_data = $this->get_item_model()->find($data['item_id']);
         }
-        return view('AdminPanelNew/components/inventory/item_create_update', $item_data['data']);
+        return view('AdminPanelNew/components/inventory/item_create_update', $item_data);
     }
     public function role_module_menus($role_id)
     {
