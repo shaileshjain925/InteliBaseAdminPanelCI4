@@ -7,6 +7,7 @@ use App\Controllers\BaseController;
 use App\Database\Seeds\AllInOneSeeder;
 use App\Traits\CommonTraits;
 use Config\Database;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class AdminPageController extends BaseController
 {
@@ -522,12 +523,12 @@ class AdminPageController extends BaseController
     public function item_view_component() {}
     public function item_create_update_component()
     {
-        $data = getRequestData($this->request, 'ARRAY');
+        $data = getRequestData($this->request, 'ARRAY') ?? [];
         $item_data = [];
-        if (isset($data['item_id']) && !empty($data['item_id'])) {
+        if (!empty($data) && isset($data['item_id'])) {
             $item_data = $this->get_item_model()->find($data['item_id']);
         }
-        return view('AdminPanelNew/components/inventory/item_create_update', $item_data['data']);
+        return view('AdminPanelNew/components/inventory/item_create_update', $item_data);
     }
     public function role_module_menus($role_id)
     {
@@ -823,5 +824,71 @@ class AdminPageController extends BaseController
             ],
         ];
         return $menuArray;
+    }
+    public function exportEnquiryExcelTemplate()
+    {
+        // Step 1: Create a new Spreadsheet object
+        $EC = new ExcelController();
+        $spreadsheet = $EC->createSpreadsheet();
+
+        // Sheet 1: ImportEnquiry
+        $sheet1 = $EC->addSheet($spreadsheet, 'ImportEnquiry');
+        $EC->addHeadings($spreadsheet, $sheet1, 1, ['ProductName', 'BrandName', 'BrandId', 'CategoryName', 'CategoryID', 'SubGroupName', 'SubGroupID']);
+
+        // Hide specific columns
+        $EC->hideColumn($sheet1, 'C');
+        $EC->hideColumn($sheet1, 'E');
+        $EC->hideColumn($sheet1, 'G');
+
+        // Sheet 2: Brands
+        $brandsData = $EC->get_item_brand_model()->select('item_brand_name, item_brand_id')->findAll() ?? [];
+        $sheet2 = $EC->addSheet($spreadsheet, 'Brands');
+        $EC->addHeadings($spreadsheet, $sheet2, 1, ['Name', 'ID']);
+        $EC->addRows($sheet2, 2, $brandsData);
+
+        // Protect Sheet 2
+        $EC->protectSheet($sheet2, 'your_password');
+
+        // Sheet 3: Categories
+        $categoriesData = $EC->get_item_category_model()->select('item_category_name, item_category_id')->findAll() ?? [];
+        $sheet3 = $EC->addSheet($spreadsheet, 'Categories');
+        $EC->addHeadings($spreadsheet, $sheet3, 1, ['Name', 'ID']);
+        $EC->addRows($sheet3, 2, $categoriesData);
+
+        // Protect Sheet 3
+        $EC->protectSheet($sheet3, 'your_password');
+
+        // Sheet 4: SubGroup
+        $subGroupsData = $EC->get_item_sub_group_model()->select('item_sub_group_name, item_sub_group_id')->findAll() ?? [];
+        $sheet4 = $EC->addSheet($spreadsheet, 'SubGroup');
+        $EC->addHeadings($spreadsheet, $sheet4, 1, ['Name', 'ID']);
+        $EC->addRows($sheet4, 2, $subGroupsData);
+
+        // Protect Sheet 4
+        $EC->protectSheet($sheet4, 'your_password');
+
+        // Step 2: Apply validation and formulas to Sheet 1
+        // Set dropdown validation for BrandName (B2)
+        $EC->addDropdownValidation($sheet1, 'B2', 'Brands!$A$2:$A$' . (count($brandsData) + 1));
+        // Set the VLOOKUP formula for BrandId (C2)
+        $EC->addFormula($sheet1, 'C2', '=IFERROR(VLOOKUP(B2, Brands!$A$2:$B$' . (count($brandsData) + 1) . ', 2, FALSE), "")');
+
+        // Set dropdown validation for CategoryName (D2)
+        $EC->addDropdownValidation($sheet1, 'D2', 'Categories!$A$2:$A$' . (count($categoriesData) + 1));
+        // Set the VLOOKUP formula for CategoryID (E2)
+        $EC->addFormula($sheet1, 'E2', '=IFERROR(VLOOKUP(D2, Categories!$A$2:$B$' . (count($categoriesData) + 1) . ', 2, FALSE), "")');
+
+        // Set dropdown validation for SubGroupName (F2)
+        $EC->addDropdownValidation($sheet1, 'F2', 'SubGroup!$A$2:$A$' . (count($subGroupsData) + 1));
+        // Set the VLOOKUP formula for SubGroupID (G2)
+        $EC->addFormula($sheet1, 'G2', '=IFERROR(VLOOKUP(F2, SubGroup!$A$2:$B$' . (count($subGroupsData) + 1) . ', 2, FALSE), "")');
+
+        // Hide additional sheets
+        $EC->hideSheet($spreadsheet, 'Brands');
+        $EC->hideSheet($spreadsheet, 'Categories');
+        $EC->hideSheet($spreadsheet, 'SubGroup');
+
+        // Step 3: Save the file and return the download response
+        return $EC->saveAndExport($this->response, $spreadsheet, WRITEPATH . 'exports/multiple_sheets.xlsx', 'multiple_sheets.xlsx');
     }
 }
