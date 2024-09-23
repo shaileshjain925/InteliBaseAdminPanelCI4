@@ -106,14 +106,14 @@
         })
     }
 
-    function successCallback(response) {
+    function itemFormSuccessCallback(response) {
         if (response.status == 200 || response.status == 201) {
             $(".offcanvas button[data-bs-dismiss='offcanvas']").click();
             fetchTableData();
         }
     }
 
-    function errorCallback(response) {
+    function itemFormErrorCallback(response) {
         console.log(response);
     }
 
@@ -292,7 +292,7 @@
                                 <i class="fa fa-eye"></i>
                             </button>
                             <?php if (check_menu_access('ITEM', 'edit')): ?>
-                                <button type="button" onclick="item_create_update('${row.item_id}')" class="text-white btn btn-sm btn-success">
+                                <button type="button" onclick="item_create_update('${row.item_id}')" data-bs-toggle="offcanvas" data-bs-target="#right_floating_div" aria-controls="right_floating_div" class="text-white btn btn-sm btn-success">
                                     <i class="bx bx-edit-alt"></i>
                                 </button>
                             <?php endif; ?>

@@ -7,7 +7,7 @@ use App\Models\FunctionModel;
 class ItemModel extends FunctionModel
 {
     protected $table            = 'items';
-    protected $primaryKey       = 'id';
+    protected $primaryKey       = 'item_id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;

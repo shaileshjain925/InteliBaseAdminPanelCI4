@@ -563,6 +563,9 @@ function initializeSelectize(
   // Initialize Selectize
   var $select = $("#" + selectId).selectize(options);
 
+  // Properly assign defaultSelectedValue using nullish coalescing and logical OR
+  defaultSelectedValue = (defaultSelectedValue ?? $("#" + selectId).data('value')) || null;
+
   // Load data from API if apiUrl is provided
   if (apiUrl !== "") {
     $.ajax({
@@ -571,7 +574,7 @@ function initializeSelectize(
       data: apiData, // Additional data to send with the request
       dataType: "json",
       success: function (response) {
-        if (response.status == 200) {
+        if (response.status === 200) {
           var data = JSON.parse(response.data);
 
           // Check if grouping is needed
@@ -618,6 +621,7 @@ function initializeSelectize(
       },
     });
   }
+
   // Return an object with methods
   return {
     onchange: function (callback) {
@@ -636,6 +640,7 @@ function initializeSelectize(
     },
   };
 }
+
 
 function setCookie(name, value, days) {
   var expires = "";

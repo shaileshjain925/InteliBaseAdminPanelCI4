@@ -3,6 +3,7 @@
 
     <!-- Hidden Item ID (for updates) -->
     <input type="hidden" name="item_id" value="<?= @$item_id ?>">
+    <input type="hidden" name="user_id" value="<?= (isset($user_id)) ? $user_id : $_SESSION['user_id'] ?>">
 
     <div class="row">
         <h5>Basic Information</h5>
@@ -48,7 +49,7 @@
         <!-- Item Brand -->
         <div class="mb-3 col-md-4">
             <label for="item_brand_id" class="form-label">Item Brand</label>
-            <select class="form-control" id="item_brand_id" name="item_brand_id">
+            <select class="form-control" id="item_brand_id" name="item_brand_id" data-value="<?= @$item_brand_id ?>">
                 <option value="">Select Item Brand</option>
                 <!-- Options will be dynamically populated -->
             </select>
@@ -58,7 +59,7 @@
         <!-- Item Category -->
         <div class="mb-3 col-md-4">
             <label for="item_category_id" class="form-label">Item Category</label>
-            <select class="form-control" id="item_category_id" name="item_category_id">
+            <select class="form-control" id="item_category_id" name="item_category_id" data-value="<?= @$item_category_id ?>">
                 <option value="">Select Item Category</option>
                 <!-- Options will be dynamically populated -->
             </select>
@@ -68,7 +69,7 @@
         <!-- Item Sub Group -->
         <div class="mb-3 col-md-4">
             <label for="item_sub_group_id" class="form-label">Item Sub Group</label>
-            <select class="form-control" id="item_sub_group_id" name="item_sub_group_id">
+            <select class="form-control" id="item_sub_group_id" name="item_sub_group_id" data-value="<?= @$item_sub_group_id ?>">
                 <option value="">Select Item Sub Group</option>
                 <!-- Options will be dynamically populated -->
             </select>
@@ -78,7 +79,7 @@
         <!-- Item HSN -->
         <div class="mb-3 col-md-4">
             <label for="item_hsn_id" class="form-label">Item HSN</label>
-            <select class="form-control" id="item_hsn_id" name="item_hsn_id">
+            <select class="form-control" id="item_hsn_id" name="item_hsn_id" data-value="<?= @$item_hsn_id ?>">
                 <option value="">Select HSN Code</option>
                 <!-- Options will be dynamically populated -->
             </select>
@@ -162,7 +163,7 @@
         <h5>Packaging Details</h5>
         <div class="mb-3 col-md-4">
             <label for="item_uqc_id" class="form-label">Base Unit</label>
-            <select class="form-control" id="item_uqc_id" name="item_uqc_id">
+            <select class="form-control" id="item_uqc_id" name="item_uqc_id" data-value="<?= @$item_uqc_id ?>">
                 <option value="">Select Base Unit</option>
                 <!-- Options will be dynamically populated -->
             </select>
@@ -170,15 +171,7 @@
         </div>
         <div class="mb-3 col-md-4">
             <label for="item_pack_uqc_id" class="form-label">Pack Unit</label>
-            <select class="form-control" id="item_pack_uqc_id" name="item_pack_uqc_id">
-                <option value="">Select Pack Unit</option>
-                <!-- Options will be dynamically populated -->
-            </select>
-            <span class="error-message" id="error-item_pack_uqc_id"></span>
-        </div>
-        <div class="mb-3 col-md-4">
-            <label for="item_pack_uqc_id" class="form-label">Pack Unit</label>
-            <select class="form-control" id="item_pack_uqc_id" name="item_pack_uqc_id">
+            <select class="form-control" id="item_pack_uqc_id" name="item_pack_uqc_id" data-value="<?= @$item_pack_uqc_id ?>">
                 <option value="">Select Pack Unit</option>
                 <!-- Options will be dynamically populated -->
             </select>
@@ -253,7 +246,7 @@
 
         <!-- Submit Button -->
         <div class="form_submit_div text-center mt-4">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="button" class="btn btn-primary" onclick="submitFormWithAjax('item-form', true, true, itemFormSuccessCallback, itemFormErrorCallback)">Submit</button>
         </div>
     </div>
 </form>
