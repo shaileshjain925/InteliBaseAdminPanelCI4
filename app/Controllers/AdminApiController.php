@@ -567,6 +567,33 @@ class AdminApiController extends BaseController
     {
         return $this->api_delete($this->get_business_types_model());
     }
+
+    // Payment Terms -------------------------------------------------------------------------------------------------------
+    /** */
+    public function payment_terms_get_api()
+    {
+        return $this->api_get($this->get_payment_terms_model());
+    }
+    /** */
+    public function payment_terms_list_api()
+    {
+        return $this->api_list($this->get_payment_terms_model());
+    }
+    /** */
+    public function payment_terms_create_api()
+    {
+        return $this->api_create($this->get_payment_terms_model());
+    }
+    /** */
+    public function payment_terms_update_api()
+    {
+        return $this->api_update($this->get_payment_terms_model());
+    }
+    /** */
+    public function payment_terms_delete_api()
+    {
+        return $this->api_delete($this->get_payment_terms_model());
+    }
     // UserDataAccess -------------------------------------------------------------------------------------------------------
     /** */
     public function user_data_access_create_api()
@@ -708,7 +735,7 @@ class AdminApiController extends BaseController
         // Define validation rules for 'username', 'password', 'confirm-password', 'otp'
         $validation->setRules([
             'file' => "required",
-            'for' => "in_list[user,item_brand,item_group,item_sub_group]",
+            'for' => "in_list[user,item_brand,item_group,item_sub_group,item]",
         ]);
         if ($validation->run($requestedData) === false) {
             // Return validation failed response
@@ -734,6 +761,9 @@ class AdminApiController extends BaseController
                 break;
             case 'item_sub_group':
                 $folderPath .= "uploads/item_sub_group/";
+                break;
+            case 'item':
+                $folderPath .= "uploads/item/";
                 break;
         }
         $errorMessage = "";

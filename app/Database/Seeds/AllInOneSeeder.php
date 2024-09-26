@@ -30,7 +30,9 @@ class AllInOneSeeder extends Seeder
         // User Seeder
         // $errors['users'] = $f->create_update($this->get_users_model(false), $this->users_data());
         // Item UQC
-        $errors['item_uqc'] = $f->create_update($this->get_item_uqc_model(false), $this->item_uqc());
+        // $errors['item_uqc'] = $f->create_update($this->get_item_uqc_model(false), $this->item_uqc());
+        // Payment Terms
+        // $errors['payment_terms'] = $f->create_update($this->get_payment_terms_model(false), $this->payment_terms());
         print_r($errors);
     }
     protected function countries_data()
@@ -4627,7 +4629,8 @@ class AllInOneSeeder extends Seeder
                 ['module_menu_id' => 103, 'menu_code' => 'CITIES', 'menu_name' => 'Cities', 'menu_type' => 'master'],
                 ['module_menu_id' => 104, 'menu_code' => 'LOG', 'menu_name' => 'Log', 'menu_type' => 'report'],
                 ['module_menu_id' => 105, 'menu_code' => 'BUSINESSTYPE', 'menu_name' => 'Business Type', 'menu_type' => 'master'],
-                ['module_menu_id' => 105, 'menu_code' => 'ITEM_UQC', 'menu_name' => 'Item UQC', 'menu_type' => 'master'],
+                ['module_menu_id' => 106, 'menu_code' => 'PAYMENT_TERMS', 'menu_name' => 'Payment Terms', 'menu_type' => 'master'],
+                ['module_menu_id' => 107, 'menu_code' => 'ITEM_UQC', 'menu_name' => 'Item UQC', 'menu_type' => 'master'],
             ]],
             ['module_id' => 3, 'module_code' => 'STAFF_MANAGEMENT', 'module_name' => 'Staff Management', 'is_dashboard' => true, 'menus' => [
                 ['module_menu_id' => 301, 'menu_code' => 'DESIGNATIONS', 'menu_name' => 'Designation', 'menu_type' => 'master'],
@@ -4947,6 +4950,36 @@ class AllInOneSeeder extends Seeder
             ['item_uqc_id' => 'UGS', 'item_uqc_name' => 'US GALLONS'],
             ['item_uqc_id' => 'UNT', 'item_uqc_name' => 'UNITS'],
             ['item_uqc_id' => 'YDS', 'item_uqc_name' => 'YARDS']
+        ];
+    }
+    protected function payment_terms()
+    {
+        return [
+            ['payment_term_id' => 1,'payment_term_name' => 'PERFORMA INVOICE', 'payment_term_code' => 'PERF_INV', 'due_days' => 0,"status" => 1],
+            ['payment_term_id' => 2,'payment_term_name' => 'ADVANCE PAYMENT', 'payment_term_code' => 'ADV_PAY', 'due_days' => 0,"status" => 1],
+            ['payment_term_id' => 3,'payment_term_name' => 'PAYMENT DUE IN 0 DAYS', 'payment_term_code' => 'DAYS_0', 'due_days' => 0,"status" => 1],
+            ['payment_term_id' => 4,'payment_term_name' => 'PAYMENT DUE IN 7 DAYS', 'payment_term_code' => 'DAYS_7', 'due_days' => 7,"status" => 1],
+            ['payment_term_id' => 5,'payment_term_name' => 'PAYMENT DUE IN 15 DAYS', 'payment_term_code' => 'DAYS_15', 'due_days' => 15,"status" => 1],
+            ['payment_term_id' => 6,'payment_term_name' => 'PAYMENT DUE IN 21 DAYS', 'payment_term_code' => 'DAYS_21', 'due_days' => 21,"status" => 1],
+            ['payment_term_id' => 7,'payment_term_name' => 'PAYMENT DUE IN 30 DAYS', 'payment_term_code' => 'DAYS_30', 'due_days' => 30,"status" => 1],
+            ['payment_term_id' => 8,'payment_term_name' => 'PAYMENT DUE IN 45 DAYS', 'payment_term_code' => 'DAYS_45', 'due_days' => 45,"status" => 1],
+            ['payment_term_id' => 9,'payment_term_name' => 'PAYMENT DUE IN 60 DAYS', 'payment_term_code' => 'DAYS_60', 'due_days' => 60,"status" => 1],
+            ['payment_term_id' => 10,'payment_term_name' => 'PAYMENT DUE IN 75 DAYS', 'payment_term_code' => 'DAYS_75', 'due_days' => 75,"status" => 1],
+            ['payment_term_id' => 11,'payment_term_name' => 'PAYMENT DUE IN 90 DAYS', 'payment_term_code' => 'DAYS_90', 'due_days' => 90,"status" => 1],
+            ['payment_term_id' => 12,'payment_term_name' => 'PAYMENT DUE IN 100 DAYS', 'payment_term_code' => 'DAYS_100', 'due_days' => 100,"status" => 1],
+            ['payment_term_id' => 13,'payment_term_name' => 'PAYMENT DUE IN 120 DAYS', 'payment_term_code' => 'DAYS_120', 'due_days' => 120,"status" => 1],
+            ['payment_term_id' => 14,'payment_term_name' => 'BANK GUARANTEE', 'payment_term_code' => 'BANK_GUAR', 'due_days' => null,"status" => 1],
+            ['payment_term_id' => 15,'payment_term_name' => 'LETTER OF CREDIT - PAYMENT DUE IN 0 DAYS', 'payment_term_code' => 'LC_DAYS_0', 'due_days' => 0,"status" => 1],
+            ['payment_term_id' => 16,'payment_term_name' => 'LETTER OF CREDIT - PAYMENT DUE IN 7 DAYS', 'payment_term_code' => 'LC_DAYS_7', 'due_days' => 7,"status" => 1],
+            ['payment_term_id' => 17,'payment_term_name' => 'LETTER OF CREDIT - PAYMENT DUE IN 15 DAYS', 'payment_term_code' => 'LC_DAYS_15', 'due_days' => 15,"status" => 1],
+            ['payment_term_id' => 18,'payment_term_name' => 'LETTER OF CREDIT - PAYMENT DUE IN 21 DAYS', 'payment_term_code' => 'LC_DAYS_21', 'due_days' => 21,"status" => 1],
+            ['payment_term_id' => 19,'payment_term_name' => 'LETTER OF CREDIT - PAYMENT DUE IN 30 DAYS', 'payment_term_code' => 'LC_DAYS_30', 'due_days' => 30,"status" => 1],
+            ['payment_term_id' => 20,'payment_term_name' => 'LETTER OF CREDIT - PAYMENT DUE IN 45 DAYS', 'payment_term_code' => 'LC_DAYS_45', 'due_days' => 45,"status" => 1],
+            ['payment_term_id' => 21,'payment_term_name' => 'LETTER OF CREDIT - PAYMENT DUE IN 60 DAYS', 'payment_term_code' => 'LC_DAYS_60', 'due_days' => 60,"status" => 1],
+            ['payment_term_id' => 22,'payment_term_name' => 'LETTER OF CREDIT - PAYMENT DUE IN 75 DAYS', 'payment_term_code' => 'LC_DAYS_75', 'due_days' => 75,"status" => 1],
+            ['payment_term_id' => 23,'payment_term_name' => 'LETTER OF CREDIT - PAYMENT DUE IN 90 DAYS', 'payment_term_code' => 'LC_DAYS_90', 'due_days' => 90,"status" => 1],
+            ['payment_term_id' => 24,'payment_term_name' => 'LETTER OF CREDIT - PAYMENT DUE IN 100 DAYS', 'payment_term_code' => 'LC_DAYS_100', 'due_days' => 100,"status" => 1],
+            ['payment_term_id' => 25,'payment_term_name' => 'LETTER OF CREDIT - PAYMENT DUE IN 120 DAYS', 'payment_term_code' => 'LC_DAYS_120', 'due_days' => 120,"status" => 1],
         ];
     }
 }

@@ -22,7 +22,7 @@
                 <div class="navbar-brand-box p-0 m-0 w-100">
                     <a href="/" class="logo logo-dark">
                         <span class="logo-sm">
-                            <img src="assets/images/logo_sm.png" alt="logo" height="20">
+                            <img src="<?= base_url('assets/images/logo_sm.png') ?>" alt="logo" height="20">
                         </span>
                         <span class="logo-lg">
                             <img src="https://brillsense.com/theme/assets/images/homeimg/logo-brill.svg" alt="logo" height="80">
@@ -31,7 +31,7 @@
 
                     <a href="/" class="logo logo-light">
                         <span class="logo-sm">
-                            <img src="assets/images/logo_sm.png" alt="logo" height="20">
+                            <img src="<?= base_url('assets/images/logo_sm.png') ?>" alt="logo" height="20">
                         </span>
                         <span class="logo-lg">
                             <img src="https://brillsense.com/theme/assets/images/homeimg/logo-brill.svg" alt="logo" height="80">

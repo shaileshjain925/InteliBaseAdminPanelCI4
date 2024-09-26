@@ -947,7 +947,7 @@ function timeAgo(datetime) {
   }
 }
 function checkPrintAccess() {
-  if (!print_allowed) {
+  if (typeof print_allowed === 'undefined' || !print_allowed) {
     // Block Ctrl + P
     $(document).on('keydown', function (event) {
       if (event.ctrlKey && event.key === 'p') {

@@ -23,6 +23,7 @@ use App\Models\ItemHsnModel;
 use App\Models\ItemModel;
 use App\Models\ItemSubGroupsModel;
 use App\Models\ItemUqcModel;
+use App\Models\PaymentTermsModel;
 
 trait CommonTraits
 {
@@ -196,5 +197,13 @@ trait CommonTraits
     public static function get_item_model(...$variable)
     {
         return new ItemModel(...$variable);
+    }
+    /**
+     * Return Model Instance
+     * @return PaymentTermsModel
+     */
+    public static function get_payment_terms_model(...$variable)
+    {
+        return new PaymentTermsModel(...$variable);
     }
 }

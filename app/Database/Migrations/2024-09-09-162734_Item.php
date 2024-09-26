@@ -168,14 +168,8 @@ class CreateItemsTable extends Migration
                 'null' => false,
                 'default' => 0
             ],
-            'created_at' => [
-                'type' => 'DATETIME',
-                'null' => true,
-            ],
-            'updated_at' => [
-                'type' => 'DATETIME',
-                'null' => true,
-            ]
+            'created_at datetime default current_timestamp',
+            'updated_at datetime default current_timestamp on update current_timestamp',
         ]);
 
         // Adding Primary Key
