@@ -36,6 +36,11 @@
                                             <li class="mb-0"><a class=" waves-effect" href="<?= base_url(route_to('payment_terms_list_page')) ?>"> <i class="icon_theme_color_1 bx bx-grid-small"></i> <span>Payments Terms</span></a></li>
                                         </ul>
                                     <?php endif; ?>
+                                    <?php if (check_menu_access('DELIVERY_TERMS', 'view')): ?>
+                                        <ul class="right_sidebar_ul px-0 mt-2 m-0">
+                                            <li class="mb-0"><a class=" waves-effect" href="<?= base_url(route_to('delivery_terms_list_page')) ?>"> <i class="icon_theme_color_1 bx bx-grid-small"></i> <span>Delivery Terms</span></a></li>
+                                        </ul>
+                                    <?php endif; ?>
                                     <?php if (check_menu_access('COUNTRIES', 'view')): ?>
                                         <ul class="right_sidebar_ul px-0 mt-2 m-0">
                                             <li class="mb-0"><a class=" waves-effect" href="<?= base_url(route_to('country_list_page')) ?>"> <i class="icon_theme_color_1 bx bx-grid-small"></i> <span>Countries</span></a></li>

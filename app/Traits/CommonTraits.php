@@ -16,6 +16,7 @@ use App\Models\RolesModel;
 use App\Models\LogsModel;
 use App\Models\UserDataAccessModel;
 use App\Models\BusinessTypeModel;
+use App\Models\DeliveryTermsModel;
 use App\Models\ItemBrandsModel;
 use App\Models\ItemCategoriesModel;
 use App\Models\ItemGroupsModel;
@@ -23,6 +24,8 @@ use App\Models\ItemHsnModel;
 use App\Models\ItemModel;
 use App\Models\ItemSubGroupsModel;
 use App\Models\ItemUqcModel;
+use App\Models\PartyAddressModel;
+use App\Models\PartyModel;
 use App\Models\PaymentTermsModel;
 
 trait CommonTraits
@@ -205,5 +208,29 @@ trait CommonTraits
     public static function get_payment_terms_model(...$variable)
     {
         return new PaymentTermsModel(...$variable);
+    }
+    /**
+     * Return Model Instance
+     * @return DeliveryTermsModel
+     */
+    public static function get_delivery_terms_model(...$variable)
+    {
+        return new DeliveryTermsModel(...$variable);
+    }
+    /**
+     * Return Model Instance
+     * @return PartyModel
+     */
+    public static function get_party_model(...$variable)
+    {
+        return new PartyModel(...$variable);
+    }
+    /**
+     * Return Model Instance
+     * @return PartyAddressModel
+     */
+    public static function get_party_address_model(...$variable)
+    {
+        return new PartyAddressModel(...$variable);
     }
 }

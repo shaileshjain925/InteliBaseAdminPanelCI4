@@ -594,6 +594,87 @@ class AdminApiController extends BaseController
     {
         return $this->api_delete($this->get_payment_terms_model());
     }
+
+    // Delivery Terms -------------------------------------------------------------------------------------------------------
+    /** */
+    public function delivery_terms_get_api()
+    {
+        return $this->api_get($this->get_delivery_terms_model());
+    }
+    /** */
+    public function delivery_terms_list_api()
+    {
+        return $this->api_list($this->get_delivery_terms_model());
+    }
+    /** */
+    public function delivery_terms_create_api()
+    {
+        return $this->api_create($this->get_delivery_terms_model());
+    }
+    /** */
+    public function delivery_terms_update_api()
+    {
+        return $this->api_update($this->get_delivery_terms_model());
+    }
+    /** */
+    public function delivery_terms_delete_api()
+    {
+        return $this->api_delete($this->get_delivery_terms_model());
+    }
+    // Party -------------------------------------------------------------------------------------------------------
+    /** */
+    public function party_get_api()
+    {
+        return $this->api_get($this->get_party_model());
+    }
+    /** */
+    public function party_list_api()
+    {
+        return $this->api_list($this->get_party_model());
+    }
+    /** */
+    public function party_create_api()
+    {
+        return $this->api_create($this->get_party_model());
+    }
+    /** */
+    public function party_update_api()
+    {
+        return $this->api_update($this->get_party_model());
+    }
+    /** */
+    public function party_delete_api()
+    {
+        return $this->api_delete($this->get_party_model());
+    }
+
+    // PartyAddress -------------------------------------------------------------------------------------------------------
+    /** */
+    public function party_address_get_api()
+    {
+        return $this->api_get($this->get_party_address_model());
+    }
+    /** */
+    public function party_address_list_api()
+    {
+        return $this->api_list($this->get_party_address_model());
+    }
+    /** */
+    public function party_address_create_api()
+    {
+        return $this->api_create($this->get_party_address_model());
+    }
+    /** */
+    public function party_address_update_api()
+    {
+        return $this->api_update($this->get_party_address_model());
+    }
+    /** */
+    public function party_address_delete_api()
+    {
+        return $this->api_delete($this->get_party_address_model());
+    }
+
     // UserDataAccess -------------------------------------------------------------------------------------------------------
     /** */
     public function user_data_access_create_api()

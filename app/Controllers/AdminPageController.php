@@ -262,19 +262,34 @@ class AdminPageController extends BaseController
         $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
         return view('AdminPanelNew/partials/main', $theme_data);
     }
-    public function payment_terms_create_update_page($payment_term_id = null)
+    public function payment_terms_create_update_component()
+    {
+        $data = getRequestData($this->request, 'ARRAY') ?? [];
+        $payment_term_data = [];
+        if (!empty($data) && isset($data['payment_term_id'])) {
+            $payment_term_data = $this->get_payment_terms_model()->find($data['payment_term_id']);
+        }
+        return view('AdminPanelNew/components/payment_terms_create_update', $payment_term_data);
+    }
+    public function delivery_terms_list_page()
     {
         $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Payment_Terms ' . CreateUpdateAlias($payment_term_id);
-        $theme_data['_page_title'] = 'Payment_Terms ' . CreateUpdateAlias($payment_term_id);
-        $theme_data['_breadcrumb1'] = 'Payment_Terms List';
-        $theme_data['_breadcrumb2'] = 'Payment_Terms ' . CreateUpdateAlias($payment_term_id);
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/OneTimeSetting/payment_terms_create_update';
-        if (!empty($payment_term_id)) {
-            $theme_data = array_merge($theme_data, ['payment_term_id' => $payment_term_id]);
-        }
-        $theme_data['_previous_path'] = base_url(route_to($theme_data['user_type'] . '_list_page'));
+        $theme_data['_meta_title'] = 'Delivery Terms List';
+        $theme_data['_page_title'] = 'Delivery Terms List';
+        $theme_data['_breadcrumb1'] = 'Dashboard';
+        $theme_data['_breadcrumb2'] = 'Delivery Terms List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/OneTimeSetting/delivery_terms_list';
+        $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
         return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function delivery_terms_create_update_component()
+    {
+        $data = getRequestData($this->request, 'ARRAY') ?? [];
+        $delivery_term_data = [];
+        if (!empty($data) && isset($data['delivery_term_id'])) {
+            $delivery_term_data = $this->get_delivery_terms_model()->find($data['delivery_term_id']);
+        }
+        return view('AdminPanelNew/components/delivery_terms_create_update', $delivery_term_data);
     }
 
     public function designation_list_page()
@@ -538,6 +553,27 @@ class AdminPageController extends BaseController
             $item_data = $this->get_item_model()->find($data['item_id']);
         }
         return view('AdminPanelNew/components/inventory/item_create_update', $item_data);
+    }
+    public function party_list_page($party_type)
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = $party_type . ' List';
+        $theme_data['_page_title'] = $party_type . ' List';
+        $theme_data['_breadcrumb1'] = 'Dashboard';
+        $theme_data['_breadcrumb2'] = $party_type . ' List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Sales/party_list';
+        $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function party_view_component($party_type) {}
+    public function party_create_update_component($party_type)
+    {
+        $data = getRequestData($this->request, 'ARRAY') ?? [];
+        $party_data = [];
+        if (!empty($data) && isset($data['party_id'])) {
+            $party_data = $this->get_party_model()->find($data['party_id']);
+        }
+        return view('AdminPanelNew/components/sales/party_create_update', $party_data);
     }
     public function role_module_menus($role_id)
     {
