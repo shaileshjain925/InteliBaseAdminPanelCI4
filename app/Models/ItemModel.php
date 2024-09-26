@@ -63,21 +63,100 @@ class ItemModel extends FunctionModel
         'item_inspection_required' => 'permit_empty',
         'item_is_active'          => 'permit_empty',
     ];
-    protected $booleanFields = ['item_is_spare_part', 'item_is_expire', 'item_inspection_required', 'item_is_active'];
-    protected $validationMessages   = [];
+    protected $validationMessages = [
+        'item_brand_id' => [
+            'is_not_unique' => 'The selected brand does not exist in the item brands list.',
+        ],
+        'item_category_id' => [
+            'is_not_unique' => 'The selected category does not exist in the item categories list.',
+        ],
+        'item_sub_group_id' => [
+            'is_not_unique' => 'The selected sub-group does not exist in the item sub-groups list.',
+        ],
+        'item_hsn_id' => [
+            'is_not_unique' => 'The selected HSN does not exist in the item HSN list.',
+        ],
+        'item_class' => [
+            'required' => 'Item class is required.',
+            'in_list'  => 'Item class must be one of: listed, non-listed, or not-assign.',
+        ],
+        'item_code' => [
+            'is_unique'   => 'The item code already exists for another item.',
+            'max_length'  => 'Item code cannot exceed 255 characters.',
+        ],
+        'item_name' => [
+            'required'    => 'Item name is required.',
+            'is_unique'   => 'The item name already exists for another item.',
+            'max_length'  => 'Item name cannot exceed 255 characters.',
+        ],
+        'item_nature' => [
+            'required' => 'Item nature is required.',
+            'in_list'  => 'Item nature must be one of: Capex, Packaging, Services, Saleable, Consumable, MRO, NoBuy, or NoStock.',
+        ],
+        'item_manufacturing_type' => [
+            'required' => 'Item manufacturing type is required.',
+            'in_list'  => 'Manufacturing type must be one of: FinishedProduct, RawMaterial, SemiFinished, or Other.',
+        ],
+        'item_drawing_no' => [
+            'max_length'  => 'Drawing number cannot exceed 255 characters.',
+        ],
+        'item_remark' => [
+            'permit_empty' => 'Remarks can be empty.',
+        ],
+        'item_uqc_id' => [
+            'required'      => 'Base Unit is required.',
+            'is_not_unique' => 'The selected Base Unit does not exist.',
+        ],
+        'item_pack_uqc_id' => [
+            'is_not_unique' => 'The selected pack UQC ID does not exist.',
+        ],
+        'item_pack_conversion' => [
+            'permit_empty' => 'Pack conversion can be empty.',
+        ],
+        'item_user_id' => [
+            'required' => 'User ID is required.',
+        ],
+        'item_box_image' => [
+            'permit_empty' => 'Box image can be empty.',
+        ],
+        'item_image' => [
+            'permit_empty' => 'Item image can be empty.',
+        ],
+        'item_quality_check_link' => [
+            'permit_empty' => 'Quality check link can be empty.',
+        ],
+        'item_inspection_required' => [
+            'permit_empty' => 'Inspection requirement can be empty.',
+        ],
+        'item_is_active' => [
+            'permit_empty' => 'Active status can be empty.',
+        ],
+    ];
+
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 
     // Callbacks
+    protected $booleanFields = ['item_is_spare_part', 'item_is_expire', 'item_inspection_required', 'item_is_active'];
+    protected $nullSetIfEmpty = [
+        "item_brand_id",
+        "item_category_id",
+        "item_sub_group_id",
+        "item_hsn_id",
+        "item_uqc_id",
+        "item_pack_uqc_id",
+        "item_user_id",
+    ];
     protected $allowCallbacks = true;
-    protected $beforeInsert   = ['updateBooleanFields'];
+    protected $beforeInsert   = ['updateBooleanFields', 'nullSetIfEmpty'];
     protected $afterInsert    = [];
-    protected $beforeUpdate   = ['updateBooleanFields'];
+    protected $beforeUpdate   = ['updateBooleanFields', 'nullSetIfEmpty'];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
 
     public function __construct($joinRequired = true)
     {

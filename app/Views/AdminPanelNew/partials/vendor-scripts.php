@@ -52,7 +52,7 @@
 <script src='https://cdnjs.cloudflare.com/ajax/libs/compressorjs/1.2.1/compressor.min.js' integrity='sha512-MgYeYFj8R3S6rvZHiJ1xA9cM/VDGcT4eRRFQwGA7qDP7NHbnWKNmAm28z0LVjOuUqjD0T9JxpDMdVqsZOSHaSA==' crossorigin='anonymous'></script>
 <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/compressorjs/1.2.1/compressor.esm.min.js' integrity='sha512-S4y8W0g3W9xMoLffztdeQuLEDRITC2r7M6MArtCVJVdXKUgtMeKlppXxMF47z8VBVqsYWhUgxzHutwI+CCXM7w==' crossorigin='anonymous'></script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/compressorjs/1.2.1/compressor.common.min.js' integrity='sha512-CcXGYpHFlYVdUt/ati7LpFt6OOopkGkSTZhtkRrTdM7fP1QznKCDA0zRttvjzL0u78c4J4zTTLugv9I/VMRsVQ==' crossorigin='anonymous'></script> -->
-<script src="assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+<script src="<?= base_url('assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js') ?>"></script>
 <script>
     function AskForImageCompress(file, compression_ratio = 0.6) {
         return new Promise((resolve, reject) => {

@@ -11,26 +11,26 @@
                 <a href="<?= @$_previous_path ?>">
                     <button class="btn export_btn me-3" type="button"><i class="fas fa-backward"></i></button>
                 </a>
-                <?php if (check_menu_access('ITEM', 'create')): ?>
-                    <button onclick="item_create_update()" class="btn add_form_btn" data-bs-toggle="offcanvas" data-bs-target="#right_floating_div" aria-controls="right_floating_div"><i class="bx bx-plus me-2"></i>Add Item</button>
+                <?php if (check_menu_access('PAYMENT_TERMS', 'create')): ?>
+                    <button onclick="payment_terms_create_update()" class="btn add_form_btn" data-bs-toggle="offcanvas" data-bs-target="#right_floating_div" aria-controls="right_floating_div"><i class="bx bx-plus me-2"></i>Add Item</button>
                 <?php endif; ?>
             </div>
             <div class="table-responsive">
-                <table id="item" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle"></table>
+                <table id="payment_terms" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle"></table>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    var datatable_export = '<?= (check_menu_access('ITEM', 'export')) ?>';
-    var datatable_print = '<?= (check_menu_access('ITEM', 'print')) ?>';
-    var print_allowed = '<?= (check_menu_access('ITEM', 'print')) ?>';
-    var DeleteApiUrl = "<?= base_url(route_to('item_delete_api')) ?>";
+    var datatable_export = '<?= (check_menu_access('PAYMENT_TERMS', 'export')) ?>';
+    var datatable_print = '<?= (check_menu_access('PAYMENT_TERMS', 'print')) ?>';
+    var print_allowed = '<?= (check_menu_access('PAYMENT_TERMS', 'print')) ?>';
+    var DeleteApiUrl = "<?= base_url(route_to('payment_terms_delete_api')) ?>";
 
-    function item_delete(item_id) {
+    function payment_term_delete(payment_term_id) {
         deleteRow({
-                "item_id": item_id
+                "payment_term_id": payment_term_id
             }).then((response) => {
                 fetchTableData()
             })
@@ -39,12 +39,12 @@
             });
     }
 
-    function item_view(item_id) {
+    function payment_term_view(payment_term_id) {
         $.ajax({
             type: "post",
-            url: "<?= base_url(route_to('item_view_component')) ?>",
+            url: "<?= base_url(route_to('payment_term_view_component')) ?>",
             data: {
-                item_id: item_id
+                payment_term_id: payment_term_id
             },
             success: function(response) {
                 $("#right_floating_div").html("");
@@ -53,205 +53,167 @@
         });
     }
 
-    function item_create_update(item_id = '') {
+    function payment_term_create_update(payment_term_id = '') {
         var data = {};
-        if (item_id != '') {
-            data.item_id = item_id
+        if (payment_term_id != '') {
+            data.payment_term_id = payment_term_id
         }
         $.ajax({
             type: "post",
-            url: "<?= base_url(route_to('item_create_update_component')) ?>",
+            url: "<?= base_url(route_to('payment_term_create_update_component')) ?>",
             data: data,
             success: function(response) {
                 $("#right_floating_div").html("");
                 $("#right_floating_div").html(response);
-                initializeSelectFields();
             }
         });
     }
 
-    function initializeSelectFields() {
-        initializeSelectize('item_uqc_id', {
-            placeholder: "Select Base Unit"
-        }, apiUrl = "<?= base_url(route_to('item_uqc_list_api')) ?>", {}, "item_uqc_id", "item_uqc_name")
-        initializeSelectize('item_pack_uqc_id', {
-            placeholder: "Select Pack Unit"
-        }, apiUrl = "<?= base_url(route_to('item_uqc_list_api')) ?>", {}, "item_uqc_id", "item_uqc_name")
-        initializeSelectize('item_brand_id', {
-            placeholder: "Select Brand"
-        }, apiUrl = "<?= base_url(route_to('item_brand_list_api')) ?>", {}, "item_brand_id", "item_brand_name")
-        initializeSelectize('item_category_id', {
-            placeholder: "Select Category"
-        }, apiUrl = "<?= base_url(route_to('item_category_list_api')) ?>", {}, "item_category_id", "item_category_name")
-        $sub_group_parameter = {
-            '_autojoin': 'y',
-            '_select': '*',
-        };
-        initializeSelectize('item_sub_group_id', {
-            placeholder: "Select Sub Group"
-        }, apiUrl = "<?= base_url(route_to('item_sub_group_list_api')) ?>", $sub_group_parameter, "item_sub_group_id", "item_sub_group_name", null, "item_group_name")
-        hsn_parameter = {
-            '_select': '*,CONCAT(item_hsn_code," (",item_hsn_gst,"%)") as hsn_code_with_gst',
-        }
-        initializeSelectize('item_hsn_id', {
-            placeholder: "Select HSN / SAC"
-        }, apiUrl = "<?= base_url(route_to('item_hsn_list_api')) ?>", hsn_parameter, "item_hsn_id", "hsn_code_with_gst")
-        initializeSelectize('item_class', {
-            placeholder: "Select Item Class"
-        })
-        initializeSelectize('item_nature', {
-            placeholder: "Select Item Nature"
-        })
-        initializeSelectize('item_manufacturing_type', {
-            placeholder: "Select Manufacturing Type"
-        })
-    }
-
-    function itemFormSuccessCallback(response) {
+    function payment_termFormSuccessCallback(response) {
         if (response.status == 200 || response.status == 201) {
             $(".offcanvas button[data-bs-dismiss='offcanvas']").click();
             fetchTableData();
         }
     }
 
-    function itemFormErrorCallback(response) {
+    function payment_termFormErrorCallback(response) {
         console.log(response);
     }
 
     function successDataTableCallbackFunction(response) {
         var columns = [{
                 title: "ID",
-                data: "item_id",
+                data: "payment_terms_id",
                 visible: true
             },
             {
-                title: "ITEM NAME",
-                data: "item_name",
+                title: "PAYMENT_TERMS CODE",
+                data: "payment_terms_code",
                 visible: true
             },
             {
-                title: 'CLASS',
-                data: 'item_class',
-                visible: true,
+                title: "PAYMENT_TERMS NAME",
+                data: "payment_terms_name",
+                visible: true
             },
             {
                 title: 'PART NUMBER',
-                data: 'item_code',
+                data: 'payment_term_code',
                 visible: true,
             },
             {
                 title: 'Brand',
-                data: 'item_brand_name',
+                data: 'payment_term_brand_name',
                 visible: true,
             },
             {
                 title: 'Category',
-                data: 'item_category_name',
+                data: 'payment_term_category_name',
                 visible: true,
             },
             {
                 title: 'Group',
-                data: 'item_group_name',
+                data: 'payment_term_group_name',
                 visible: true,
             },
             {
                 title: 'Sub Group',
-                data: 'item_sub_group_name',
+                data: 'payment_term_sub_group_name',
                 visible: true,
             },
             {
                 title: 'HSN',
-                data: 'item_hsn_code',
+                data: 'payment_term_hsn_code',
                 visible: true,
             },
             {
                 title: 'GST %',
-                data: 'item_hsn_gst',
+                data: 'payment_term_hsn_gst',
                 visible: true,
             },
             {
                 title: 'Description',
-                data: 'item_description',
+                data: 'payment_term_description',
                 visible: true,
             },
             {
                 title: 'Supplier Description',
-                data: 'item_supplier_description',
+                data: 'payment_term_supplier_description',
                 visible: true,
             },
             {
                 title: 'Nature',
-                data: 'item_nature',
+                data: 'payment_term_nature',
                 visible: true,
             },
             {
                 title: 'mfg Type',
-                data: 'item_manufacturing_type',
+                data: 'payment_term_manufacturing_type',
                 visible: true,
             },
             {
                 title: 'Is Spare Part',
-                data: 'item_is_spare_part',
+                data: 'payment_term_is_spare_part',
                 visible: true,
             },
             {
                 title: 'Is Expire',
-                data: 'item_is_expire',
+                data: 'payment_term_is_expire',
                 visible: true,
             },
             {
                 title: 'MOQ',
-                data: 'item_min_order_qty',
+                data: 'payment_term_min_order_qty',
                 visible: true,
             },
             {
                 title: 'MPQ',
-                data: 'item_min_order_pack_qty',
+                data: 'payment_term_min_order_pack_qty',
                 visible: true,
             },
             {
                 title: 'Length',
-                data: 'item_length_cms',
+                data: 'payment_term_length_cms',
                 visible: true,
             },
             {
                 title: 'Width',
-                data: 'item_width_cms',
+                data: 'payment_term_width_cms',
                 visible: true,
             },
             {
                 title: 'Height',
-                data: 'item_height_cms',
+                data: 'payment_term_height_cms',
                 visible: true,
             },
             {
                 title: 'Weight',
-                data: 'item_weight_kg',
+                data: 'payment_term_weight_kg',
                 visible: true,
             },
             {
                 title: 'Drawing No',
-                data: 'item_drawing_no',
+                data: 'payment_term_drawing_no',
                 visible: true,
             },
             {
                 title: 'Remark',
-                data: 'item_remark',
+                data: 'payment_term_remark',
                 visible: true,
             },
             {
                 title: 'UOM',
-                data: 'item_uqc_id',
+                data: 'payment_term_uqc_id',
                 visible: true,
             },
             {
                 title: 'PACK UOM',
-                data: 'item_pack_uqc_id',
+                data: 'payment_term_pack_uqc_id',
                 visible: true,
             },
             {
                 title: 'PCK CVR',
-                data: 'item_pack_conversion',
+                data: 'payment_term_pack_conversion',
                 visible: true,
             },
             {
@@ -260,16 +222,16 @@
                 visible: true,
             },
             {
-                title: 'item_box_image',
-                data: 'item_box_image',
+                title: 'payment_term_box_image',
+                data: 'payment_term_box_image',
                 visible: true,
                 render: function(data, type, row) {
                     return `<img src="<?= base_url() ?>${data}" style="height:50px;width:auto;" onclick="enlargeImage(event)">`;
                 }
             },
             {
-                title: 'item_image',
-                data: 'item_image',
+                title: 'payment_term_image',
+                data: 'payment_term_image',
                 visible: true,
                 render: function(data, type, row) {
                     return `<img src="<?= base_url() ?>${data}" style="height:50px;width:auto;" onclick="enlargeImage(event)">`;
@@ -277,17 +239,17 @@
             },
             {
                 title: 'Is Active',
-                data: 'item_is_active',
+                data: 'payment_term_is_active',
                 visible: true,
             },
             {
                 title: 'QC Link',
-                data: 'item_quality_check_link',
+                data: 'payment_term_quality_check_link',
                 visible: true,
             },
             {
                 title: 'Inspection Required',
-                data: 'item_inspection_required',
+                data: 'payment_term_inspection_required',
                 visible: true,
             },
             {
@@ -295,16 +257,16 @@
                 "data": null,
                 "render": function(data, type, row) {
                     return `
-                            <button class="text-white btn btn-sm btn-info" onclick="item_view(${row.item_id})" data-bs-toggle="offcanvas" data-bs-target="#right_floating_div" aria-controls="right_floating_div">
+                            <button class="text-white btn btn-sm btn-info" onclick="payment_terms_view(${row.payment_term_id})" data-bs-toggle="offcanvas" data-bs-target="#right_floating_div" aria-controls="right_floating_div">
                                 <i class="fa fa-eye"></i>
                             </button>
-                            <?php if (check_menu_access('ITEM', 'edit')): ?>
-                                <button type="button" onclick="item_create_update('${row.item_id}')" data-bs-toggle="offcanvas" data-bs-target="#right_floating_div" aria-controls="right_floating_div" class="text-white btn btn-sm btn-success">
+                            <?php if (check_menu_access('PAYMENT_TERMS', 'edit')): ?>
+                                <button type="button" onclick="payment_terms_create_update('${row.payment_term_id}')" data-bs-toggle="offcanvas" data-bs-target="#right_floating_div" aria-controls="right_floating_div" class="text-white btn btn-sm btn-success">
                                     <i class="bx bx-edit-alt"></i>
                                 </button>
                             <?php endif; ?>
-                            <?php if (check_menu_access('ITEM', 'delete')): ?>
-                                <button class="text-white btn btn-sm btn-danger" onclick="item_delete(${row.item_id})">
+                            <?php if (check_menu_access('PAYMENT_TERMS', 'delete')): ?>
+                                <button class="text-white btn btn-sm btn-danger" onclick="payment_terms_delete(${row.payment_term_id})">
                                     <i class="bx bx-trash-alt"></i>
                                 </button>
                             <?php endif; ?>
@@ -331,7 +293,7 @@
         parameter._autojoin = 'F';
         parameter._select = '*';
         DataTableInitialized(
-            'item', // table_id
+            'payment_term', // table_id
             "<?= base_url(route_to('item_list_api')) ?>", // url
             'POST', // method
             parameter, // parameter

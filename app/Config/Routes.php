@@ -53,9 +53,13 @@ if (!in_array($file_extension, $extensions)) {
             });
             $routes->group('BusinessType', function ($routes) {
                 $routes->get('List', 'AdminPageController::business_types_list_page', ['as' => 'business_types_list_page']);
-                $routes->get('CreateUpdate', 'AdminPageController::business_types_create_update_page', ['as' => 'business_types_create_update_page']);
-                $routes->get('CreateUpdate/(:num)', 'AdminPageController::business_types_create_update_page/$1');
                 $routes->post('View', 'AdminPageController::business_types_view_component', ['as' => 'business_types_view_component']);
+            });
+            $routes->group('PaymentTerms', function ($routes) {
+                $routes->get('List', 'AdminPageController::payment_terms_list_page', ['as' => 'payment_terms_list_page']);
+                $routes->get('CreateUpdate', 'AdminPageController::payment_terms_create_update_page', ['as' => 'payment_terms_create_update_page']);
+                $routes->get('CreateUpdate/(:num)', 'AdminPageController::payment_terms_create_update_page/$1');
+                $routes->post('View', 'AdminPageController::payment_terms_view_component', ['as' => 'payment_terms_view_component']);
             });
             $routes->group('ItemUQC', function ($routes) {
                 $routes->get('List', 'AdminPageController::item_uqc_list_page', ['as' => 'item_uqc_list_page']);
@@ -258,6 +262,13 @@ if (!in_array($file_extension, $extensions)) {
                 $routes->post("business_types_create_api", "AdminApiController::business_types_create_api", ['as' => 'business_types_create_api']);
                 $routes->post("business_types_update_api", "AdminApiController::business_types_update_api", ['as' => 'business_types_update_api']);
                 $routes->post("business_types_delete_api", "AdminApiController::business_types_delete_api", ['as' => 'business_types_delete_api']);
+            });
+            $routes->group('payment_terms', function ($routes) {
+                $routes->post("payment_terms_get_api", "AdminApiController::payment_terms_get_api", ['as' => 'payment_terms_get_api']);
+                $routes->post("payment_terms_list_api", "AdminApiController::payment_terms_list_api", ['as' => 'payment_terms_list_api']);
+                $routes->post("payment_terms_create_api", "AdminApiController::payment_terms_create_api", ['as' => 'payment_terms_create_api']);
+                $routes->post("payment_terms_update_api", "AdminApiController::payment_terms_update_api", ['as' => 'payment_terms_update_api']);
+                $routes->post("payment_terms_delete_api", "AdminApiController::payment_terms_delete_api", ['as' => 'payment_terms_delete_api']);
             });
             $routes->group('user_data_access', function ($routes) {
                 $routes->post("user_data_access_get_api", "AdminApiController::user_data_access_get_api", ['as' => 'user_data_access_get_api']);

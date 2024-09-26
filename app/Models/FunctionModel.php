@@ -509,6 +509,22 @@ class FunctionModel extends Model
 
         return $data;
     }
+    public function nullSetIfEmpty($data)
+    {
+        $nullSetIfEmpty = $this->nullSetIfEmpty ?? null;
+
+        if (!isset($data['data']) || !is_array($data['data'])) {
+            return $data; // Handle edge case where 'data' is not set or not an array
+        }
+
+        foreach ($nullSetIfEmpty as $key => &$field) {
+            // Check if the field exists in the data and if its value indicates it's checked
+            if (isset($data['data'][$field]) && empty($data['data'][$field])) {
+                $data['data'][$field] = null;
+            }
+        }
+        return $data;
+    }
 
 
     public function ConvertDateDMY(array $data)
@@ -604,7 +620,7 @@ class FunctionModel extends Model
         $data_for_update = [];
 
         foreach ($data as $row) {
-            if (!in_array($row[$pk], $existing_data_primary_keys)) {
+            if (!isset($row[$pk]) || !in_array($row[$pk], $existing_data_primary_keys)) {
                 $data_for_insert[] = $row;
             } else {
                 $data_for_update[] = $row;

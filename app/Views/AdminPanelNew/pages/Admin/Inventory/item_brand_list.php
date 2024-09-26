@@ -28,7 +28,7 @@
     var datatable_export = '<?= (check_menu_access('ITEM_GROUP', 'export')) ?>';
     var datatable_print = '<?= (check_menu_access('ITEM_GROUP', 'print')) ?>';
     var print_allowed = '<?= (check_menu_access('ITEM_GROUP', 'print')) ?>';
-    var DeleteApiUrl = "<?= base_url(route_to('item_brand_delete_api')) ?>"
+    var DeleteApiUrl = "<?= base_url(route_to('item_brand_delete_api')) ?>";
 
     function item_brand_delete(item_brand_id) {
         deleteRow({

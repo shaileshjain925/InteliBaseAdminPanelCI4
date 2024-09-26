@@ -251,19 +251,28 @@ class AdminPageController extends BaseController
         $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
         return view('AdminPanelNew/partials/main', $theme_data);
     }
-    public function business_types_create_update_page($user_id = null)
+    public function payment_terms_list_page()
     {
         $theme_data = $this->admin_panel_common_data();
-        $theme_data['_meta_title'] = 'Business Types ' . CreateUpdateAlias($user_id);
-        $theme_data['_page_title'] = 'Business Types ' . CreateUpdateAlias($user_id);
-        $theme_data['_breadcrumb1'] = 'Business Types List';
-        $theme_data['_breadcrumb2'] = 'Business Types ' . CreateUpdateAlias($user_id);
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/OneTimeSetting/business_types_create_update';
-        if (!empty($user_id)) {
-            $theme_data = array_merge($theme_data, ['user_id' => $user_id]);
+        $theme_data['_meta_title'] = 'Payment Terms List';
+        $theme_data['_page_title'] = 'Payment Terms List';
+        $theme_data['_breadcrumb1'] = 'Dashboard';
+        $theme_data['_breadcrumb2'] = 'Payment Terms List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/OneTimeSetting/payment_terms_list';
+        $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function payment_terms_create_update_page($payment_term_id = null)
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Payment_Terms ' . CreateUpdateAlias($payment_term_id);
+        $theme_data['_page_title'] = 'Payment_Terms ' . CreateUpdateAlias($payment_term_id);
+        $theme_data['_breadcrumb1'] = 'Payment_Terms List';
+        $theme_data['_breadcrumb2'] = 'Payment_Terms ' . CreateUpdateAlias($payment_term_id);
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/OneTimeSetting/payment_terms_create_update';
+        if (!empty($payment_term_id)) {
+            $theme_data = array_merge($theme_data, ['payment_term_id' => $payment_term_id]);
         }
-        $theme_data['user_type'] = "super_admin";
-        $theme_data['_form_type'] = 'component';
         $theme_data['_previous_path'] = base_url(route_to($theme_data['user_type'] . '_list_page'));
         return view('AdminPanelNew/partials/main', $theme_data);
     }
