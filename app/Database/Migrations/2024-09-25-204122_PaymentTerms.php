@@ -44,7 +44,7 @@ class PaymentTerms extends Migration
             'updated_at datetime default current_timestamp on update current_timestamp',
         ]);
 
-        $this->forge->addForeignKey('payment_term_id'); // Primary key
+        $this->forge->addPrimaryKey('payment_term_id'); // Primary key
         $this->forge->createTable('payment_terms', true);
     }
 

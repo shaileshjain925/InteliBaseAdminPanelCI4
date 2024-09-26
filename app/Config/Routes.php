@@ -57,9 +57,11 @@ if (!in_array($file_extension, $extensions)) {
             });
             $routes->group('PaymentTerms', function ($routes) {
                 $routes->get('List', 'AdminPageController::payment_terms_list_page', ['as' => 'payment_terms_list_page']);
-                $routes->get('CreateUpdate', 'AdminPageController::payment_terms_create_update_page', ['as' => 'payment_terms_create_update_page']);
-                $routes->get('CreateUpdate/(:num)', 'AdminPageController::payment_terms_create_update_page/$1');
-                $routes->post('View', 'AdminPageController::payment_terms_view_component', ['as' => 'payment_terms_view_component']);
+                $routes->post('payment_terms_create_update_component', 'AdminPageController::payment_terms_create_update_component', ['as' => 'payment_terms_create_update_component']);
+            });
+            $routes->group('DeliveryTerms', function ($routes) {
+                $routes->get('List', 'AdminPageController::delivery_terms_list_page', ['as' => 'delivery_terms_list_page']);
+                $routes->post('delivery_terms_create_update_component', 'AdminPageController::delivery_terms_create_update_component', ['as' => 'delivery_terms_create_update_component']);
             });
             $routes->group('ItemUQC', function ($routes) {
                 $routes->get('List', 'AdminPageController::item_uqc_list_page', ['as' => 'item_uqc_list_page']);
@@ -124,6 +126,20 @@ if (!in_array($file_extension, $extensions)) {
                 $routes->get('List', 'AdminPageController::item_list_page', ['as' => 'item_list_page']);
                 $routes->post('item_view_component', 'AdminPageController::item_view_component', ['as' => 'item_view_component']);
                 $routes->post('item_create_update_component', 'AdminPageController::item_create_update_component', ['as' => 'item_create_update_component']);
+            });
+        });
+        $routes->group('Sales', function ($routes) {
+            $routes->group('Customer', function ($routes) {
+                $routes->get('List', 'AdminPageController::party_list_page/Customer', ['as' => 'customer_list_page']);
+                $routes->post('party_view_component', 'AdminPageController::party_view_component/Customer', ['as' => 'customer_view_component']);
+                $routes->post('party_create_update_component', 'AdminPageController::party_create_update_component/Customer', ['as' => 'customer_create_update_component']);
+            });
+        });
+        $routes->group('Purchase', function ($routes) {
+            $routes->group('Customer', function ($routes) {
+                $routes->get('List', 'AdminPageController::party_list_page/Supplier', ['as' => 'supplier_list_page']);
+                $routes->post('party_view_component', 'AdminPageController::party_view_component/Supplier', ['as' => 'supplier_view_component']);
+                $routes->post('party_create_update_component', 'AdminPageController::party_create_update_component/Supplier', ['as' => 'supplier_create_update_component']);
             });
         });
         $routes->group('FileUpload', function ($routes) {
@@ -269,6 +285,27 @@ if (!in_array($file_extension, $extensions)) {
                 $routes->post("payment_terms_create_api", "AdminApiController::payment_terms_create_api", ['as' => 'payment_terms_create_api']);
                 $routes->post("payment_terms_update_api", "AdminApiController::payment_terms_update_api", ['as' => 'payment_terms_update_api']);
                 $routes->post("payment_terms_delete_api", "AdminApiController::payment_terms_delete_api", ['as' => 'payment_terms_delete_api']);
+            });
+            $routes->group('delivery_terms', function ($routes) {
+                $routes->post("delivery_terms_get_api", "AdminApiController::delivery_terms_get_api", ['as' => 'delivery_terms_get_api']);
+                $routes->post("delivery_terms_list_api", "AdminApiController::delivery_terms_list_api", ['as' => 'delivery_terms_list_api']);
+                $routes->post("delivery_terms_create_api", "AdminApiController::delivery_terms_create_api", ['as' => 'delivery_terms_create_api']);
+                $routes->post("delivery_terms_update_api", "AdminApiController::delivery_terms_update_api", ['as' => 'delivery_terms_update_api']);
+                $routes->post("delivery_terms_delete_api", "AdminApiController::delivery_terms_delete_api", ['as' => 'delivery_terms_delete_api']);
+            });
+            $routes->group('party', function ($routes) {
+                $routes->post("party_get_api", "AdminApiController::party_get_api", ['as' => 'party_get_api']);
+                $routes->post("party_list_api", "AdminApiController::party_list_api", ['as' => 'party_list_api']);
+                $routes->post("party_create_api", "AdminApiController::party_create_api", ['as' => 'party_create_api']);
+                $routes->post("party_update_api", "AdminApiController::party_update_api", ['as' => 'party_update_api']);
+                $routes->post("party_delete_api", "AdminApiController::party_delete_api", ['as' => 'party_delete_api']);
+            });
+            $routes->group('party_address', function ($routes) {
+                $routes->post("party_address_get_api", "AdminApiController::party_address_get_api", ['as' => 'party_address_get_api']);
+                $routes->post("party_address_list_api", "AdminApiController::party_address_list_api", ['as' => 'party_address_list_api']);
+                $routes->post("party_address_create_api", "AdminApiController::party_address_create_api", ['as' => 'party_address_create_api']);
+                $routes->post("party_address_update_api", "AdminApiController::party_address_update_api", ['as' => 'party_address_update_api']);
+                $routes->post("party_address_delete_api", "AdminApiController::party_address_delete_api", ['as' => 'party_address_delete_api']);
             });
             $routes->group('user_data_access', function ($routes) {
                 $routes->post("user_data_access_get_api", "AdminApiController::user_data_access_get_api", ['as' => 'user_data_access_get_api']);
