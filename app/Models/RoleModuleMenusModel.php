@@ -14,7 +14,7 @@ class RoleModuleMenusModel extends FunctionModel
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields = ['role_module_menu_id', 'role_id', 'module_menu_id', 'view', 'create', 'edit', 'approval', 'delete', 'print', 'export', 'bulk_delete', 'back_days_data_allowed','back_days_data_edit_allowed', 'created_at', 'updated_at'];
+    protected $allowedFields = ['role_module_menu_id', 'role_id', 'module_menu_id', 'view', 'create', 'edit', 'approval', 'delete', 'print', 'export', 'bulk_delete', 'back_days_data_allowed', 'back_days_data_edit_allowed', 'created_at', 'updated_at'];
     protected $booleanFields = ['view', 'create', 'edit', 'approval', 'delete', 'print', 'export', 'bulk_delete'];
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -45,6 +45,7 @@ class RoleModuleMenusModel extends FunctionModel
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+    protected $messageAlias = 'Role Module Menus';
     public function __construct($joinRequired = true)
     {
         parent::__construct();

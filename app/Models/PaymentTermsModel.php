@@ -15,7 +15,6 @@ class PaymentTermsModel extends FunctionModel
     protected $allowedFields    = ["payment_term_id", "payment_term_code", "payment_term_name", "due_days", "post_due_interest_rate", "status"];
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
-    protected $messageAlias = 'Payment Terms';
 
     protected array $casts = [];
     protected array $castHandlers = [];
@@ -26,6 +25,7 @@ class PaymentTermsModel extends FunctionModel
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
     protected $deletedField  = 'deleted_at';
+    protected $messageAlias = 'Payments Term';
 
     // Validation
     protected $validationRules = [

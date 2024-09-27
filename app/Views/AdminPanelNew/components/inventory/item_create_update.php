@@ -30,7 +30,7 @@
             <!-- Item Class -->
             <div class="mb-3 col-md-4">
                 <label for="item_class" class="form-label">Item Class</label>
-                <select class="form-control" id="item_class" name="item_class">
+                <select class="" id="item_class" name="item_class">
                     <option value="listed" <?= @$item_class == 'listed' ? 'selected' : '' ?>>Listed</option>
                     <option value="non-listed" <?= @$item_class == 'non-listed' ? 'selected' : '' ?>>Non-Listed</option>
                     <option value="not-assign" <?= @$item_class == 'not-assign' ? 'selected' : '' ?>>Not Assign</option>
@@ -56,7 +56,7 @@
             <!-- Item Brand -->
             <div class="mb-3 col-md-4">
                 <label for="item_brand_id" class="form-label">Item Brand</label>
-                <select class="form-control" id="item_brand_id" name="item_brand_id" data-value="<?= @$item_brand_id ?>">
+                <select class="" id="item_brand_id" name="item_brand_id" data-value="<?= @$item_brand_id ?>">
                     <option value="">Select Item Brand</option>
                     <!-- Options will be dynamically populated -->
                 </select>
@@ -66,7 +66,7 @@
             <!-- Item Category -->
             <div class="mb-3 col-md-4">
                 <label for="item_category_id" class="form-label">Item Category</label>
-                <select class="form-control" id="item_category_id" name="item_category_id" data-value="<?= @$item_category_id ?>">
+                <select class="" id="item_category_id" name="item_category_id" data-value="<?= @$item_category_id ?>">
                     <option value="">Select Item Category</option>
                     <!-- Options will be dynamically populated -->
                 </select>
@@ -76,7 +76,7 @@
             <!-- Item Sub Group -->
             <div class="mb-3 col-md-4">
                 <label for="item_sub_group_id" class="form-label">Item Sub Group</label>
-                <select class="form-control" id="item_sub_group_id" name="item_sub_group_id" data-value="<?= @$item_sub_group_id ?>">
+                <select class="" id="item_sub_group_id" name="item_sub_group_id" data-value="<?= @$item_sub_group_id ?>">
                     <option value="">Select Item Sub Group</option>
                     <!-- Options will be dynamically populated -->
                 </select>
@@ -86,7 +86,7 @@
             <!-- Item HSN -->
             <div class="mb-3 col-md-4">
                 <label for="item_hsn_id" class="form-label">Item HSN</label>
-                <select class="form-control" id="item_hsn_id" name="item_hsn_id" data-value="<?= @$item_hsn_id ?>">
+                <select class="" id="item_hsn_id" name="item_hsn_id" data-value="<?= @$item_hsn_id ?>">
                     <option value="">Select HSN Code</option>
                     <!-- Options will be dynamically populated -->
                 </select>
@@ -96,7 +96,7 @@
             <!-- Item Nature -->
             <div class="mb-3 col-md-4">
                 <label for="item_nature" class="form-label">Item Nature</label>
-                <select class="form-control" id="item_nature" name="item_nature">
+                <select class="" id="item_nature" name="item_nature">
                     <option value="Capex" <?= @$item_nature == 'Capex' ? 'selected' : '' ?>>Capex</option>
                     <option value="Packaging" <?= @$item_nature == 'Packaging' ? 'selected' : '' ?>>Packaging</option>
                     <option value="Services" <?= @$item_nature == 'Services' ? 'selected' : '' ?>>Services</option>
@@ -112,7 +112,7 @@
             <!-- Item Manufacturing Type -->
             <div class="mb-3 col-md-4">
                 <label for="item_manufacturing_type" class="form-label">Item Manufacturing Type</label>
-                <select class="form-control" id="item_manufacturing_type" name="item_manufacturing_type">
+                <select class="" id="item_manufacturing_type" name="item_manufacturing_type">
                     <option value="FinishedProduct" <?= @$item_manufacturing_type == 'FinishedProduct' ? 'selected' : '' ?>>Finished Product</option>
                     <option value="RawMaterial" <?= @$item_manufacturing_type == 'RawMaterial' ? 'selected' : '' ?>>Raw Material</option>
                     <option value="SemiFinished" <?= @$item_manufacturing_type == 'SemiFinished' ? 'selected' : '' ?>>Semi-Finished</option>
@@ -170,7 +170,7 @@
             <h5>Packaging Details</h5>
             <div class="mb-3 col-md-4">
                 <label for="item_uqc_id" class="form-label">Base Unit</label>
-                <select class="form-control" id="item_uqc_id" name="item_uqc_id" data-value="<?= @$item_uqc_id ?>">
+                <select class="" id="item_uqc_id" name="item_uqc_id" data-value="<?= @$item_uqc_id ?>">
                     <option value="">Select Base Unit</option>
                     <!-- Options will be dynamically populated -->
                 </select>
@@ -178,7 +178,7 @@
             </div>
             <div class="mb-3 col-md-4">
                 <label for="item_pack_uqc_id" class="form-label">Pack Unit</label>
-                <select class="form-control" id="item_pack_uqc_id" name="item_pack_uqc_id" data-value="<?= @$item_pack_uqc_id ?>">
+                <select class="" id="item_pack_uqc_id" name="item_pack_uqc_id" data-value="<?= @$item_pack_uqc_id ?>">
                     <option value="">Select Pack Unit</option>
                     <!-- Options will be dynamically populated -->
                 </select>

@@ -45,6 +45,7 @@ class UserDataAccessModel extends FunctionModel
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+    protected $messageAlias = 'User Data Access';
     public function __construct($joinRequired = true)
     {
         parent::__construct();

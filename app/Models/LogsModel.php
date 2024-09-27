@@ -55,6 +55,7 @@ class LogsModel extends FunctionModel
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+    protected $messageAlias = 'Logs';
     public function __construct($joinRequired = true)
     {
         parent::__construct();

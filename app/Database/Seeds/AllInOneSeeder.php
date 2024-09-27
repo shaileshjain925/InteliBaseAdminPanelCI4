@@ -65,8 +65,24 @@ class AllInOneSeeder extends Seeder
                 ['module_menu_id' => 405, 'menu_code' => 'ITEM_HSN', 'menu_name' => 'Item Hsn', 'menu_type' => 'master'],
                 ['module_menu_id' => 406, 'menu_code' => 'ITEM', 'menu_name' => 'Item', 'menu_type' => 'master'],
             ]],
-            ['module_id' => 5, 'module_code' => 'PURCHASE', 'module_name' => 'Purchase', 'is_dashboard' => true],
-            ['module_id' => 6, 'module_code' => 'SALES', 'module_name' => 'Sales', 'is_dashboard' => true],
+            [
+                'module_id' => 5,
+                'module_code' => 'PURCHASE',
+                'module_name' => 'Purchase',
+                'is_dashboard' => true,
+                'menus' => [
+                    ['module_menu_id' => 501, 'menu_code' => 'SUPPLIER', 'menu_name' => 'Supplier', 'menu_type' => 'master'],
+                ]
+            ],
+            [
+                'module_id' => 6,
+                'module_code' => 'SALES',
+                'module_name' => 'Sales',
+                'is_dashboard' => true,
+                'menus' => [
+                    ['module_menu_id' => 601, 'menu_code' => 'CUSTOMER', 'menu_name' => 'Customer', 'menu_type' => 'master'],
+                ]
+            ],
             ['module_id' => 7, 'module_code' => 'FINANCE', 'module_name' => 'Finance', 'is_dashboard' => true],
             ['module_id' => 8, 'module_code' => 'CRM', 'module_name' => 'CRM', 'is_dashboard' => true],
             ['module_id' => 9, 'module_code' => 'PART_MAINTENANCE', 'module_name' => 'Product Maintenance', 'is_dashboard' => true],

@@ -75,28 +75,28 @@
                         <!-- Designation -->
                         <div class="mb-3 col-md-3">
                             <label class="mb-2 form-label">Designation</label>
-                            <select class="form-control" name="designation_id" id="designation_id"></select>
+                            <select class="" name="designation_id" id="designation_id"></select>
                             <span class="error-message" id="error-designation_id"></span>
                         </div>
 
                         <!-- Role -->
                         <div class="mb-3 col-md-3">
                             <label class="mb-2 form-label">Role</label>
-                            <select class="form-control" name="role_id" id="role_id"></select>
+                            <select class="" name="role_id" id="role_id"></select>
                             <span class="error-message" id="error-role_id"></span>
                         </div>
 
                         <!-- Reporting To -->
                         <div class="mb-3 col-md-3">
                             <label class="mb-2 form-label">Reporting To</label>
-                            <select class="form-control" name="reporting_to_user_id" id="reporting_to_user_id"></select>
+                            <select class="" name="reporting_to_user_id" id="reporting_to_user_id"></select>
                             <span class="error-message" id="error-reporting_to_user_id"></span>
                         </div>
 
                         <!-- User Type -->
                         <div class="mb-3 col-md-3">
                             <label class="mb-2 form-label">User Type</label>
-                            <select class="form-control" name="user_type" id="user_type">
+                            <select class="" name="user_type" id="user_type">
                                 <?php if (isset($user_type) && $user_type == 'super_admin'): ?>
                                     <option value="super_admin" selected>Super Admin</option>
                                 <?php else: ?>
@@ -110,7 +110,7 @@
                         <!-- Data Access Rights -->
                         <div class="mb-3 col-md-3">
                             <label class="mb-2 form-label">Data Access Rights</label>
-                            <select class="form-control" name="user_data_access" id="user_data_access">
+                            <select class="" name="user_data_access" id="user_data_access">
                                 <option value="self" <?= (isset($user_data_access) && $user_data_access == 'self') ? "selected" : "" ?>>Self</option>
                                 <option value="hierarchy" <?= (isset($user_data_access) && $user_data_access == 'hierarchy') ? "selected" : "" ?>>Hierarchy</option>
                                 <option value="all" <?= (isset($user_data_access) && $user_data_access == 'all') ? "selected" : "" ?>>All</option>
@@ -134,21 +134,21 @@
                         <!-- Country -->
                         <div class="mb-3 col-md-4">
                             <label class="mb-2 form-label">Country</label>
-                            <select class="form-control" name="user_country_id" id="user_country_id"></select>
+                            <select class="" name="user_country_id" id="user_country_id"></select>
                             <span class="error-message" id="error-user_country_id"></span>
                         </div>
 
                         <!-- State -->
                         <div class="mb-3 col-md-4">
                             <label class="mb-2 form-label">State</label>
-                            <select class="form-control" name="user_state_id" id="user_state_id"></select>
+                            <select class="" name="user_state_id" id="user_state_id"></select>
                             <span class="error-message" id="error-user_state_id"></span>
                         </div>
 
                         <!-- City -->
                         <div class="mb-3 col-md-4">
                             <label class="mb-2 form-label">City</label>
-                            <select class="form-control" name="user_city_id" id="user_city_id"></select>
+                            <select class="" name="user_city_id" id="user_city_id"></select>
                             <span class="error-message" id="error-user_city_id"></span>
                         </div>
                     </div>
@@ -242,17 +242,16 @@
             initializeSelectize('designation_id', {
                 placeholder: "Select Designation"
             }, apiUrl = "<?= base_url(route_to('designation_list_api')) ?>", {}, "designation_id", "designation_name", selected_designation_id)
-
+            initializeSelectize('user_type', {
+                placeholder: "Select User Type"
+            })
+            initializeSelectize('user_data_access', {})
             initializeSelectize('user_state_id', {
                 placeholder: "Select State"
             })
             initializeSelectize('user_city_id', {
                 placeholder: "Select City"
             })
-            initializeSelectize('user_type', {
-                placeholder: "Select User Type"
-            })
-            initializeSelectize('user_data_access', {})
             initializeSelectize('user_country_id', {
                     placeholder: "Select Country"
                 }, apiUrl = "<?= base_url(route_to('country_list_api')) ?>", {}, "country_id", "country_name", selected_user_country_id)

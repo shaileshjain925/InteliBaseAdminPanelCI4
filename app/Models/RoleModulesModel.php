@@ -46,6 +46,7 @@ class RoleModulesModel extends FunctionModel
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+    protected $messageAlias = 'Role Modules';
     public function __construct($joinRequired = true)
     {
         parent::__construct();
