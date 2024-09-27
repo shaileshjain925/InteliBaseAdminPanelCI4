@@ -130,6 +130,7 @@ class PartyAddressModel extends FunctionModel
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+    protected $messageAlias = 'Address';
     public function __construct($joinRequired = true, $alias = 'party')
     {
         parent::__construct();

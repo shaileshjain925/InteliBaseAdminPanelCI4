@@ -15,6 +15,7 @@ class BusinessTypeModel extends FunctionModel
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = ['business_type_id', 'business_type_name'];
+    protected $messageAlias = 'Business Type';
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

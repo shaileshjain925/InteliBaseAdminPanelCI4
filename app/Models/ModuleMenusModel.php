@@ -52,6 +52,7 @@ class ModuleMenusModel extends FunctionModel
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+    protected $messageAlias = 'Modules Menu';
     public function __construct($joinRequired = true)
     {
         parent::__construct();

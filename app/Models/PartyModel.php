@@ -38,7 +38,13 @@ class PartyModel extends FunctionModel
         'default_billing_address_id',
         'default_shipping_address_id'
     ];
-
+    protected $nullSetIfEmpty = [
+        'business_type_id',
+        'payment_term_id',
+        'delivery_term_id',
+        'default_billing_address_id',
+        'default_shipping_address_id'
+    ];
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
 
@@ -180,14 +186,15 @@ class PartyModel extends FunctionModel
 
     // Callbacks
     protected $allowCallbacks = true;
-    protected $beforeInsert   = [];
+    protected $beforeInsert   = ['nullSetIfEmpty'];
     protected $afterInsert    = [];
-    protected $beforeUpdate   = [];
+    protected $beforeUpdate   = ['nullSetIfEmpty'];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+    protected $messageAlias = 'Party';
     public function __construct($joinRequired = true)
     {
         parent::__construct();
@@ -196,35 +203,35 @@ class PartyModel extends FunctionModel
             $this->addParentJoin('payment_term_id', $this->get_payment_terms_model(), 'left', ['payment_term_code', 'payment_term_name', 'due_days', 'post_due_interest_rate']);
             $this->addParentJoin('delivery_term_id', $this->get_delivery_terms_model(), 'left', ['delivery_term_code', 'delivery_term_name', 'delivery_term_description']);
             $billing_alias = "billing";
-            $this->addParentJoin('default_billing_address_id', $this->get_party_address_model(true, $billing_alias), 'left', [
-                "address_short_name as " . $billing_alias . "_address_short_name",
-                "firm_name as " . $billing_alias . "_firm_name",
-                "firm_gst as " . $billing_alias . "_firm_gst",
-                "party_country_id as " . $billing_alias . "_party_country_id",
-                "party_state_id as " . $billing_alias . "_party_state_id",
-                "party_city_id as " . $billing_alias . "_party_city_id",
-                "party_pincode as " . $billing_alias . "_party_pincode",
-                "party_addresses as " . $billing_alias . "_party_addresses",
-                "address_person_name as " . $billing_alias . "_address_person_name",
-                "address_person_mobile as " . $billing_alias . "_address_person_mobile",
-                "address_person_email as " . $billing_alias . "_address_person_email",
-                "address_type as " . $billing_alias . "_address_type",
-            ], $billing_alias . "_address");
-            $shipping_alias = "shipping";
-            $this->addParentJoin('default_shipping_address_id', $this->get_party_address_model(true, $shipping_alias), 'left', [
-                "address_short_name as " . $shipping_alias . "_address_short_name",
-                "firm_name as " . $shipping_alias . "_firm_name",
-                "firm_gst as " . $shipping_alias . "_firm_gst",
-                "party_country_id as " . $shipping_alias . "_party_country_id",
-                "party_state_id as " . $shipping_alias . "_party_state_id",
-                "party_city_id as " . $shipping_alias . "_party_city_id",
-                "party_pincode as " . $shipping_alias . "_party_pincode",
-                "party_addresses as " . $shipping_alias . "_party_addresses",
-                "address_person_name as " . $shipping_alias . "_address_person_name",
-                "address_person_mobile as " . $shipping_alias . "_address_person_mobile",
-                "address_person_email as " . $shipping_alias . "_address_person_email",
-                "address_type as " . $shipping_alias . "_address_type",
-            ], $shipping_alias . "_address");
+            // $this->addParentJoin('default_billing_address_id', $this->get_party_address_model(true, $billing_alias), 'left', [
+            //     "address_short_name as " . $billing_alias . "_address_short_name",
+            //     "firm_name as " . $billing_alias . "_firm_name",
+            //     "firm_gst as " . $billing_alias . "_firm_gst",
+            //     "party_country_id as " . $billing_alias . "_party_country_id",
+            //     "party_state_id as " . $billing_alias . "_party_state_id",
+            //     "party_city_id as " . $billing_alias . "_party_city_id",
+            //     "party_pincode as " . $billing_alias . "_party_pincode",
+            //     "party_addresses as " . $billing_alias . "_party_addresses",
+            //     "address_person_name as " . $billing_alias . "_address_person_name",
+            //     "address_person_mobile as " . $billing_alias . "_address_person_mobile",
+            //     "address_person_email as " . $billing_alias . "_address_person_email",
+            //     "address_type as " . $billing_alias . "_address_type",
+            // ], $billing_alias . "_address");
+            // $shipping_alias = "shipping";
+            // $this->addParentJoin('default_shipping_address_id', $this->get_party_address_model(true, $shipping_alias), 'left', [
+            //     "address_short_name as " . $shipping_alias . "_address_short_name",
+            //     "firm_name as " . $shipping_alias . "_firm_name",
+            //     "firm_gst as " . $shipping_alias . "_firm_gst",
+            //     "party_country_id as " . $shipping_alias . "_party_country_id",
+            //     "party_state_id as " . $shipping_alias . "_party_state_id",
+            //     "party_city_id as " . $shipping_alias . "_party_city_id",
+            //     "party_pincode as " . $shipping_alias . "_party_pincode",
+            //     "party_addresses as " . $shipping_alias . "_party_addresses",
+            //     "address_person_name as " . $shipping_alias . "_address_person_name",
+            //     "address_person_mobile as " . $shipping_alias . "_address_person_mobile",
+            //     "address_person_email as " . $shipping_alias . "_address_person_email",
+            //     "address_type as " . $shipping_alias . "_address_type",
+            // ], $shipping_alias . "_address");
         }
     }
 }

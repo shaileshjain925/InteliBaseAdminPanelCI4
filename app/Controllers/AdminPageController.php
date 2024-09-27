@@ -561,8 +561,10 @@ class AdminPageController extends BaseController
         $theme_data['_page_title'] = $party_type . ' List';
         $theme_data['_breadcrumb1'] = 'Dashboard';
         $theme_data['_breadcrumb2'] = $party_type . ' List';
-        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Sales/party_list';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/party_list';
         $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
+        $theme_data['party_type'] = $party_type;
+        $theme_data['menu_code'] = ($party_type == "Customer") ? "CUSTOMER" : "SUPPLIER";
         return view('AdminPanelNew/partials/main', $theme_data);
     }
     public function party_view_component($party_type) {}
@@ -573,7 +575,42 @@ class AdminPageController extends BaseController
         if (!empty($data) && isset($data['party_id'])) {
             $party_data = $this->get_party_model()->find($data['party_id']);
         }
-        return view('AdminPanelNew/components/sales/party_create_update', $party_data);
+        $party_data['party_type'] = $party_type;
+        return view('AdminPanelNew/components/party_create_update', $party_data);
+    }
+    public function add_row_contact_details()
+    {
+        $data = getRequestData($this->request, 'ARRAY');
+        return view('AdminPanelNew/components/party_contact_person_detail', $data);
+    }
+    public function party_address_list_page()
+    {
+        $data = $this->request->getGet();
+        if (!isset($data['party_id'])) {
+            return redirect()->route('default_dashboard_page');
+        }
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data = array_merge($theme_data, $this->get_party_model()->select('party.*')->autoJoin()->find($data['party_id']) ?? []);
+        $theme_data['_meta_title'] = $theme_data['party_name'] . ' Address List';
+        $theme_data['_page_title'] = $theme_data['party_name'] . ' Address List';
+        $theme_data['_breadcrumb1'] = $theme_data['party_type'] . ' List';
+        $theme_data['_breadcrumb2'] = $theme_data['party_name'] . ' Address List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/party_address_list';
+        $theme_data['_previous_path'] = base_url(route_to(strtolower($theme_data['party_type']) . '_list_page'));
+        $theme_data['menu_code'] = ($theme_data['party_type'] == "Customer") ? "CUSTOMER" : "SUPPLIER";
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
+    public function party_address_view_component() {}
+    public function party_address_create_update_component()
+    {
+        $data = getRequestData($this->request, 'ARRAY') ?? [];
+        $party_address_data = [];
+        if (!empty($data) && isset($data['address_id'])) {
+            $party_address_data = $this->get_party_address_model()->find($data['address_id']);
+        }
+        $party_address_data['party_id'] = $data['party_id'];
+        $party_address_data['party_name'] = $data['party_name'];
+        return view('AdminPanelNew/components/party_address_create_update', $party_address_data);
     }
     public function role_module_menus($role_id)
     {
@@ -761,20 +798,6 @@ class AdminPageController extends BaseController
                 ]
             ],
             [
-                "module_title" => "Sales",
-                "module_name" => "Sales",
-                "module_icon" => "mdi mdi-account-supervisor-outline",
-                "visibility" => check_module_access('SALES'),
-                "menus" => [],
-            ],
-            [
-                "module_title" => "Purchase",
-                "module_name" => "Purchase",
-                "module_icon" => "mdi mdi-account-supervisor-outline",
-                "visibility" => check_module_access('PURCHASE'),
-                "menus" => []
-            ],
-            [
                 "module_title" => "Inventory",
                 "module_name" => "Inventory",
                 "module_icon" => "mdi mdi-account-supervisor-outline",
@@ -817,6 +840,34 @@ class AdminPageController extends BaseController
                         "visibility" => check_menu_access('ITEM', 'view'),
                     ],
                 ]
+            ],
+            [
+                "module_title" => "Purchase",
+                "module_name" => "Purchase",
+                "module_icon" => "mdi mdi-account-supervisor-outline",
+                "visibility" => check_module_access('PURCHASE'),
+                "menus" => [
+                    [
+                        "title" => "Supplier",
+                        "url" => base_url(route_to('supplier_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => check_menu_access('SUPPLIER', 'view'),
+                    ],
+                ],
+            ],
+            [
+                "module_title" => "Sales",
+                "module_name" => "Sales",
+                "module_icon" => "mdi mdi-account-supervisor-outline",
+                "visibility" => check_module_access('SALES'),
+                "menus" => [
+                    [
+                        "title" => "Customer",
+                        "url" => base_url(route_to('customer_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => check_menu_access('CUSTOMER', 'view'),
+                    ],
+                ],
             ],
             [
                 "module_title" => "Finance",

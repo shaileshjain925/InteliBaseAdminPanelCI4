@@ -48,7 +48,7 @@ class DesignationsModel extends FunctionModel
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-
+    protected $messageAlias = 'Designation';
     public function __construct($joinRequired = true)
     {
         parent::__construct();

@@ -128,18 +128,22 @@ if (!in_array($file_extension, $extensions)) {
                 $routes->post('item_create_update_component', 'AdminPageController::item_create_update_component', ['as' => 'item_create_update_component']);
             });
         });
-        $routes->group('Sales', function ($routes) {
-            $routes->group('Customer', function ($routes) {
-                $routes->get('List', 'AdminPageController::party_list_page/Customer', ['as' => 'customer_list_page']);
-                $routes->post('party_view_component', 'AdminPageController::party_view_component/Customer', ['as' => 'customer_view_component']);
-                $routes->post('party_create_update_component', 'AdminPageController::party_create_update_component/Customer', ['as' => 'customer_create_update_component']);
-            });
-        });
+        $routes->post('add_row_contact_details', 'AdminPageController::add_row_contact_details', ['as' => 'add_row_contact_details']);
+        $routes->post('party_address_view_component', 'AdminPageController::party_address_view_component', ['as' => 'party_address_view_component']);
+        $routes->post('party_address_create_update_component', 'AdminPageController::party_address_create_update_component', ['as' => 'party_address_create_update_component']);
+        $routes->get('Party/Address', 'AdminPageController::party_address_list_page', ['as' => 'party_address_list_page']);
         $routes->group('Purchase', function ($routes) {
             $routes->group('Customer', function ($routes) {
                 $routes->get('List', 'AdminPageController::party_list_page/Supplier', ['as' => 'supplier_list_page']);
                 $routes->post('party_view_component', 'AdminPageController::party_view_component/Supplier', ['as' => 'supplier_view_component']);
                 $routes->post('party_create_update_component', 'AdminPageController::party_create_update_component/Supplier', ['as' => 'supplier_create_update_component']);
+            });
+        });
+        $routes->group('Sales', function ($routes) {
+            $routes->group('Customer', function ($routes) {
+                $routes->get('List', 'AdminPageController::party_list_page/Customer', ['as' => 'customer_list_page']);
+                $routes->post('party_view_component', 'AdminPageController::party_view_component/Customer', ['as' => 'customer_view_component']);
+                $routes->post('party_create_update_component', 'AdminPageController::party_create_update_component/Customer', ['as' => 'customer_create_update_component']);
             });
         });
         $routes->group('FileUpload', function ($routes) {

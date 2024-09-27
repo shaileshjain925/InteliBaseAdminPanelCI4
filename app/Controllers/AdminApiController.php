@@ -635,11 +635,21 @@ class AdminApiController extends BaseController
     /** */
     public function party_create_api()
     {
+        $data = getRequestData($this->request, 'ARRAY');
+        if (isset($data['contact_person_json_data']) && !empty($data['contact_person_json_data'])) {
+            $data['contact_person_json_data'] = json_encode($data['contact_person_json_data']);
+        }
+        $this->request->setGlobal('post', $data);
         return $this->api_create($this->get_party_model());
     }
     /** */
     public function party_update_api()
     {
+        $data = getRequestData($this->request, 'ARRAY');
+        if (isset($data['contact_person_json_data']) && !empty($data['contact_person_json_data'])) {
+            $data['contact_person_json_data'] = json_encode($data['contact_person_json_data']);
+        }
+        $this->request->setGlobal('post', $data);
         return $this->api_update($this->get_party_model());
     }
     /** */

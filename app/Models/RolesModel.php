@@ -15,7 +15,7 @@ class RolesModel extends FunctionModel
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields = ['role_id', 'role_name', 'created_at', 'updated_at'];
-
+    protected $messageAlias = 'Role';
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
 
