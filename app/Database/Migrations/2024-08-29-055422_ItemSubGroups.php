@@ -40,6 +40,26 @@ class ItemSubGroups extends Migration
                 'type' => 'BOOLEAN',
                 'default' => true,
             ],
+            'listed_overhead_percentage' => [
+                'type' => 'FLOAT',
+                'constraint' => '6,2',
+                'default' => 0.00,
+            ],
+            'listed_margin_percentage' => [
+                'type' => 'FLOAT',
+                'constraint' => '6,2',
+                'default' => 0.00,
+            ],
+            'nonlisted_overhead_percentage' => [
+                'type' => 'FLOAT',
+                'constraint' => '6,2',
+                'default' => 0.00,
+            ],
+            'nonlisted_margin_percentage' => [
+                'type' => 'FLOAT',
+                'constraint' => '6,2',
+                'default' => 0.00,
+            ],
             'created_at datetime default current_timestamp',
             'updated_at datetime default current_timestamp on update current_timestamp',
         ]);

@@ -14,7 +14,7 @@ class ItemSubGroupsModel extends FunctionModel
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['item_sub_group_id', 'item_group_id', 'item_sub_group_name', 'item_sub_group_code', 'item_sub_group_description', 'item_sub_group_image', 'item_sub_group_is_active'];
+    protected $allowedFields    = ['item_sub_group_id', 'item_group_id', 'item_sub_group_name', 'item_sub_group_code', 'item_sub_group_description', 'item_sub_group_image', 'item_sub_group_is_active', 'listed_overhead_percentage', 'listed_margin_percentage', 'nonlisted_overhead_percentage', 'nonlisted_margin_percentage'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
