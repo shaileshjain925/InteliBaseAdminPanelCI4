@@ -18,7 +18,7 @@
                 <?php endif; ?>
             </div>
             <div class="table-responsive">
-                <table id="group_table" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle"></table>
+                <table id="group_table" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle w-100"></table>
             </div>
         </div>
     </div>
@@ -103,6 +103,38 @@
                 title: "Group Code",
                 data: "item_group_code",
                 visible: false
+            },
+            {
+                title: "<span title='Listed Overhead Percentage'>LOP</span>",
+                data: "listed_overhead_percentage",
+                visible: true,
+                "render": function(data, type, row) {
+                    return `${data}%`
+                }
+            },
+            {
+                title: "<span title='Listed Margin Percentage'>LMP</span>",
+                data: "listed_margin_percentage",
+                visible: true,
+                "render": function(data, type, row) {
+                    return `${data}%`
+                }
+            },
+            {
+                title: "<span title='NonListed Overhead Percentage'>NLOP</span>",
+                data: "nonlisted_overhead_percentage",
+                visible: true,
+                "render": function(data, type, row) {
+                    return `${data}%`
+                }
+            },
+            {
+                title: "<span title='NonListed Margin Percentage'>NLMP</span>",
+                data: "nonlisted_margin_percentage",
+                visible: true,
+                "render": function(data, type, row) {
+                    return `${data}%`
+                }
             },
             {
                 "title": "Actions",
