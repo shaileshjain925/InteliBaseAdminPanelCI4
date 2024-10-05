@@ -8,137 +8,175 @@ class Party extends Migration
 {
     public function up()
     {
+        // Create party table
         $this->forge->addField([
             'party_id' => [
-                'type' => 'INT',
+                'type'           => 'INT',
                 'constraint' => 11,
+                'unsigned'       => true,
                 'auto_increment' => true,
-                'unsigned' => true,
             ],
             'party_type' => [
-                'type' => 'ENUM',
+                'type'       => 'ENUM',
                 'constraint' => ['Customer', 'Supplier'],
-                'null' => false,
+                'null'       => false,
             ],
             'party_code' => [
-                'type' => 'VARCHAR',
+                'type'       => 'VARCHAR',
                 'constraint' => '50',
-                'null' => true,
+                'null'       => true,
                 'unique' => true,
             ],
+            'party_alloted_id' => [
+                'type'       => 'VARCHAR',
+                'constraint' => '255',
+                'null'       => false,
+            ],
             'party_name' => [
-                'type' => 'VARCHAR',
-                'constraint' => 255,
-                'null' => false,
+                'type'       => 'VARCHAR',
+                'constraint' => '255',
+                'null'       => false,
             ],
             'party_email' => [
-                'type' => 'VARCHAR',
-                'constraint' => 255,
-                'null' => false,
+                'type'       => 'VARCHAR',
+                'constraint' => '255',
+                'null'       => false,
             ],
             'party_number' => [
-                'type' => 'VARCHAR',
-                'constraint' => 15,
-                'null' => false,
+                'type'       => 'VARCHAR',
+                'constraint' => '15',
+                'null'       => false,
             ],
             'pan_no' => [
-                'type' => 'VARCHAR',
+                'type'       => 'VARCHAR',
                 'constraint' => '50',
-                'null' => true,
+                'null'       => true,
             ],
-
-            // Business information
+            'party_tin' => [
+                'type'       => 'VARCHAR',
+                'constraint' => '45',
+                'null'       => true,
+            ],
+            'party_cin' => [
+                'type'       => 'VARCHAR',
+                'constraint' => '45',
+                'null'       => true,
+            ],
+            'party_rating_credit_id' => [
+                'type'       => 'INT',
+                'constraint' => 11,
+                'unsigned'   => true,
+                'null'       => true,
+            ],
+            'party_rating_value_id' => [
+                'type'       => 'INT',
+                'constraint' => 11,
+                'unsigned'   => true,
+                'null'       => true,
+            ],
             'firm_type' => [
-                'type' => 'ENUM',
+                'type'       => 'ENUM',
                 'constraint' => ['PROPRIETORSHIP', 'PARTNERSHIP', 'LLP', 'PVT LTD', 'LIMITED', 'GOVT', 'ENTERPRISE', 'SEMI GOVT.ENTR', 'EOU'],
-                'null' => false,
+                'null'       => false,
             ],
             'business_type_id' => [
-                'type' => 'INT',
-                'unsigned' => true,
-                'null' => true,
+                'type'       => 'INT',
+                'constraint' => 11,
+                'unsigned'   => true,
+                'null'       => true,
             ],
             'business_nature_code' => [
-                'type' => 'ENUM',
+                'type'       => 'ENUM',
                 'constraint' => ['Retail', 'Wholesale', 'Stockist', 'Manufacture', 'Service'],
-                'null' => false,
+                'null'       => false,
             ],
-
-            // Payment, delivery, and packaging information
             'payment_term_id' => [
-                'type' => 'INT',
+                'type'       => 'INT',
                 'constraint' => 11,
-                'unsigned' => true,
-                'null' => false,
+                'unsigned'   => true,
+                'null'       => false,
             ],
             'delivery_term_id' => [
-                'type' => 'INT',
-                'unsigned' => true,
-                'null' => true,
-            ],
-            'estimated_days_to_deliver' => [
-                'type' => 'INT',
-                'default' => 0,
+                'type'       => 'INT',
+                'constraint' => 11,
+                'unsigned'   => true,
+                'null'       => true,
             ],
             'packaging_type' => [
-                'type' => 'ENUM',
+                'type'       => 'ENUM',
                 'constraint' => ['Standard', 'Non-Standard'],
-                'null' => false,
+                'null'       => false,
             ],
-
-            // Banking details
             'bank_name' => [
-                'type' => 'VARCHAR',
+                'type'       => 'VARCHAR',
                 'constraint' => '255',
-                'null' => true,
+                'null'       => true,
             ],
             'bank_no' => [
-                'type' => 'VARCHAR',
+                'type'       => 'VARCHAR',
                 'constraint' => '50',
-                'null' => true,
+                'null'       => true,
             ],
             'bank_ifsc' => [
-                'type' => 'VARCHAR',
+                'type'       => 'VARCHAR',
                 'constraint' => '20',
-                'null' => true,
+                'null'       => true,
             ],
             'bank_holder_name' => [
-                'type' => 'VARCHAR',
+                'type'       => 'VARCHAR',
                 'constraint' => '255',
-                'null' => true,
+                'null'       => true,
             ],
-
-            // Additional information
             'notes' => [
                 'type' => 'TEXT',
                 'null' => true,
             ],
             'website' => [
-                'type' => 'VARCHAR',
+                'type'       => 'VARCHAR',
                 'constraint' => '255',
-                'null' => true,
+                'null'       => true,
             ],
-            'contact_person_json_data' => [
-                'type' => 'TEXT',
-                'null' => true,
-            ],
-
-            // Status
             'is_active' => [
-                'type' => 'BOOLEAN',
-                'default' => true,
+                'type'       => 'TINYINT',
+                'constraint' => 1,
+                'default'    => 1,
+            ],
+            'default_billing_address_id' => [
+                'type'       => 'INT',
+                'unsigned'   => true,
+                'null'       => true,
+            ],
+            'default_shipping_address_id' => [
+                'type'       => 'INT',
+                'unsigned'   => true,
+                'null'       => true,
+            ],
+            'party_user_id' => [
+                'type'       => 'INT',
+                'constraint' => 11,
+                'unsigned'   => true,
+                'null'       => true,
             ],
         ]);
 
-        $this->forge->addKey('party_id', true); // Primary key
-        $this->forge->addForeignKey('payment_term_id', 'payment_terms', 'payment_term_id', 'CASCADE', 'RESTRICT');
-        $this->forge->addForeignKey('business_type_id', 'business_types', 'business_type_id', 'CASCADE', 'RESTRICT');
-        $this->forge->addForeignKey('delivery_term_id', 'delivery_terms', 'delivery_term_id', 'CASCADE', 'RESTRICT');
-        $this->forge->createTable('party');
+        // Define primary key
+        $this->forge->addPrimaryKey('party_id');
+        // Add foreign keys
+        $this->forge->addForeignKey('payment_term_id', 'payment_terms', 'payment_term_id', 'RESTRICT', 'CASCADE');
+        $this->forge->addForeignKey('business_type_id', 'business_types', 'business_type_id', 'RESTRICT', 'CASCADE');
+        $this->forge->addForeignKey('delivery_term_id', 'delivery_terms', 'delivery_term_id', 'RESTRICT', 'CASCADE');
+        $this->forge->addForeignKey('party_rating_credit_id', 'party_rating_credit', 'party_rating_credit_id', 'RESTRICT', 'CASCADE');
+        $this->forge->addForeignKey('party_rating_value_id', 'party_rating_value', 'party_rating_value_id', 'RESTRICT', 'CASCADE');
+        $this->forge->addForeignKey('default_billing_address_id', 'party_address', 'address_id', 'SET NULL', 'SET NULL');
+        $this->forge->addForeignKey('default_shipping_address_id', 'party_address', 'address_id', 'SET NULL', 'SET NULL');
+        $this->forge->addForeignKey('party_user_id', 'users', 'user_id', 'RESTRICT', 'RESTRICT');
+
+        $this->forge->createTable('party', true);
     }
 
     public function down()
     {
-        $this->forge->dropTable('party');
+        // Drop party table
+        $this->forge->dropTable('party', true);
     }
 }
