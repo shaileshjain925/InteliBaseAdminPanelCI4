@@ -33,10 +33,30 @@
                             <input type="text" class="form-control" name="item_sub_group_code" id="item_sub_group_code" value="<?= @$item_sub_group_code ?>" placeholder="Sub Group Code" />
                             <span class="error-message" id="error-item_sub_group_code"></span>
                         </div>
-                        <div class="mb-3 col-md-6">
+                        <div class="mb-3 col-md-12">
                             <label class="mb-2 form-label">Sub Group Description</label>
                             <textarea class="form-control" name="item_sub_group_description" id="item_sub_group_description" placeholder="Sub Group Description"><?= @$item_sub_group_description ?></textarea>
                             <span class="error-message" id="error-item_sub_group_description"></span>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label class="mb-2 form-label">Listed Overhead Percentage</label>
+                            <input type="text" class="form-control" name="listed_overhead_percentage" id="listed_overhead_percentage" value="<?= @$listed_overhead_percentage ?>" placeholder="Listed Overhead Percentage" />
+                            <span class="error-message" id="error-listed_overhead_percentage"></span>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label class="mb-2 form-label">Listed Margin Percentage</label>
+                            <input type="text" class="form-control" name="listed_margin_percentage" id="listed_margin_percentage" value="<?= @$listed_margin_percentage ?>" placeholder="Listed Margin Percentage" />
+                            <span class="error-message" id="error-listed_margin_percentage"></span>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label class="mb-2 form-label">Non Listed Overhead Percentage</label>
+                            <input type="text" class="form-control" name="nonlisted_overhead_percentage" id="nonlisted_overhead_percentage" value="<?= @$nonlisted_overhead_percentage ?>" placeholder="Non Listed Overhead Percentage" />
+                            <span class="error-message" id="error-nonlisted_overhead_percentage"></span>
+                        </div>
+                        <div class="mb-3 col-md-3">
+                            <label class="mb-2 form-label">Non Listed Margin Percentage</label>
+                            <input type="text" class="form-control" name="nonlisted_margin_percentage" id="nonlisted_margin_percentage" value="<?= @$nonlisted_margin_percentage ?>" placeholder="Non Listed Margin Percentage" />
+                            <span class="error-message" id="error-nonlisted_margin_percentage"></span>
                         </div>
 
                         <div class="col-md-4 mb-3">

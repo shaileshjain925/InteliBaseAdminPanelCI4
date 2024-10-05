@@ -13,7 +13,7 @@
                 </a>
                 <?php if (check_menu_access('ITEM_SUB_GROUP', 'create')): ?>
                     <a href="<?= base_url(route_to('item_sub_group_create_update_page')) ?>">
-                        <button class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add Group</button>
+                        <button class="btn add_form_btn"><i class="bx bx-plus me-2"></i>Add Sub Group</button>
                     </a>
                 <?php endif; ?>
             </div>
