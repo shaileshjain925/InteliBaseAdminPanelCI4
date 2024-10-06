@@ -14,7 +14,7 @@
 
             </div>
             <div class="table-responsive">
-                <table id="log_table" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle"></table>
+                <table id="log_table" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle w-100"></table>
             </div>
         </div>
     </div>

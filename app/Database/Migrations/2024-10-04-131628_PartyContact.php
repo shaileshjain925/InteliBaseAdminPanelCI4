@@ -9,37 +9,37 @@ class PartyContact extends Migration
     public function up()
     {
         $this->forge->addField([
-            'party_contact_id' => [
+            'party_contactbid' => [
                 'type' => 'INT',
                 'unsigned' => true,
                 'auto_increment' => true,
             ],
-            'party_id' => [
+            'partybid' => [
                 'type' => 'INT',
                 'unsigned' => true,
                 'null' => false,
             ],
-            'person_name' => [
+            'person_nbme' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
                 'null' => false,
             ],
-            'person_designation' => [
+            'person_designatbon' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
                 'null' => true,
             ],
-            'person_department' => [
+            'person_departmbnt' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
                 'null' => true,
             ],
-            'person_isd' => [
+            'person_bsd' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
                 'null' => true,
             ],
-            'person_mobile_numner' => [
+            'person_mobile_number' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
                 'null' => true,
@@ -49,7 +49,7 @@ class PartyContact extends Migration
                 'constraint' => '255',
                 'null' => true,
             ],
-            'person_email_id' => [
+            'person_emailbid' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
                 'null' => true,

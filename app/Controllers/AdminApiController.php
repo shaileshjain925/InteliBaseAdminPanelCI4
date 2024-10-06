@@ -595,6 +595,85 @@ class AdminApiController extends BaseController
         return $this->api_delete($this->get_payment_terms_model());
     }
 
+    // get_party_rating_credit_model Terms -------------------------------------------------------------------------------------------------------
+    /** */
+    public function party_rating_credit_get_api()
+    {
+        return $this->api_get($this->get_party_rating_credit_model());
+    }
+    /** */
+    public function party_rating_credit_list_api()
+    {
+        return $this->api_list($this->get_party_rating_credit_model());
+    }
+    /** */
+    public function party_rating_credit_create_api()
+    {
+        return $this->api_create($this->get_party_rating_credit_model());
+    }
+    /** */
+    public function party_rating_credit_update_api()
+    {
+        return $this->api_update($this->get_party_rating_credit_model());
+    }
+    /** */
+    public function party_rating_credit_delete_api()
+    {
+        return $this->api_delete($this->get_party_rating_credit_model());
+    }
+
+    // get_party_rating_value_model Terms -------------------------------------------------------------------------------------------------------
+    /** */
+    public function party_rating_value_get_api()
+    {
+        return $this->api_get($this->get_party_rating_value_model());
+    }
+    /** */
+    public function party_rating_value_list_api()
+    {
+        return $this->api_list($this->get_party_rating_value_model());
+    }
+    /** */
+    public function party_rating_value_create_api()
+    {
+        return $this->api_create($this->get_party_rating_value_model());
+    }
+    /** */
+    public function party_rating_value_update_api()
+    {
+        return $this->api_update($this->get_party_rating_value_model());
+    }
+    /** */
+    public function party_rating_value_delete_api()
+    {
+        return $this->api_delete($this->get_party_rating_value_model());
+    }
+    // get_party_contact_model Terms -------------------------------------------------------------------------------------------------------
+    /** */
+    public function party_contact_get_api()
+    {
+        return $this->api_get($this->get_party_contact_model());
+    }
+    /** */
+    public function party_contact_list_api()
+    {
+        return $this->api_list($this->get_party_contact_model());
+    }
+    /** */
+    public function party_contact_create_api()
+    {
+        return $this->api_create($this->get_party_contact_model());
+    }
+    /** */
+    public function party_contact_update_api()
+    {
+        return $this->api_update($this->get_party_contact_model());
+    }
+    /** */
+    public function party_contact_delete_api()
+    {
+        return $this->api_delete($this->get_party_contact_model());
+    }
     // Delivery Terms -------------------------------------------------------------------------------------------------------
     /** */
     public function delivery_terms_get_api()
@@ -636,21 +715,45 @@ class AdminApiController extends BaseController
     public function party_create_api()
     {
         $data = getRequestData($this->request, 'ARRAY');
-        if (isset($data['contact_person_json_data']) && !empty($data['contact_person_json_data'])) {
-            $data['contact_person_json_data'] = json_encode($data['contact_person_json_data']);
+        $array_result = [];
+        $api_result =  $this->api_create($this->get_party_model(), $array_result);
+        if ($array_result['status'] == ApiResponseStatusCode::CREATED) {
+            $this->get_party_contact_model()->where('party_id', $array_result['data']['party_id'])->delete();
+            if (isset($data['party_contact_data']) && !empty($data['party_contact_data'])) {
+                foreach ($data['party_contact_data'] as $key => &$party_contact) {
+                    $party_contact['party_id'] = $array_result['data']['party_id'];
+                    if (empty($party_contact['person_name'])) {
+                        unset($data['party_contact_data'][$key]);
+                    }
+                }
+                if (isset($data['party_contact_data']) && !empty($data['party_contact_data'])) {
+                    $party_contact_result = $this->get_party_contact_model()->insertBatch($data['party_contact_data']);
+                }
+            }
         }
-        $this->request->setGlobal('post', $data);
-        return $this->api_create($this->get_party_model());
+        return $api_result;
     }
     /** */
     public function party_update_api()
     {
         $data = getRequestData($this->request, 'ARRAY');
-        if (isset($data['contact_person_json_data']) && !empty($data['contact_person_json_data'])) {
-            $data['contact_person_json_data'] = json_encode($data['contact_person_json_data']);
+        $array_result = [];
+        $api_result =  $this->api_update($this->get_party_model(), $array_result);
+        if ($array_result['status'] == ApiResponseStatusCode::OK) {
+            $this->get_party_contact_model()->where('party_id', $array_result['data']['party_id'])->delete();
+            if (isset($data['party_contact_data']) && !empty($data['party_contact_data'])) {
+                foreach ($data['party_contact_data'] as $key => &$party_contact) {
+                    $party_contact['party_id'] = $array_result['data']['party_id'];
+                    if (empty($party_contact['person_name'])) {
+                        unset($data['party_contact_data'][$key]);
+                    }
+                }
+                if (isset($data['party_contact_data']) && !empty($data['party_contact_data'])) {
+                    $party_contact_result = $this->get_party_contact_model()->insertBatch($data['party_contact_data']);
+                }
+            }
         }
-        $this->request->setGlobal('post', $data);
-        return $this->api_update($this->get_party_model());
+        return $api_result;
     }
     /** */
     public function party_delete_api()

@@ -16,7 +16,7 @@
                 <?php endif; ?>
             </div>
             <div class="table-responsive">
-                <table id="party_table" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle"></table>
+                <table id="party_table" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle w-100"></table>
             </div>
         </div>
     </div>
@@ -30,7 +30,7 @@
     var parameter = {};
     parameter._autojoin = 'F';
     parameter._select = '*';
-    parameter._selectOther = `(SELECT COALESCE(COUNT(address_id), 0) FROM party_address WHERE party_address.party_id = party.party_id) AS address_count`;
+    parameter._selectOther = `(SELECT COALESCE(COUNT(address_id), 0) FROM party_address WHERE party_address.party_id = party.party_id) AS address_count, (SELECT COALESCE(COUNT(party_contact_id), 0) FROM party_contact WHERE party_contact.party_id = party.party_id) AS party_contact_count`;
     parameter['party-party_type'] = '<?= $party_type ?>';
 
     function party_delete(party_id) {
@@ -75,62 +75,6 @@
         });
     }
 
-    function viewContacts(contact_person_json_data) {
-        if (contact_person_json_data && contact_person_json_data.trim() !== '') {
-            try {
-                // Parse JSON data
-                let data = JSON.parse(decodeURIComponent(contact_person_json_data));
-
-                // Check if the data is an array
-                if (Array.isArray(data)) {
-                    // Prepare table structure for multiple contacts
-                    let table = `
-                        <div class="table-responsive" style="width: 100%;">
-                            <table class="table table-bordered table-striped" style="font-size: 0.875rem; width: 100%;"> <!-- font-size reduced to 0.875rem (~14px) -->
-                                <thead class="thead-dark">
-                                    <tr>
-                                        <th>Person Name</th>
-                                        <th>Designation</th>
-                                        <th>Mobile</th>
-                                        <th>Email</th>
-                                    </tr>
-                                </thead>
-                                <tbody>`;
-
-                    data.forEach(contact => {
-                        table += `
-                        <tr>
-                            <td>${contact.person_name || ''}</td>
-                            <td>${contact.person_designation || ''}</td>
-                            <td>${contact.person_mobile || ''}</td>
-                            <td>${contact.person_email || ''}</td>
-                        </tr>`;
-                    });
-
-                    table += '</tbody></table></div>';
-
-
-                    // Display table in SweetAlert modal
-                    Swal.fire({
-                        title: 'Contact Person(s)',
-                        html: table, // Insert the table here
-                        showCloseButton: true,
-                        focusConfirm: false,
-                        confirmButtonText: 'Close',
-                        width: '80%'
-                    });
-                } else {
-                    Swal.fire('Error', 'Invalid data format', 'error');
-                }
-            } catch (e) {
-                Swal.fire('Error', 'Failed to parse JSON data', 'error');
-            }
-        } else {
-            Swal.fire('No Contacts', 'No contact person data available.', 'info');
-        }
-    }
-
-
     function initializeSelectFields() {
         initializeSelectize('firm_type', {
             placeholder: "Select Firm Type"
@@ -142,9 +86,19 @@
             placeholder: "Select Packaging Type"
         });
         initializeSelectize('is_active');
+
         initializeSelectize('business_type_id', {
             placeholder: "Select Business Type"
         }, apiUrl = "<?= base_url(route_to('business_types_list_api')) ?>", {}, "business_type_id", "business_type_name")
+
+        initializeSelectize('party_rating_credit_id', {
+            placeholder: "Select Credit Rating"
+        }, apiUrl = "<?= base_url(route_to('party_rating_credit_list_api')) ?>", {}, "party_rating_credit_id", "party_rating_credit_name")
+
+        initializeSelectize('party_rating_value_id', {
+            placeholder: "Select Value Rating"
+        }, apiUrl = "<?= base_url(route_to('party_rating_value_list_api')) ?>", {}, "party_rating_value_id", "party_rating_value_name")
+
         initializeSelectize('payment_term_id', {
             placeholder: "Select Payment Terms"
         }, apiUrl = "<?= base_url(route_to('payment_terms_list_api')) ?>", {}, "payment_term_id", "payment_term_code")
@@ -201,22 +155,6 @@
                 visible: true
             },
             {
-                title: "Address",
-                data: "address_count",
-                visible: true,
-                render: function(data, type, row) {
-                    return `<a href="<?= base_url(route_to('party_address_list_page')) ?>?party_id=${row.party_id}" class="btn btn-sm btn-info">View(${data})</a>`;
-                }
-            },
-            {
-                title: "Contact Person Data",
-                data: "contact_person_json_data",
-                visible: true,
-                render: function(data, type, row) {
-                    return `<button class="btn btn-info" onclick="viewContacts('${encodeURIComponent(row.contact_person_json_data)}')">Contact Person(s)</button>`;
-                }
-            },
-            {
                 title: "Email",
                 data: "party_email",
                 visible: true
@@ -229,6 +167,31 @@
             {
                 title: "PAN No",
                 data: "pan_no",
+                visible: true
+            },
+            {
+                title: "Party Alloted ID To Us",
+                data: "party_alloted_id",
+                visible: true
+            },
+            {
+                title: "TIN No",
+                data: "party_tin",
+                visible: true
+            },
+            {
+                title: "CIN No",
+                data: "party_cin",
+                visible: true
+            },
+            {
+                title: "Credit Rating",
+                data: "party_rating_credit_name",
+                visible: true
+            },
+            {
+                title: "Value Rating",
+                data: "party_rating_value_name",
                 visible: true
             },
             {
@@ -264,11 +227,6 @@
             {
                 title: "Delivery Term",
                 data: "delivery_term_code",
-                visible: true
-            },
-            {
-                title: "Estimated Delivery Days",
-                data: "estimated_days_to_deliver",
                 visible: true
             },
             {
@@ -320,6 +278,16 @@
                 title: "Default Shipping Address ID",
                 data: "default_shipping_address_id",
                 visible: false
+            },
+            {
+                title: "Links",
+                data: null,
+                render: function(data, type, row) {
+                    return `
+                    <a title="Address Page" class="fa fa-address-card" aria-hidden="true" target="_blank" href="<?= base_url(route_to('party_address_list_page')) ?>?party_id=${row.party_id}"> (${row.address_count})</a> 
+                    <a title="Contact Page" class="fa fa-address-book ms-2" aria-hidden="true" target="_blank" href="<?= base_url(route_to('party_contact_list_page')) ?>?party_id=${row.party_id}"> (${row.party_contact_count})</a>
+                    `;
+                }
             },
             {
                 title: "Actions",

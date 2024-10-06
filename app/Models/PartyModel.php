@@ -19,13 +19,18 @@ class PartyModel extends FunctionModel
         'party_name',
         'party_email',
         'party_number',
+        'party_alloted_id',
+        'party_tin',
+        'party_cin',
+        'party_rating_credit_id',
+        'party_rating_value_id',
+        'party_user_id',
         'pan_no',
         'firm_type',
         'business_type_id',
         'business_nature_code',
         'payment_term_id',
         'delivery_term_id',
-        'estimated_days_to_deliver',
         'packaging_type',
         'bank_name',
         'bank_no',
@@ -33,7 +38,6 @@ class PartyModel extends FunctionModel
         'bank_holder_name',
         'notes',
         'website',
-        'contact_person_json_data',
         'is_active',
         'default_billing_address_id',
         'default_shipping_address_id'
@@ -43,7 +47,9 @@ class PartyModel extends FunctionModel
         'payment_term_id',
         'delivery_term_id',
         'default_billing_address_id',
-        'default_shipping_address_id'
+        'default_shipping_address_id',
+        'party_rating_credit_id',
+        'party_rating_value_id',
     ];
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -64,15 +70,20 @@ class PartyModel extends FunctionModel
         'party_type' => 'required|in_list[Customer,Supplier]',
         'party_code' => 'permit_empty|is_unique[party.party_code,party_id,{party_id}]',
         'party_name' => 'required|max_length[255]',
-        'party_email' => 'required|valid_email',
-        'party_number' => 'required|max_length[15]',
+        'party_email' => 'permit_empty|valid_email',
+        'party_number' => 'permit_empty|max_length[15]',
+        'party_alloted_id' => 'permit_empty',
+        'party_tin' => 'permit_empty',
+        'party_cin' => 'permit_empty',
+        'party_rating_credit_id' => 'permit_empty|is_not_unique[party_rating_credit.party_rating_credit_id]',
+        'party_rating_value_id' => 'permit_empty|is_not_unique[party_rating_value.party_rating_value_id]',
+        'party_user_id' => 'permit_empty|is_not_unique[users.user_id]',
         'pan_no' => 'permit_empty|max_length[50]',
         'firm_type' => 'required|in_list[PROPRIETORSHIP,PARTNERSHIP,LLP,PVT LTD,LIMITED,GOVT,ENTERPRISE,SEMI GOVT.ENTR,EOU]',
         'business_type_id' => 'permit_empty|is_not_unique[business_types.business_type_id]',
         'business_nature_code' => 'required|in_list[Retail,Wholesale,Stockist,Manufacture,Service]',
         'payment_term_id' => 'required|is_not_unique[payment_terms.payment_term_id]',
         'delivery_term_id' => 'permit_empty|is_not_unique[delivery_terms.delivery_term_id]',
-        'estimated_days_to_deliver' => 'required|integer',
         'packaging_type' => 'required|in_list[Standard,Non-Standard]',
         'bank_name' => 'permit_empty|max_length[255]',
         'bank_no' => 'permit_empty|max_length[50]',
@@ -80,7 +91,6 @@ class PartyModel extends FunctionModel
         'bank_holder_name' => 'permit_empty|max_length[255]',
         'notes' => 'permit_empty',
         'website' => 'permit_empty|valid_url',
-        'contact_person_json_data' => 'permit_empty',
         'is_active' => 'required|in_list[0,1]',
         'default_billing_address_id' => 'permit_empty|is_not_unique[party_address.address_id]',
         'default_shipping_address_id' => 'permit_empty|is_not_unique[party_address.address_id]',
@@ -133,10 +143,6 @@ class PartyModel extends FunctionModel
             'permit_empty' => 'The delivery term ID is optional.',
             'is_not_unique' => 'The delivery term ID must exist in the delivery terms table.',
         ],
-        'estimated_days_to_deliver' => [
-            'required' => 'Estimated days to deliver is required.',
-            'integer' => 'Estimated days to deliver must be an integer.',
-        ],
         'packaging_type' => [
             'required' => 'The packaging type is required.',
             'in_list' => 'The packaging type must be either Standard or Non-Standard.',
@@ -163,9 +169,6 @@ class PartyModel extends FunctionModel
         'website' => [
             'permit_empty' => 'The website is optional.',
             'valid_url' => 'Please provide a valid URL.',
-        ],
-        'contact_person_json_data' => [
-            'permit_empty' => 'Contact person data is optional.',
         ],
         'is_active' => [
             'required' => 'The active status is required.',
@@ -202,6 +205,17 @@ class PartyModel extends FunctionModel
             $this->addParentJoin('business_type_id', $this->get_business_types_model(), 'left', ['business_type_name']);
             $this->addParentJoin('payment_term_id', $this->get_payment_terms_model(), 'left', ['payment_term_code', 'payment_term_name', 'due_days', 'post_due_interest_rate']);
             $this->addParentJoin('delivery_term_id', $this->get_delivery_terms_model(), 'left', ['delivery_term_code', 'delivery_term_name', 'delivery_term_description']);
+            $this->addParentJoin('party_rating_credit_id', $this->get_party_rating_credit_model(), 'left', [
+                'party_rating_credit_name',
+                'party_rating_credit_non_listed_percentage',
+                'party_rating_credit_listed_percentage'
+            ]);
+            $this->addParentJoin('party_rating_value_id', $this->get_party_rating_value_model(), 'left', [
+                'party_rating_value_name',
+                'party_rating_value_non_listed_percentage',
+                'party_rating_value_listed_percentage'
+            ]);
+
             $billing_alias = "billing";
             // $this->addParentJoin('default_billing_address_id', $this->get_party_address_model(true, $billing_alias), 'left', [
             //     "address_short_name as " . $billing_alias . "_address_short_name",
