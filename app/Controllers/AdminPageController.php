@@ -574,6 +574,7 @@ class AdminPageController extends BaseController
         $party_data = [];
         if (!empty($data) && isset($data['party_id'])) {
             $party_data = $this->get_party_model()->find($data['party_id']);
+            $party_data['party_contact_data'] = $this->get_party_contact_model()->where('party_id', $data['party_id'])->findAll() ?? [];
         }
         $party_data['party_type'] = $party_type;
         return view('AdminPanelNew/components/party_create_update', $party_data);
@@ -582,6 +583,19 @@ class AdminPageController extends BaseController
     {
         $data = getRequestData($this->request, 'ARRAY');
         return view('AdminPanelNew/components/party_contact_person_detail', $data);
+    }
+    public function party_contact_list_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Party Contact List';
+        $theme_data['_page_title'] = 'Party Contact List';
+        $theme_data['_breadcrumb1'] = 'Dashboard';
+        $theme_data['_breadcrumb2'] = 'Party List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/party_contact_list';
+        $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
+        $parameter = $this->request->getGet() ?? [];
+        $theme_data = array_merge($theme_data, $parameter);
+        return view('AdminPanelNew/partials/main', $theme_data);
     }
     public function party_address_list_page()
     {

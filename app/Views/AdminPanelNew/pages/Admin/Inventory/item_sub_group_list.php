@@ -18,7 +18,7 @@
                 <?php endif; ?>
             </div>
             <div class="table-responsive">
-                <table id="group_table" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle w-100"></table>
+                <table id="group_table" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle w-100 w-100"></table>
             </div>
         </div>
     </div>

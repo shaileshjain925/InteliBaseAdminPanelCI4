@@ -132,6 +132,8 @@ if (!in_array($file_extension, $extensions)) {
         $routes->post('party_address_view_component', 'AdminPageController::party_address_view_component', ['as' => 'party_address_view_component']);
         $routes->post('party_address_create_update_component', 'AdminPageController::party_address_create_update_component', ['as' => 'party_address_create_update_component']);
         $routes->get('Party/Address', 'AdminPageController::party_address_list_page', ['as' => 'party_address_list_page']);
+        $routes->get('Party/Contact', 'AdminPageController::party_contact_list_page', ['as' => 'party_contact_list_page']);
+
         $routes->group('Purchase', function ($routes) {
             $routes->group('Customer', function ($routes) {
                 $routes->get('List', 'AdminPageController::party_list_page/Supplier', ['as' => 'supplier_list_page']);
@@ -297,12 +299,33 @@ if (!in_array($file_extension, $extensions)) {
                 $routes->post("delivery_terms_update_api", "AdminApiController::delivery_terms_update_api", ['as' => 'delivery_terms_update_api']);
                 $routes->post("delivery_terms_delete_api", "AdminApiController::delivery_terms_delete_api", ['as' => 'delivery_terms_delete_api']);
             });
+            $routes->group('party_rating_credit', function ($routes) {
+                $routes->post("party_rating_credit_get_api", "AdminApiController::party_rating_credit_get_api", ['as' => 'party_rating_credit_get_api']);
+                $routes->post("party_rating_credit_list_api", "AdminApiController::party_rating_credit_list_api", ['as' => 'party_rating_credit_list_api']);
+                $routes->post("party_rating_credit_create_api", "AdminApiController::party_rating_credit_create_api", ['as' => 'party_rating_credit_create_api']);
+                $routes->post("party_rating_credit_update_api", "AdminApiController::party_rating_credit_update_api", ['as' => 'party_rating_credit_update_api']);
+                $routes->post("party_rating_credit_delete_api", "AdminApiController::party_rating_credit_delete_api", ['as' => 'party_rating_credit_delete_api']);
+            });
+            $routes->group('party_rating_value', function ($routes) {
+                $routes->post("party_rating_value_get_api", "AdminApiController::party_rating_value_get_api", ['as' => 'party_rating_value_get_api']);
+                $routes->post("party_rating_value_list_api", "AdminApiController::party_rating_value_list_api", ['as' => 'party_rating_value_list_api']);
+                $routes->post("party_rating_value_create_api", "AdminApiController::party_rating_value_create_api", ['as' => 'party_rating_value_create_api']);
+                $routes->post("party_rating_value_update_api", "AdminApiController::party_rating_value_update_api", ['as' => 'party_rating_value_update_api']);
+                $routes->post("party_rating_value_delete_api", "AdminApiController::party_rating_value_delete_api", ['as' => 'party_rating_value_delete_api']);
+            });
             $routes->group('party', function ($routes) {
                 $routes->post("party_get_api", "AdminApiController::party_get_api", ['as' => 'party_get_api']);
                 $routes->post("party_list_api", "AdminApiController::party_list_api", ['as' => 'party_list_api']);
                 $routes->post("party_create_api", "AdminApiController::party_create_api", ['as' => 'party_create_api']);
                 $routes->post("party_update_api", "AdminApiController::party_update_api", ['as' => 'party_update_api']);
                 $routes->post("party_delete_api", "AdminApiController::party_delete_api", ['as' => 'party_delete_api']);
+            });
+            $routes->group('party_contact', function ($routes) {
+                $routes->post("party_contact_get_api", "AdminApiController::party_contact_get_api", ['as' => 'party_contact_get_api']);
+                $routes->post("party_contact_list_api", "AdminApiController::party_contact_list_api", ['as' => 'party_contact_list_api']);
+                $routes->post("party_contact_create_api", "AdminApiController::party_contact_create_api", ['as' => 'party_contact_create_api']);
+                $routes->post("party_contact_update_api", "AdminApiController::party_contact_update_api", ['as' => 'party_contact_update_api']);
+                $routes->post("party_contact_delete_api", "AdminApiController::party_contact_delete_api", ['as' => 'party_contact_delete_api']);
             });
             $routes->group('party_address', function ($routes) {
                 $routes->post("party_address_get_api", "AdminApiController::party_address_get_api", ['as' => 'party_address_get_api']);

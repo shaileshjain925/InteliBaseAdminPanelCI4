@@ -47,6 +47,50 @@
                 <span class="error-message" id="error-pan_no"></span>
             </div>
 
+            <!-- Party Tin Number -->
+            <div class="mb-3 col-md-4">
+                <label for="party_tin" class="form-label">TIN Number</label>
+                <input type="text" class="form-control" id="party_tin" name="party_tin" value="<?= @$party_tin ?>" placeholder="TIN Number">
+                <span class="error-message" id="error-party_tin"></span>
+            </div>
+            <!-- Party CIN -->
+            <div class="mb-3 col-md-4">
+                <label for="party_cin" class="form-label">CIN Number</label>
+                <input type="text" class="form-control" id="party_cin" name="party_cin" value="<?= @$party_cin ?>" placeholder="CIN Number">
+                <span class="error-message" id="error-party_cin"></span>
+            </div>
+
+            <!-- Party Alloted ID -->
+            <div class="mb-3 col-md-4">
+                <label for="party_alloted_id" class="form-label">Party Alloted ID To Us</label>
+                <input type="text" class="form-control" id="party_alloted_id" name="party_alloted_id" value="<?= @$party_alloted_id ?>" placeholder="Party Alloted ID To Us">
+                <span class="error-message" id="error-party_alloted_id"></span>
+            </div>
+
+            <!-- Website -->
+            <div class="mb-3 col-md-4">
+                <label for="website" class="form-label">Website</label>
+                <input type="text" class="form-control" id="website" name="website" value="<?= @$website ?>" placeholder="Website URL">
+                <span class="error-message" id="error-website"></span>
+            </div>
+
+            <!-- Credit Rating -->
+            <div class="mb-3 col-md-4">
+                <label for="party_rating_credit_id" class="form-label">Credit Rating</label>
+                <select class="" id="party_rating_credit_id" name="party_rating_credit_id" data-value="<?= @$party_rating_credit_id ?>">
+                    <!-- Options populated dynamically -->
+                </select>
+                <span class="error-message" id="error-party_rating_credit_id"></span>
+            </div>
+            <!-- Value Rating -->
+            <div class="mb-3 col-md-4">
+                <label for="party_rating_value_id" class="form-label">Value Rating</label>
+                <select class="" id="party_rating_value_id" name="party_rating_value_id" data-value="<?= @$party_rating_value_id ?>">
+                    <!-- Options populated dynamically -->
+                </select>
+                <span class="error-message" id="error-party_rating_value_id"></span>
+            </div>
+
             <!-- Payment Term -->
             <div class="mb-3 col-md-4">
                 <label for="payment_term_id" class="form-label">Payment Term</label>
@@ -115,12 +159,6 @@
                 </select>
                 <span class="error-message" id="error-packaging_type"></span>
             </div>
-            <!-- Estimate Days -->
-            <div class="mb-3 col-md-4">
-                <label for="estimated_days_to_deliver" class="form-label">Estimate Delivery Dates</label>
-                <input type="number" class="form-control" id="estimated_days_to_deliver" name="estimated_days_to_deliver" value="<?= @$estimated_days_to_deliver ?>" placeholder="Estimate Delivery Dates">
-                <span class="error-message" id="error-estimated_days_to_deliver"></span>
-            </div>
             <!--Billing Address -->
             <div class="mb-3 col-md-6">
                 <label for="default_billing_address_id" class="form-label">Billing Address</label>
@@ -172,13 +210,6 @@
                 <textarea class="form-control" id="notes" name="notes" placeholder="Additional Notes"><?= @$notes ?></textarea>
                 <span class="error-message" id="error-notes"></span>
             </div>
-
-            <!-- Website -->
-            <div class="mb-3 col-md-4">
-                <label for="website" class="form-label">Website</label>
-                <input type="text" class="form-control" id="website" name="website" value="<?= @$website ?>" placeholder="Website URL">
-                <span class="error-message" id="error-website"></span>
-            </div>
             <!-- Is Active -->
             <div class="mb-3 col-md-4">
                 <label for="is_active" class="form-label">Is Active</label>
@@ -192,9 +223,9 @@
             <!-- Contact Person Details -->
             <h5>Contact Person Details <span onclick="addContactRow()" class="btn ms-2 btn-sm add_form_btn"><i class="bx bx-plus me-2"></i>Add Row</span></h5>
             <div id="contact_person_div" class="container">
-                <?php if (isset($contact_person_json_data) && !empty($contact_person_json_data)): ?>
-                    <?php foreach (json_decode($contact_person_json_data, true) as $key => $contact_details): ?>
-                        <?= view('AdminPanelNew/components/party_contact_person_detail', array_merge($contact_details, ['index' => $key])) ?>
+                <?php if (isset($party_contact_data) && !empty($party_contact_data)): ?>
+                    <?php foreach ($party_contact_data as $key => $party_contact): ?>
+                        <?= view('AdminPanelNew/components/party_contact_person_detail', array_merge($party_contact, ['index' => $key])) ?>
                     <?php endforeach; ?>
                 <?php else: ?>
                     <?= view('AdminPanelNew/components/party_contact_person_detail', array_merge(['index' => 0])) ?>

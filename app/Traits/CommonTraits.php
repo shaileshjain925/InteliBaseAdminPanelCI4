@@ -27,6 +27,9 @@ use App\Models\ItemUqcModel;
 use App\Models\PartyAddressModel;
 use App\Models\PartyModel;
 use App\Models\PaymentTermsModel;
+use App\Models\PartyContactModel;
+use App\Models\PartyRatingCreditModel;
+use App\Models\PartyRatingValueModel;
 
 trait CommonTraits
 {
@@ -232,5 +235,29 @@ trait CommonTraits
     public static function get_party_address_model(...$variable)
     {
         return new PartyAddressModel(...$variable);
+    }
+    /**
+     * Return Model Instance
+     * @return PartyContactModel
+     */
+    public static function get_party_contact_model(...$variable)
+    {
+        return new PartyContactModel(...$variable);
+    }
+    /**
+     * Return Model Instance
+     * @return PartyRatingCreditModel
+     */
+    public static function get_party_rating_credit_model(...$variable)
+    {
+        return new PartyRatingCreditModel(...$variable);
+    }
+    /**
+     * Return Model Instance
+     * @return PartyRatingValueModel
+     */
+    public static function get_party_rating_value_model(...$variable)
+    {
+        return new PartyRatingValueModel(...$variable);
     }
 }
