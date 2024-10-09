@@ -154,6 +154,47 @@ class CreateItemsTable extends Migration
                 'constraint' => '255',
                 'null' => true
             ],
+            'price_list_upload_user_id' => [
+                'type' => 'INT',
+                'constraint' => 11,
+                'null' => true,
+                'unsigned' => true,
+                'default' => null,
+            ],
+            'price_list_uploaded_date' => [
+                'type' => 'DATE',
+                'null' => true,
+                'default' => null,
+            ],
+            'price_list_date' => [
+                'type' => 'DATE',
+                'null' => true,
+                'default' => null,
+            ],
+            'price_list_name' => [
+                'type' => 'VARCHAR',
+                'constraint' => 255,
+                'null' => true,
+                'default' => null,
+            ],
+            'price_list_rate' => [
+                'type' => 'DOUBLE',
+                'constraint' => '10,2',
+                'null' => true,
+                'default' => '0.00',
+            ],
+            'price_list_min_order_qty' => [
+                'type' => 'DOUBLE',
+                'constraint' => '10,3',
+                'null' => true,
+                'default' => '0.000',
+            ],
+            'price_list_min_order_pack_qty' => [
+                'type' => 'DOUBLE',
+                'constraint' => '10,3',
+                'null' => true,
+                'default' => '0.000',
+            ],
             'item_is_active' => [
                 'type' => 'BOOLEAN',
                 'null' => false,

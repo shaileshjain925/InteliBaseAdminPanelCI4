@@ -554,6 +554,17 @@ class AdminPageController extends BaseController
         }
         return view('AdminPanelNew/components/inventory/item_create_update', $item_data);
     }
+    public function price_list_page()
+    {
+        $theme_data = $this->admin_panel_common_data();
+        $theme_data['_meta_title'] = 'Price List';
+        $theme_data['_page_title'] = 'Price List';
+        $theme_data['_breadcrumb1'] = 'Dashboard';
+        $theme_data['_breadcrumb2'] = 'Price List';
+        $theme_data['_view_files'][] = 'AdminPanelNew/pages/Admin/Purchase/price_list';
+        $theme_data['_previous_path'] = base_url(route_to('default_dashboard_page'));
+        return view('AdminPanelNew/partials/main', $theme_data);
+    }
     public function party_list_page($party_type)
     {
         $theme_data = $this->admin_panel_common_data();
@@ -864,6 +875,12 @@ class AdminPageController extends BaseController
                     [
                         "title" => "Supplier",
                         "url" => base_url(route_to('supplier_list_page')),
+                        "badge_count" => 0,
+                        "visibility" => check_menu_access('SUPPLIER', 'view'),
+                    ],
+                    [
+                        "title" => "Price List",
+                        "url" => base_url(route_to('price_list_page')),
                         "badge_count" => 0,
                         "visibility" => check_menu_access('SUPPLIER', 'view'),
                     ],
