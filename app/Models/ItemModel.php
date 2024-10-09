@@ -12,7 +12,7 @@ class ItemModel extends FunctionModel
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields = ['item_id', 'item_brand_id', 'item_category_id', 'item_sub_group_id', 'item_hsn_id', 'item_class', 'item_code', 'item_name', 'item_description', 'item_supplier_description', 'item_nature', 'item_manufacturing_type', 'item_is_spare_part', 'item_is_expire', 'item_min_order_qty', 'item_min_order_pack_qty', 'item_length_cms', 'item_width_cms', 'item_height_cms', 'item_weight_kg', 'item_drawing_no', 'item_remark', 'item_uqc_id', 'item_pack_uqc_id', 'item_pack_conversion', 'item_user_id', 'item_box_image', 'item_image', 'item_is_active', 'price_list_upload_user_id', 'price_list_uploaded_date', 'price_list_date', 'price_list_name', 'price_list_rate', 'price_list_min_order_qty', 'price_list_min_order_pack_qty', 'item_quality_check_link', 'item_inspection_required'];
+    protected $allowedFields = ['item_id', 'item_brand_id', 'item_category_id', 'item_sub_group_id', 'item_hsn_id', 'item_class', 'item_code', 'item_name', 'item_description', 'item_supplier_description', 'item_nature', 'item_manufacturing_type', 'item_is_spare_part', 'item_is_expire', 'item_min_order_qty', 'item_min_order_pack_qty', 'item_length_cms', 'item_width_cms', 'item_height_cms', 'item_weight_kg', 'item_drawing_no', 'item_remark', 'item_uqc_id', 'item_pack_uqc_id', 'item_pack_conversion', 'item_user_id', 'item_box_image', 'item_image', 'item_is_active', 'price_list_upload_user_id', 'price_list_uploaded_date', 'price_list_date', 'price_list_name', 'price_list_rate', 'price_list_item_group', 'price_list_min_order_qty', 'price_list_min_order_pack_qty', 'price_list_comment', 'price_list_supplier_comment', 'item_quality_check_link', 'item_inspection_required'];
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
 
@@ -65,8 +65,11 @@ class ItemModel extends FunctionModel
         'price_list_date' => 'permit_empty',
         'price_list_name' => 'permit_empty',
         'price_list_rate' => 'permit_empty',
+        'price_list_item_group' => 'permit_empty',
         'price_list_min_order_qty' => 'permit_empty',
         'price_list_min_order_pack_qty' => 'permit_empty',
+        'price_list_comment' => 'permit_empty',
+        'price_list_supplier_comment' => 'permit_empty',
     ];
     protected $validationMessages = [
         'item_brand_id' => [

@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\Response;
 use ApiResponseStatusCode;
+use Exception;
 
 class AdminApiController extends BaseController
 {
@@ -1008,5 +1009,116 @@ class AdminApiController extends BaseController
             // log_message('error', 'Image file not found or invalid path: ' . $imagePath);
             return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::NOT_FOUND, "Image file not found");
         }
+    }
+
+    public function ImportPriceListByExcel()
+    {
+        try {
+            helper(['form', 'excel']);
+            $data = getRequestData($this->request, 'ARRAY');
+            $file = $data['_files']['csv'];
+            if ($file->isValid() && !$file->hasMoved()) {
+                $filePath = $file->getTempName();
+                $excelData = getExcelDataInArrayHeaderKeyWise($filePath, 2);
+                if (empty($excelData)) {
+                    return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::BAD_REQUEST, 'Record Not Found For Import');
+                }
+                // Trim Data
+                $this->ExcelDataTrim($excelData);
+                // Process Data to Default Values
+                $this->PriceListExcelDataProcess($excelData);
+                // Validate Excel File
+                $errors = [];
+                if (!$this->PriceListExcelValidate($excelData, $errors)) {
+                    return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::VALIDATION_FAILED, "Excel File Validation Failed", [], $errors);
+                } else {
+                    $result = [];
+                    foreach ($excelData as $key => $row) {
+                        $data = [
+                            "price_list_upload_user_id" => $_SESSION['user_id'],
+                            "price_list_uploaded_date" => date("Y-m-d"),
+                            "price_list_date" => $row["PL Date"],
+                            "price_list_name" => $row["PL Name"],
+                            "price_list_item_group" => $row["PL Item Group"],
+                            "price_list_rate" => $row["PL Rate"],
+                            "price_list_min_order_qty" => $row["PL MOQ"],
+                            "price_list_min_order_pack_qty" => $row["PL MPQ"],
+                            "price_list_supplier_comment" => $row["PL Supp Comments"],
+                            "price_list_comment" => $row["PL Co Comments"],
+                        ];
+                        $result = $this->get_item_model()->RecordUpdate($data, $row["ID"]);
+                    }
+                }
+                return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::OK, 'Price List Update Successfully', $result);
+            } else {
+                return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::BAD_REQUEST, 'Invalid file or file has already been moved'[]);
+            }
+        } catch (Exception $e) {
+            return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::BAD_REQUEST, $e->getMessage(), []);
+        }
+    }
+    protected function ExcelDataTrim(&$rows)
+    {
+        foreach ($rows as $key => &$row) {
+            foreach ($row as $key1 => &$value) {
+                $value = trim($value);
+            }
+        }
+    }
+    protected function PriceListExcelDataProcess(&$rows)
+    {
+        $intFields = ["PL Rate"];
+        $defaultDataBluePrint = [
+            "ID" => "",
+            "PL Date" => "",
+            "PL Name" => "",
+            "PL Item Group" => "",
+            "PL Rate" => 0.00,
+            "PL MOQ" => 1.00,
+            "PL MPQ" => 1.00,
+            "PL Supp Comments" => "",
+            "PL Co Comments" => "",
+        ];
+        foreach ($rows as $key => &$row) {
+            foreach ($row as $key1 => &$value) {
+                if (empty($value)) {
+                    if (array_key_exists($key1, $defaultDataBluePrint)) {
+                        $value = $defaultDataBluePrint[$key1];
+                    }
+                }
+            }
+        }
+        foreach ($rows as $key => &$row) {
+            foreach ($row as $key1 => &$value) {
+                if (in_array($key1, $intFields)) {
+                    $value = floatval($value);
+                }
+            }
+        }
+    }
+    protected function PriceListExcelValidate($rows, &$errors)
+    {
+        $validationRules = [
+            "ID" => "required",
+            "PL Date" => "required|valid_date",
+            "PL Name" => "required",
+            "PL Item Group" => "permit_empty",
+            "PL Rate" => "required",
+            "PL MOQ" => "permit_empty",
+            "PL MPQ" => "permit_empty",
+            "PL Supp Comments" => "permit_empty",
+            "PL Co Comments" => "permit_empty",
+        ];
+
+        $validation = \Config\Services::validation();
+        $isValid = true;
+
+        foreach ($rows as $index => $row) {
+            if (!$validation->setRules($validationRules)->run($row)) {
+                $errors[$index] = $validation->getErrors();
+                $isValid = false;
+            }
+        }
+        return $isValid;
     }
 }

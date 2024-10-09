@@ -762,7 +762,6 @@ function DataTableInitialized(
   headers = {},
   afterTableViewCallbackFunction = null
 ) {
-  // Check if DataTable is already initialized
   if (url !== null) {
     if ($.fn.DataTable.isDataTable("#" + table_id)) {
       DataTableApiCall(
@@ -774,7 +773,6 @@ function DataTableInitialized(
       )
         .then(function (data) {
           var dataTable = $("#" + table_id).DataTable();
-          // Clear existing data and add new data
           dataTable.clear().rows.add(data.rowData).draw();
           if (typeof afterTableViewCallbackFunction === "function") {
             afterTableViewCallbackFunction(data);
@@ -784,7 +782,6 @@ function DataTableInitialized(
           console.log("DataTable Error fetching data from server");
         });
     } else {
-      // DataTable not initialized, initialize it with API data
       DataTableApiCall(
         url,
         method,
@@ -793,17 +790,32 @@ function DataTableInitialized(
         headers
       )
         .then(function (data) {
-          var buttonsArray = ["colvis"]; // Base buttons
+          var buttonsArray = ["colvis"];
+
           if (datatable_export) {
-            buttonsArray.push("copy", "csv", "excel", "pdf"); // Add export buttons if allowed
+            buttonsArray.push({
+              extend: "excel",
+              exportOptions: {
+                columns: function (idx, data, node) {
+                  // Check if exportable key exists and if it's false
+                  var columnSettings = dataTable.settings().init().columns[idx];
+                  return (
+                    !("exportable" in columnSettings) || columnSettings.exportable !== false
+                  );
+                }
+              }
+            });
+
+            buttonsArray.push("csv", "pdf");
           }
           if (datatable_print) {
-            buttonsArray.push("print"); // Add print button if allowed
+            buttonsArray.push("print");
           }
+
           var dataTable = $("#" + table_id).DataTable({
             data: data.rowData,
             columns: data.columns,
-            dom: "Bfrtip", // Add the Buttons extension elements
+            dom: "Bfrtip",
             buttons: buttonsArray,
             initComplete: function () {
               if (typeof afterTableViewCallbackFunction === "function") {
@@ -811,6 +823,7 @@ function DataTableInitialized(
               }
             },
           });
+
           dataTable
             .buttons()
             .container()
@@ -823,11 +836,12 @@ function DataTableInitialized(
     }
   } else {
     var dataTable = $("#" + table_id).DataTable({
-      dom: "Bfrtip", // Add the Buttons extension elements
+      dom: "Bfrtip",
       buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"],
     });
   }
 }
+
 /**
  * Makes an AJAX request to fetch data from an API.
  * @param {string} url - The URL of the API endpoint.

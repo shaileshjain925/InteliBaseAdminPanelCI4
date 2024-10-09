@@ -195,6 +195,22 @@ class CreateItemsTable extends Migration
                 'null' => true,
                 'default' => '0.000',
             ],
+            'price_list_item_group' => [
+                'type' => 'VARCHAR',
+                'constraint' => 255,
+                'null' => true,
+                'default' => null,
+            ],
+            'price_list_comment' => [
+                'type' => 'TEXT',
+                'null' => true,
+                'default' => null,
+            ],
+            'price_list_supplier_comment' => [
+                'type' => 'TEXT',
+                'null' => true,
+                'default' => null,
+            ],
             'item_is_active' => [
                 'type' => 'BOOLEAN',
                 'null' => false,

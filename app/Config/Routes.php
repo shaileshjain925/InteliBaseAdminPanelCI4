@@ -278,6 +278,7 @@ if (!in_array($file_extension, $extensions)) {
                 $routes->post("item_create_api", "AdminApiController::item_create_api", ['as' => 'item_create_api']);
                 $routes->post("item_update_api", "AdminApiController::item_update_api", ['as' => 'item_update_api']);
                 $routes->post("item_delete_api", "AdminApiController::item_delete_api", ['as' => 'item_delete_api']);
+                $routes->post("ImportPriceListByExcel", "AdminApiController::ImportPriceListByExcel", ['as' => 'ImportPriceListByExcel']);
             });
             $routes->group('business_types', function ($routes) {
                 $routes->post("business_types_get_api", "AdminApiController::business_types_get_api", ['as' => 'business_types_get_api']);
