@@ -17,13 +17,6 @@
                     <label for="item_brand_id">Brand</label>
                     <select name="item_brand_id" id="item_brand_id" multiple></select>
                 </div>
-                <div class="col-4">
-                    <label for="item_sub_group_id">Sub Group</label>
-                    <select name="item_sub_group_id" id="item_sub_group_id" multiple></select>
-                </div>
-                <div class="col-4">
-
-                </div>
             </div>
             <div class="table-responsive">
                 <table id="item" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle w-100"></table>
@@ -69,16 +62,6 @@
             {
                 title: 'Brand',
                 data: 'item_brand_name',
-                visible: true,
-            },
-            {
-                title: 'Group',
-                data: 'item_group_name',
-                visible: true,
-            },
-            {
-                title: 'Sub Group',
-                data: 'item_sub_group_name',
                 visible: true,
             },
             {
@@ -163,34 +146,7 @@
                 "fieldname": "item_brands-item_brand_id",
                 "value": selected_brands
             }]
-        })
-
-        $sub_group_parameter = {
-            '_autojoin': 'y',
-            '_select': '*',
-            '_whereIn': [{
-                "fieldname": "item_sub_groups-item_sub_group_id",
-                "value": sub_group_ids
-            }]
-        };
-        initializeSelectize('item_sub_group_id', {
-            placeholder: "Select Sub Group"
-        }, apiUrl = "<?= base_url(route_to('item_sub_group_list_api')) ?>", $sub_group_parameter, "item_sub_group_id", "item_sub_group_name", null, "item_group_name").onchange(function(selected_sub_groups) {
-            // Remove the old condition for 'item_sub_groups-item_sub_group_id'
-            parameter['_whereIn'] = parameter['_whereIn'].filter(function(condition) {
-                return condition.fieldname !== "item_sub_groups-item_sub_group_id";
-            });
-            if (selected_sub_groups.length === 0) {
-                parameter['_whereIn'] = [{
-                    "fieldname": "item_sub_groups-item_sub_group_id",
-                    "value": sub_group_ids
-                }]
-            } else {
-                parameter['_whereIn'] = [{
-                    "fieldname": "item_sub_groups-item_sub_group_id",
-                    "value": selected_sub_groups
-                }]
-            }
+            fetchTableData();
         })
     });
 </script>
