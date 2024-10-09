@@ -144,6 +144,7 @@ class ItemModel extends FunctionModel
     // Callbacks
     protected $booleanFields = ['item_is_spare_part', 'item_is_expire', 'item_inspection_required', 'item_is_active'];
     protected $nullSetIfEmpty = [
+        "item_code",
         "item_brand_id",
         "item_category_id",
         "item_sub_group_id",
