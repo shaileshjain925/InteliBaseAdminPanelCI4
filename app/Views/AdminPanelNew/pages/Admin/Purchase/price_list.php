@@ -88,6 +88,11 @@
                 visible: true,
             },
             {
+                title: 'Sub Group',
+                data: 'item_sub_group_name',
+                visible: true,
+            },
+            {
                 title: 'MOQ',
                 data: 'item_min_order_qty',
                 visible: true,
