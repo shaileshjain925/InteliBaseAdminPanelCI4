@@ -140,6 +140,7 @@ if (!in_array($file_extension, $extensions)) {
                 $routes->post('party_view_component', 'AdminPageController::party_view_component/Supplier', ['as' => 'supplier_view_component']);
                 $routes->post('party_create_update_component', 'AdminPageController::party_create_update_component/Supplier', ['as' => 'supplier_create_update_component']);
             });
+            $routes->get('PriceList', 'AdminPageController::price_list_page', ['as' => 'price_list_page']);
         });
         $routes->group('Sales', function ($routes) {
             $routes->group('Customer', function ($routes) {

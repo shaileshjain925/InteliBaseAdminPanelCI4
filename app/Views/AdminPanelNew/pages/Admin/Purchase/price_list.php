@@ -1,0 +1,197 @@
+<!-- -----------main page start----------- -->
+<div class="offcanvas offcanvas-end  vendor-offcanvas" style="overflow: scroll; width:850px!important" tabindex="-1" id="right_floating_div">
+</div>
+
+<div class="row new_table_div col-md-12">
+    <div class="card">
+        <div class="card-body p-2">
+            <div class="d-flex justify-content-end align-items-center mb-2">
+                <a href="<?= base_url(route_to('default_dashboard_page')) ?>"><i class="fas fa-home home_icn me-3"></i></a>
+                <img onclick="fetchTableData()" src="<?php echo base_url('AdminPanelNew/assets/images/refresh.png') ?>" height="20" class="me-3">
+                <a href="<?= @$_previous_path ?>">
+                    <button class="btn export_btn me-3" type="button"><i class="fas fa-backward"></i></button>
+                </a>
+            </div>
+            <div class="row mb-3">
+                <div class="col-4">
+                    <label for="item_brand_id">Brand</label>
+                    <select name="item_brand_id" id="item_brand_id" multiple></select>
+                </div>
+                <div class="col-4">
+                    <label for="item_sub_group_id">Sub Group</label>
+                    <select name="item_sub_group_id" id="item_sub_group_id" multiple></select>
+                </div>
+                <div class="col-4">
+
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table id="item" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle w-100"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var sub_group_ids = JSON.parse('<?= get_user_data_access('sub_groups', true) ?>');
+    var datatable_export = '<?= (check_menu_access('PRICE_LIST', 'export')) ?>';
+    var datatable_print = '<?= (check_menu_access('PRICE_LIST', 'print')) ?>';
+    var print_allowed = '<?= (check_menu_access('PRICE_LIST', 'print')) ?>';
+    var parameter = {};
+    parameter._autojoin = 'F';
+    parameter._select = '*';
+    parameter['_whereIn'] = [{
+        "fieldname": "item_groups-item_group_id",
+        "value": sub_group_ids
+    }]
+
+    function itemFormSuccessCallback(response) {
+        if (response.status == 200 || response.status == 201) {
+            fetchTableData();
+        }
+    }
+
+    function itemFormErrorCallback(response) {
+        console.log(response);
+    }
+
+    function successDataTableCallbackFunction(response) {
+        var columns = [{
+                title: "ID",
+                data: "item_id",
+                visible: true
+            },
+            {
+                title: "Item Name",
+                data: "item_name",
+                visible: true
+            },
+            {
+                title: 'Brand',
+                data: 'item_brand_name',
+                visible: true,
+            },
+            {
+                title: 'Group',
+                data: 'item_group_name',
+                visible: true,
+            },
+            {
+                title: 'Sub Group',
+                data: 'item_sub_group_name',
+                visible: true,
+            },
+            {
+                title: 'MOQ',
+                data: 'item_min_order_qty',
+                visible: true,
+            },
+            {
+                title: 'MPQ',
+                data: 'item_min_order_pack_qty',
+                visible: true,
+            },
+            {
+                title: 'Uploader Name',
+                data: 'price_list_upload_user_name',
+                visible: true,
+            },
+            {
+                title: 'Uploaded Date',
+                data: 'price_list_uploaded_date',
+                visible: true,
+            },
+            {
+                title: 'PL Date',
+                data: 'price_list_date',
+                visible: true,
+            },
+            {
+                title: 'PL Name',
+                data: 'price_list_name',
+                visible: true,
+            },
+            {
+                title: 'PL Rate',
+                data: 'price_list_rate',
+                visible: true,
+            },
+            {
+                title: 'PL MOQ',
+                data: 'price_list_min_order_qty',
+                visible: true,
+            },
+            {
+                title: 'PL MPQ',
+                data: 'price_list_min_order_pack_qty',
+                visible: true,
+            },
+        ];
+        if (response.status == 200) {
+            return {
+                "status": response.status,
+                "columns": columns,
+                "data": JSON.parse(response.data)
+            };
+        } else {
+            return {
+                "status": response.status,
+                "columns": columns,
+                "data": {}
+            };
+        }
+    }
+
+    function fetchTableData() {
+        DataTableInitialized(
+            'item', // table_id
+            "<?= base_url(route_to('item_list_api')) ?>", // url
+            'POST', // method
+            parameter, // parameter
+            successDataTableCallbackFunction // dataTableSuccessCallBack
+        );
+    }
+    $(document).ready(function() {
+        fetchTableData();
+        initializeSelectize('item_brand_id', {
+            placeholder: "Select Brand"
+        }, apiUrl = "<?= base_url(route_to('item_brand_list_api')) ?>", {}, "item_brand_id", "item_brand_name").onchange(function(selected_brands) {
+            parameter['_whereIn'] = parameter['_whereIn'].filter(function(condition) {
+                return condition.fieldname !== "item_brands-item_brand_id";
+            });
+            parameter['_whereIn'] = [{
+                "fieldname": "item_brands-item_brand_id",
+                "value": selected_brands
+            }]
+        })
+
+        $sub_group_parameter = {
+            '_autojoin': 'y',
+            '_select': '*',
+            '_whereIn': [{
+                "fieldname": "item_sub_groups-item_sub_group_id",
+                "value": sub_group_ids
+            }]
+        };
+        initializeSelectize('item_sub_group_id', {
+            placeholder: "Select Sub Group"
+        }, apiUrl = "<?= base_url(route_to('item_sub_group_list_api')) ?>", $sub_group_parameter, "item_sub_group_id", "item_sub_group_name", null, "item_group_name").onchange(function(selected_sub_groups) {
+            // Remove the old condition for 'item_sub_groups-item_sub_group_id'
+            parameter['_whereIn'] = parameter['_whereIn'].filter(function(condition) {
+                return condition.fieldname !== "item_sub_groups-item_sub_group_id";
+            });
+            if (selected_sub_groups.length === 0) {
+                parameter['_whereIn'] = [{
+                    "fieldname": "item_sub_groups-item_sub_group_id",
+                    "value": sub_group_ids
+                }]
+            } else {
+                parameter['_whereIn'] = [{
+                    "fieldname": "item_sub_groups-item_sub_group_id",
+                    "value": selected_sub_groups
+                }]
+            }
+        })
+    });
+</script>
+<!-- --------------main page end----------- -->

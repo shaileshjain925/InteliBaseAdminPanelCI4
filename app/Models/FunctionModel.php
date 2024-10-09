@@ -451,15 +451,15 @@ class FunctionModel extends Model
      */
     private function removeDuplicateJoins(array $joins): array
     {
-        $refTableNames = array_column($joins, 'refTableName');
-        $uniqueRefTableNames = array_unique($refTableNames);
+        $refTableAlias = array_column($joins, 'refTableAlias');
+        $uniqueRefTableNames = array_unique($refTableAlias);
 
         $uniqueJoins = array_filter($joins, function ($item) use ($uniqueRefTableNames) {
             static $seen = [];
-            if (isset($seen[$item['refTableName']])) {
+            if (isset($seen[$item['refTableAlias']])) {
                 return false;
             }
-            $seen[$item['refTableName']] = true;
+            $seen[$item['refTableAlias']] = true;
             return true;
         });
 
