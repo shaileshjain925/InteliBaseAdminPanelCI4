@@ -909,3 +909,34 @@ if (!function_exists('TransformMultiRowArray')) {
     return $return_array;
   }
 }
+if (!function_exists('convertToYmd')) {
+
+/**
+ * Function to check and convert a date to 'yyyy-mm-dd' format.
+ * 
+ * @param string $date The input date string.
+ * @return string The formatted date string in 'yyyy-mm-dd' format or false if invalid.
+ */
+function convertToYmd($date) {
+  // Remove any spaces or extra characters
+  $date = trim($date);
+  
+  // Check if the date is in 'yyyy-mm-dd' or 'yyyy/mm/dd' format
+  if (preg_match('/^\d{4}[-\/]\d{2}[-\/]\d{2}$/', $date)) {
+      // Replace slashes (/) with dashes (-)
+      return str_replace('/', '-', $date); // Already in correct format, just normalize the separator
+  }
+  
+  // Check if the date is in 'dd-mm-yyyy' or 'dd/mm/yyyy' format
+  if (preg_match('/^\d{2}[-\/]\d{2}[-\/]\d{4}$/', $date)) {
+      // Convert from 'dd-mm-yyyy' or 'dd/mm/yyyy' to 'yyyy-mm-dd'
+      $dateObject = \DateTime::createFromFormat('d-m-Y', str_replace('/', '-', $date));
+      if ($dateObject) {
+          return $dateObject->format('Y-m-d');
+      }
+  }
+
+  // If the date does not match any known formats, return false
+  return false; // Invalid date format
+}
+}
