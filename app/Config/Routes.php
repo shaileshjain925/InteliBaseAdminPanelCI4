@@ -126,6 +126,7 @@ if (!in_array($file_extension, $extensions)) {
                 $routes->get('List', 'AdminPageController::item_list_page', ['as' => 'item_list_page']);
                 $routes->post('item_view_component', 'AdminPageController::item_view_component', ['as' => 'item_view_component']);
                 $routes->post('item_create_update_component', 'AdminPageController::item_create_update_component', ['as' => 'item_create_update_component']);
+                $routes->get('export_item_import_template', 'AdminPageController::export_item_import_template', ['as' => 'export_item_import_template']);
             });
         });
         $routes->post('add_row_contact_details', 'AdminPageController::add_row_contact_details', ['as' => 'add_row_contact_details']);
@@ -279,6 +280,7 @@ if (!in_array($file_extension, $extensions)) {
                 $routes->post("item_update_api", "AdminApiController::item_update_api", ['as' => 'item_update_api']);
                 $routes->post("item_delete_api", "AdminApiController::item_delete_api", ['as' => 'item_delete_api']);
                 $routes->post("ImportPriceListByExcel", "AdminApiController::ImportPriceListByExcel", ['as' => 'ImportPriceListByExcel']);
+                $routes->post("ImportItemListByExcel", "AdminApiController::ImportItemListByExcel", ['as' => 'ImportItemListByExcel']);
             });
             $routes->group('business_types', function ($routes) {
                 $routes->post("business_types_get_api", "AdminApiController::business_types_get_api", ['as' => 'business_types_get_api']);
