@@ -13,10 +13,35 @@
                 </a>
                 <?php if (check_menu_access('ITEM', 'create')): ?>
                     <button onclick="item_create_update()" class="btn add_form_btn" data-bs-toggle="offcanvas" data-bs-target="#right_floating_div" aria-controls="right_floating_div"><i class="bx bx-plus me-2"></i>Add Item</button>
+                    <a href="<?= base_url(route_to('export_item_import_template')) ?>" class="btn btn-success"><i class="bx bx-plus me-2"></i>Export Item Import Template</a>
+                    <button class="btn btn-secondary text-white" type="button" data-bs-toggle="modal" data-bs-target="#importPriceList">
+                        <i class="bx bx-import"></i> Import Price List
+                    </button>
                 <?php endif; ?>
             </div>
             <div class="table-responsive">
                 <table id="item" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle w-100"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Import Product Modal -->
+<div class="modal fade" id="importPriceList" tabindex="-1" aria-labelledby="importPriceListLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="importPriceListLabel">Import Price List</h5>
+                <button id='md-close' type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" enctype="multipart/form-data" id='enquiryImportCsv' name='importfile'>
+                    <div class="mb-3">
+                        <label for="productFile" class="form-label">Upload File</label>
+                        <input class="form-control" type='file' name="csv" id="csvImportFile" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Import</button>
+                </form>
             </div>
         </div>
     </div>
@@ -338,6 +363,37 @@
             successDataTableCallbackFunction // dataTableSuccessCallBack
         );
     }
+    $("form[name='importfile']").on("submit", function(ev) {
+        ev.preventDefault(); // Prevent the default form submission
+
+        var formData = new FormData(this); // Create FormData from the form
+
+        $.ajax({
+            url: '<?= route_to('ImportItemListByExcel') ?>',
+            type: "POST",
+            data: formData,
+            dataType: "json",
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                fetchTableData();
+                if (response.status === 200) {
+                    toastr.success(response.message);
+                    $('#md-close').click();
+                } else if (response.status === 422) {
+                    toastr.error(response.message);
+                    $.each(response.errors[0], function(key, value) {
+                        toastr.error(value);
+                    });
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                toastr.error('An error occurred while importing the product.');
+            }
+        });
+    });
     $(document).ready(function() {
         fetchTableData();
     });

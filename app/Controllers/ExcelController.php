@@ -5,10 +5,13 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\Response;
 use CodeIgniter\HTTP\ResponseInterface;
+use Exception;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx as XlsxWriter;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx as XlsxReader;
+use PhpOffice\PhpSpreadsheet\Worksheet\Table;
+use PhpOffice\PhpSpreadsheet\Worksheet\Table\TableStyle;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class ExcelController extends BaseController
@@ -90,9 +93,8 @@ class ExcelController extends BaseController
      * Example usage:
      * $excelManager->addHeadings($spreadsheet, $sheet, 1, ['Product', 'Price', 'Quantity']);
      */
-    public function addHeadings(Spreadsheet $spreadsheet, Worksheet $sheet, int $row, array $headings): void
+    public function addHeadings(Spreadsheet $spreadsheet, Worksheet $sheet, int $row, array $headings, $column = 'A'): void
     {
-        $column = 'A';
         $sheetIndex = $this->getSheetIndex($spreadsheet, $sheet);
         foreach ($headings as $heading) {
             $sheet->setCellValue("{$column}{$row}", $heading);
@@ -104,9 +106,10 @@ class ExcelController extends BaseController
     /**
      * Adds rows of data starting from the specified row.
      *
-     * @param Worksheet $sheet
+     * @param Worksheet $sheet The worksheet where rows will be added.
      * @param int $startRow The starting row number.
      * @param array $data A multidimensional array of row data.
+     * @param string $startColumn The starting column (default is 'A').
      * 
      * Example usage:
      * $data = [
@@ -115,17 +118,30 @@ class ExcelController extends BaseController
      * ];
      * $excelManager->addRows($sheet, 2, $data);
      */
-    public function addRows(Worksheet $sheet, int $startRow, array $data): void
+    public function addRows(Worksheet $sheet, int $startRow, array $data, string $startColumn = 'A'): void
     {
+        // Convert the starting column from a letter to an index
+        $startColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($startColumn);
+
         foreach ($data as $row) {
-            $column = 'A';
+            $currentColumnIndex = $startColumnIndex;
+
             foreach ($row as $cellValue) {
-                $sheet->setCellValue("{$column}{$startRow}", $cellValue);
-                $column++;
+                // Convert the column index back to the Excel column letter
+                $currentColumnLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($currentColumnIndex);
+
+                // Set the cell value in the correct position
+                $sheet->setCellValue("{$currentColumnLetter}{$startRow}", $cellValue);
+
+                // Increment the column index
+                $currentColumnIndex++;
             }
+
+            // Move to the next row after completing one row
             $startRow++;
         }
     }
+
 
     /**
      * Retrieves the column letter associated with a given heading.
@@ -211,6 +227,36 @@ class ExcelController extends BaseController
     {
         $sheet->getColumnDimension($columnLetter)->setVisible(false);
     }
+    public function addDropdownValidationToRange(
+        Worksheet $sheet,
+        string $cellRangeStart,
+        string $cellRangeEnd,
+        string $formula,
+        ?string $promptTitle = null,
+        ?string $promptMessage = null
+    ): void {
+        // Extract start and end coordinates
+        preg_match('/([A-Z]+)([0-9]+)/', $cellRangeStart, $start);
+        preg_match('/([A-Z]+)([0-9]+)/', $cellRangeEnd, $end);
+
+        $startColumn = $start[1];  // e.g., "C"
+        $startRow = (int)$start[2];  // e.g., "3"
+        $endColumn = $end[1];  // e.g., "C"
+        $endRow = (int)$end[2];  // e.g., "10"
+
+        // Make sure the columns are the same for simplicity
+        if ($startColumn !== $endColumn) {
+            throw new Exception("This function only supports ranges within the same column.");
+        }
+
+        // Loop through each row in the range
+        for ($row = $startRow; $row <= $endRow; $row++) {
+            // Apply dropdown validation to each cell
+            $cellCoordinate = $startColumn . $row;
+            $this->addDropdownValidation($sheet, $cellCoordinate, $formula, $promptTitle, $promptMessage);
+        }
+    }
+
 
 
 
@@ -598,8 +644,8 @@ class ExcelController extends BaseController
         if (!is_dir(dirname($filePath))) {
             mkdir(dirname($filePath), 0755, true);
         }
-        $writer->save($filePath);
-        return $response->download($filePath, null)->setFileName($fileName);
+        $writer->save($filePath . $fileName);
+        return $response->download($filePath . $fileName, null)->setFileName($fileName);
     }
 
     /**
@@ -619,5 +665,19 @@ class ExcelController extends BaseController
 
         // Trigger the download of the generated CSV file using CodeIgniter's response object
         return $this->response->download($filePath, null);
+    }
+    function createStyledTable($sheet, $range, $tableName, $styleTheme = 'TableStyleMedium9')
+    {
+        // Create a new Table
+        $importItemTable = new Table($range, $tableName);
+        $sheet->addTable($importItemTable);
+
+        // Create a TableStyle object
+        $tableStyle = new TableStyle();
+        $tableStyle->setTheme($styleTheme); // Set predefined style name
+        $tableStyle->setShowRowStripes(true); // Alternate row colors
+
+        // Apply the TableStyle to the table
+        $importItemTable->setStyle($tableStyle);
     }
 }
