@@ -23,6 +23,9 @@ function encodeArray($array)
 if (!in_array($file_extension, $extensions)) {
     // Admin Page Controller Start -----------------------------------------------------------------------------
     $routes->get('/', 'AdminPageController::login_page', ['as' => 'login_page']);
+    $routes->get('/null', function () {
+        return ''; // Return an empty string for blank HTML
+    });
     $routes->get('/exportEnquiryExcelTemplate', 'AdminPageController::exportEnquiryExcelTemplate', ['as' => 'exportEnquiryExcelTemplate']);
     $routes->get('/seeder_run', 'AdminPageController::seeder_run', ['as' => 'seeder_run']);
     $routes->get('logout', 'AdminPageController::logout', ['as' => 'logout']);

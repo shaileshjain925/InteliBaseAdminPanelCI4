@@ -736,26 +736,21 @@ class AdminPageController extends BaseController
         $mst = $ec->setActiveSheet($ss, 1);
         $ec->addHeadings($ss, $mst, 1, [
             'item_brand_name',
-            'item_brand_id',
             'item_category_name',
-            'item_category_id',
             'item_sub_group_name',
-            'item_sub_group_id',
-            'item_hsn_code',
-            'item_hsn_id',
             'item_uqc_name',
-            'item_uqc_id',
+            'item_hsn_code',
         ], 'A');
-        $brand_list = $this->get_item_brand_model()->select('item_brand_name,item_brand_id')->orderBy('item_brand_name')->findAll() ?? [];
-        $category_list = $this->get_item_category_model()->select('item_category_name,item_category_id')->orderBy('item_category_name')->findAll() ?? [];
-        $sub_group_list = $this->get_item_sub_group_model()->select('item_sub_group_name,item_sub_group_id')->orderBy('item_sub_group_name')->findAll() ?? [];
-        $hsn_list = $this->get_item_hsn_model()->select('item_hsn_code,item_hsn_id')->orderBy('item_hsn_code')->findAll() ?? [];
-        $uqc_list = $this->get_item_uqc_model()->select('item_uqc_name,item_uqc_id')->orderBy('item_uqc_name')->findAll() ?? [];
+        $brand_list = $this->get_item_brand_model()->select('item_brand_name')->orderBy('item_brand_name')->findAll() ?? [];
+        $category_list = $this->get_item_category_model()->select('item_category_name')->orderBy('item_category_name')->findAll() ?? [];
+        $sub_group_list = $this->get_item_sub_group_model()->select('item_sub_group_name')->orderBy('item_sub_group_name')->findAll() ?? [];
+        $hsn_list = $this->get_item_hsn_model()->select('item_hsn_code')->orderBy('item_hsn_code')->findAll() ?? [];
+        $uqc_list = $this->get_item_uqc_model()->select('item_uqc_name')->orderBy('item_uqc_name')->findAll() ?? [];
         $ec->addRows($mst, 2, $brand_list, 'A');
-        $ec->addRows($mst, 2, $category_list, 'C');
-        $ec->addRows($mst, 2, $sub_group_list, 'E');
-        $ec->addRows($mst, 2, $hsn_list, 'G');
-        $ec->addRows($mst, 2, $uqc_list, 'I');
+        $ec->addRows($mst, 2, $category_list, 'B');
+        $ec->addRows($mst, 2, $sub_group_list, 'C');
+        $ec->addRows($mst, 2, $uqc_list, 'D');
+        $ec->addRows($mst, 2, $hsn_list, 'E');
         $im = $ec->setActiveSheet($ss, 0);
         $ec->addHeadings($ss, $im, 1, [
             'item_name',
@@ -764,17 +759,12 @@ class AdminPageController extends BaseController
             'item_nature',
             'item_manufacturing_type',
             'item_brand_name',
-            'item_brand_id',
             'item_category_name',
-            'item_category_id',
             'item_sub_group_name',
-            'item_sub_group_id',
-            'item_hsn_code',
-            'item_hsn_id',
             'item_uqc_name',
-            'item_uqc_id',
             'item_pack_uqc_name',
-            'item_pack_uqc_id',
+            'item_hsn_code',
+            'item_hsn_gst',
             'item_description',
             'item_supplier_description',
             'item_quality_check_link',
@@ -791,7 +781,6 @@ class AdminPageController extends BaseController
             'item_is_expire',
             'item_inspection_required',
             'item_is_active',
-            'item_hsn_gst',
         ], 'A');
         $ec->addHeadings($ss, $im, 2, [
             'Item Name',
@@ -800,17 +789,12 @@ class AdminPageController extends BaseController
             'Nature',
             'Item Manufacturing Type',
             'Brand',
-            'item_brand_id',
             'Category Name',
-            'item_category_id',
             'Sub Group Name',
-            'item_sub_group_id',
-            'HSN Code',
-            'item_hsn_id',
             'Unit',
-            'item_uqc_id',
             'Pack Unit',
-            'item_pack_uqc_id',
+            'HSN Code',
+            'Gst %',
             'Description',
             'Supplier Description',
             'Quality Check Link Url',
@@ -827,49 +811,14 @@ class AdminPageController extends BaseController
             'Expirable',
             'Inspection Required',
             'Is Active',
-            'Gst %'
         ], 'A');
-        $item_structure = [
-            'item_name'               => 'required|is_unique[items.item_name,item_id,{item_id}]|max_length[255]',
-            'item_code'               => 'permit_empty|is_unique[items.item_code,item_id,{item_id}]|max_length[255]',
-            'item_class'              => 'required|in_list[listed,non-listed,not-assign]',
-            'item_nature'             => 'required|in_list[Capex,Packaging,Services,Saleable,Consumable,MRO,NoBuy,NoStock]',
-            'item_manufacturing_type'  => 'required|in_list[FinishedProduct,RawMaterial,SemiFinished,Other]',
-            'item_brand_name'           => 'permit_empty|is_not_unique[item_brands.item_brand_id]',
-            'item_brand_id'           => 'permit_empty|is_not_unique[item_brands.item_brand_id]',
-            'item_category_name'        => 'permit_empty|is_not_unique[item_categories.item_category_id]',
-            'item_category_id'        => 'permit_empty|is_not_unique[item_categories.item_category_id]',
-            'item_sub_group_name'       => 'permit_empty|is_not_unique[item_sub_groups.item_sub_group_id]',
-            'item_sub_group_id'       => 'permit_empty|is_not_unique[item_sub_groups.item_sub_group_id]',
-            'item_hsn_code'             => 'permit_empty|is_not_unique[item_hsn.item_hsn_id]',
-            'item_hsn_id'             => 'permit_empty|is_not_unique[item_hsn.item_hsn_id]',
-            'item_uqc_id'             => 'required|is_not_unique[item_uqc.item_uqc_id]',
-            'item_pack_uqc_id'        => 'permit_empty|is_not_unique[item_uqc.item_uqc_id]',
-            'item_description'        => 'permit_empty',
-            'item_supplier_description' => 'permit_empty',
-            'item_quality_check_link' => 'permit_empty',
-            'item_drawing_no'         => 'permit_empty|max_length[255]',
-            'item_remark'             => 'permit_empty',
-            'item_min_order_qty'      => 'permit_empty',
-            'item_min_order_pack_qty' => 'permit_empty',
-            'item_length_cms'         => 'permit_empty',
-            'item_width_cms'          => 'permit_empty',
-            'item_height_cms'         => 'permit_empty',
-            'item_weight_kg'          => 'permit_empty',
-            'item_pack_conversion'    => 'permit_empty',
-            'item_is_spare_part'      => 'permit_empty',
-            'item_is_expire'          => 'permit_empty',
-            'item_inspection_required' => 'permit_empty',
-            'item_is_active'          => 'permit_empty',
-        ];
-
         // Set the cell where you want the dropdown list (e.g., A1)
         $cell = 'C3';
 
         // Create ItemClass new Data Validation rule
         $ItemClassDataValidation = $im->getCell($cell)->getDataValidation();
         $ItemClassDataValidation->setType(DataValidation::TYPE_LIST);
-        $ItemClassDataValidation->setErrorStyle(DataValidation::STYLE_STOP);
+        $ItemClassDataValidation->setErrorStyle(DataValidation::STYLE_INFORMATION);
         $ItemClassDataValidation->setAllowBlank(false);
         $ItemClassDataValidation->setShowDropDown(true);
         $ItemClassDataValidation->setFormula1('"listed,non-listed,not-assign"');  // Add the dropdown list to the cell
@@ -883,7 +832,7 @@ class AdminPageController extends BaseController
         // Create ItemNature new Data Validation rule
         $ItemNatureDataValidation = $im->getCell($cell)->getDataValidation();
         $ItemNatureDataValidation->setType(DataValidation::TYPE_LIST);
-        $ItemNatureDataValidation->setErrorStyle(DataValidation::STYLE_STOP);
+        $ItemNatureDataValidation->setErrorStyle(DataValidation::STYLE_INFORMATION);
         $ItemNatureDataValidation->setAllowBlank(false);
         $ItemNatureDataValidation->setShowDropDown(true);
         $ItemNatureDataValidation->setFormula1('"Capex,Packaging,Services,Saleable,Consumable,MRO,NoBuy,NoStock"');  // Add the dropdown list to the cell
@@ -897,7 +846,7 @@ class AdminPageController extends BaseController
         // Create ItemManufacturingType new Data Validation rule
         $ItemManufacturingTypeDataValidation = $im->getCell($cell)->getDataValidation();
         $ItemManufacturingTypeDataValidation->setType(DataValidation::TYPE_LIST);
-        $ItemManufacturingTypeDataValidation->setErrorStyle(DataValidation::STYLE_STOP);
+        $ItemManufacturingTypeDataValidation->setErrorStyle(DataValidation::STYLE_INFORMATION);
         $ItemManufacturingTypeDataValidation->setAllowBlank(false);
         $ItemManufacturingTypeDataValidation->setShowDropDown(true);
         $ItemManufacturingTypeDataValidation->setFormula1('"FinishedProduct,RawMaterial,SemiFinished,Other"');  // Add the dropdown list to the cell
@@ -912,126 +861,73 @@ class AdminPageController extends BaseController
         $cell = 'F3';
         // Define the range of the dropdown list (from 'Masters'!A1:A3)
         $brand_list_range = 'Masters!$A$2:$A$' . count($brand_list) + 1;
-        $brand_list_range2 = 'Masters!$A$2:$B$' . count($brand_list) + 1;
-
         // Create a new Data Validation rule
         $BrandValidation = $im->getCell($cell)->getDataValidation();
         $BrandValidation->setType(DataValidation::TYPE_LIST);
-        $BrandValidation->setErrorStyle(DataValidation::STYLE_STOP);
+        $BrandValidation->setErrorStyle(DataValidation::STYLE_INFORMATION);
         $BrandValidation->setAllowBlank(false);
         $BrandValidation->setShowDropDown(true);
         $BrandValidation->setFormula1($brand_list_range);  // Reference to the other sheet range
-        $BrandValidation->setShowErrorMessage(true);
 
-        // Optional: Set a title and an error message for invalid selections
-        $BrandValidation->setErrorTitle('Invalid Selection');
-        $BrandValidation->setError('Please select a valid option from the dropdown.');
-        $formula = '=IFERROR(VLOOKUP(F3,' . $brand_list_range2 . ',2,FALSE),"")';
-        $im->setCellValue('G3', $formula);
-
-        $cell = 'H3';
+        $cell = 'G3';
         // Define the range of the dropdown list (from 'Masters'!A1:A3)
-        $category_list_range = 'Masters!$C$2:$C$' . count($category_list) + 1;
-        $category_list_range2 = 'Masters!$C$2:$D$' . count($category_list) + 1;
-
+        $category_list_range = 'Masters!$B$2:$B$' . count($category_list) + 1;
         // Create a new Data Validation rule
         $CategoryValidation = $im->getCell($cell)->getDataValidation();
         $CategoryValidation->setType(DataValidation::TYPE_LIST);
-        $CategoryValidation->setErrorStyle(DataValidation::STYLE_STOP);
+        $CategoryValidation->setErrorStyle(DataValidation::STYLE_INFORMATION);
         $CategoryValidation->setAllowBlank(false);
         $CategoryValidation->setShowDropDown(true);
         $CategoryValidation->setFormula1($category_list_range);  // Reference to the other sheet range
-        $CategoryValidation->setShowErrorMessage(true);
 
-        // Optional: Set a title and an error message for invalid selections
-        $CategoryValidation->setErrorTitle('Invalid Selection');
-        $CategoryValidation->setError('Please select a valid option from the dropdown.');
-        $formula = '=IFERROR(VLOOKUP(' . $cell . ',' . $category_list_range2 . ',2,FALSE),"")';
-        $im->setCellValue('I3', $formula);
-
-        $cell = 'J3';
+        $cell = 'H3';
         // Define the range of the dropdown list (from 'Masters'!A1:A3)
-        $sub_group_list_range = 'Masters!$E$2:$E$' . count($sub_group_list) + 1;
-        $sub_group_list_range2 = 'Masters!$E$2:$F$' . count($sub_group_list) + 1;
-
+        $sub_group_list_range = 'Masters!$C$2:$C$' . count($sub_group_list) + 1;
         // Create a new Data Validation rule
         $SubGroupValidation = $im->getCell($cell)->getDataValidation();
         $SubGroupValidation->setType(DataValidation::TYPE_LIST);
-        $SubGroupValidation->setErrorStyle(DataValidation::STYLE_STOP);
+        $SubGroupValidation->setErrorStyle(DataValidation::STYLE_INFORMATION);
         $SubGroupValidation->setAllowBlank(false);
         $SubGroupValidation->setShowDropDown(true);
         $SubGroupValidation->setFormula1($sub_group_list_range);  // Reference to the other sheet range
-        $SubGroupValidation->setShowErrorMessage(true);
 
-        // Optional: Set a title and an error message for invalid selections
-        $SubGroupValidation->setErrorTitle('Invalid Selection');
-        $SubGroupValidation->setError('Please select a valid option from the dropdown.');
-        $formula = '=IFERROR(VLOOKUP(' . $cell . ',' . $sub_group_list_range2 . ',2,FALSE),"")';
-        $im->setCellValue('K3', $formula);
-
-        $cell = 'L3';
+        $cell = 'I3';
         // Define the range of the dropdown list (from 'Masters'!A1:A3)
-        $hsn_list_range = 'Masters!$G$2:$G$' . count($hsn_list) + 1;
-        $hsn_list_range2 = 'Masters!$G$2:$H$' . count($hsn_list) + 1;
+        $uqc_list_range = 'Masters!$D$2:$D$' . count($uqc_list) + 1;
+        // Create a new Data Validation rule
+        $UqcValidation = $im->getCell($cell)->getDataValidation();
+        $UqcValidation->setType(DataValidation::TYPE_LIST);
+        $UqcValidation->setErrorStyle(DataValidation::STYLE_INFORMATION);
+        $UqcValidation->setAllowBlank(false);
+        $UqcValidation->setShowDropDown(true);
+        $UqcValidation->setFormula1($uqc_list_range);  // Reference to the other sheet range
+
+        $cell = 'J3';
+        // Define the range of the dropdown list (from 'Masters'!A1:A3)
+        $pack_uqc_list_range = 'Masters!$D$2:$D$' . count($uqc_list) + 1;
+        // Create a new Data Validation rule
+        $PackUqcValidation = $im->getCell($cell)->getDataValidation();
+        $PackUqcValidation->setType(DataValidation::TYPE_LIST);
+        $PackUqcValidation->setErrorStyle(DataValidation::STYLE_INFORMATION);
+        $PackUqcValidation->setAllowBlank(false);
+        $PackUqcValidation->setShowDropDown(true);
+        $PackUqcValidation->setFormula1($pack_uqc_list_range);  // Reference to the other sheet range
+        // Define file path in public folder
+
+        $cell = 'K3';
+        // Define the range of the dropdown list (from 'Masters'!A1:A3)
+        $hsn_list_range = 'Masters!$E$2:$E$' . count($hsn_list) + 1;
 
         // Create a new Data Validation rule
         $HsnValidation = $im->getCell($cell)->getDataValidation();
         $HsnValidation->setType(DataValidation::TYPE_LIST);
-        $HsnValidation->setErrorStyle(DataValidation::STYLE_STOP);
-        $HsnValidation->setAllowBlank(false);
+        $HsnValidation->setErrorStyle(DataValidation::STYLE_INFORMATION);
+        $HsnValidation->setAllowBlank(true);
         $HsnValidation->setShowDropDown(true);
         $HsnValidation->setFormula1($hsn_list_range);  // Reference to the other sheet range
-        $HsnValidation->setShowErrorMessage(true);
-
-        // Optional: Set a title and an error message for invalid selections
-        $HsnValidation->setErrorTitle('Invalid Selection');
-        $HsnValidation->setError('Please select a valid option from the dropdown.');
-        $formula = '=IFERROR(VLOOKUP(' . $cell . ',' . $hsn_list_range2 . ',2,FALSE),"")';
-        $im->setCellValue('M3', $formula);
-
-        $cell = 'N3';
-        // Define the range of the dropdown list (from 'Masters'!A1:A3)
-        $uqc_list_range = 'Masters!$I$2:$I$' . count($uqc_list) + 1;
-        $uqc_list_range2 = 'Masters!$I$2:$J$' . count($uqc_list) + 1;
-
-        // Create a new Data Validation rule
-        $UqcValidation = $im->getCell($cell)->getDataValidation();
-        $UqcValidation->setType(DataValidation::TYPE_LIST);
-        $UqcValidation->setErrorStyle(DataValidation::STYLE_STOP);
-        $UqcValidation->setAllowBlank(false);
-        $UqcValidation->setShowDropDown(true);
-        $UqcValidation->setFormula1($uqc_list_range);  // Reference to the other sheet range
-        $UqcValidation->setShowErrorMessage(true);
-
-        // Optional: Set a title and an error message for invalid selections
-        $UqcValidation->setErrorTitle('Invalid Selection');
-        $UqcValidation->setError('Please select a valid option from the dropdown.');
-        $formula = '=IFERROR(VLOOKUP(' . $cell . ',' . $uqc_list_range2 . ',2,FALSE),"")';
-        $im->setCellValue('O3', $formula);
-
-        $cell = 'P3';
-        // Define the range of the dropdown list (from 'Masters'!A1:A3)
-        $pack_uqc_list_range = 'Masters!$I$2:$I$' . count($uqc_list) + 1;
-        $pack_uqc_list_range2 = 'Masters!$I$2:$J$' . count($uqc_list) + 1;
-
-        // Create a new Data Validation rule
-        $PackUqcValidation = $im->getCell($cell)->getDataValidation();
-        $PackUqcValidation->setType(DataValidation::TYPE_LIST);
-        $PackUqcValidation->setErrorStyle(DataValidation::STYLE_STOP);
-        $PackUqcValidation->setAllowBlank(false);
-        $PackUqcValidation->setShowDropDown(true);
-        $PackUqcValidation->setFormula1($pack_uqc_list_range);  // Reference to the other sheet range
-        $PackUqcValidation->setShowErrorMessage(true);
-
-        // Optional: Set a title and an error message for invalid selections
-        $PackUqcValidation->setErrorTitle('Invalid Selection');
-        $PackUqcValidation->setError('Please select a valid option from the dropdown.');
-        $formula = '=IFERROR(VLOOKUP(' . $cell . ',' . $pack_uqc_list_range2 . ',2,FALSE),"")';
-        $im->setCellValue('Q3', $formula);
-        // Define file path in public folder
 
         // Table Styled
-        $ec->createStyledTable($im, 'A2:AH3', 'ImportItemTable');
+        $ec->createStyledTable($im, 'A2:AB3', 'ImportItemTable');
         $filePath = WRITEPATH . 'exports/';  // 'exports' is a subdirectory in 'writable'
         $fileName = 'ImportItemTemplate.xlsx';
         return $ec->saveAndExport($this->response, $ss, $filePath, $fileName);

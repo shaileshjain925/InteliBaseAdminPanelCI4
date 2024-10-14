@@ -1127,7 +1127,8 @@ class AdminApiController extends BaseController
                 } else {
                     unset($excelData[0]);
                     $errors = [];
-                    $result = $this->ImportItemProcess($excelData, $errors);
+                    $result = $this->ImportItemProcess($excelData, 3);
+                    return formatApiAutoResponse($this->request, $this->response, $result);
                 }
             } else {
                 return formatCommonResponse(ApiResponseStatusCode::BAD_REQUEST, 'Invalid file or file has already been moved', []);
@@ -1136,40 +1137,80 @@ class AdminApiController extends BaseController
             return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::BAD_REQUEST, $e->getMessage(), []);
         }
     }
-    protected function ImportItemProcess(array $item_list = [], &$errors = [])
+    protected function ImportItemProcess(array &$item_list = [], $row_number_starts)
     {
         $this->ExcelDataTrim($item_list);
         // Process Data to Default Values
         $this->ItemListExcelDataProcess($item_list);
         // Validate Excel File
-        if (!$this->ItemListExcelValidate($item_list, $errors)) {
-            return formatCommonResponse(ApiResponseStatusCode::VALIDATION_FAILED, "Excel File Validation Failed", [], $errors);
+        if (!$this->ItemListExcelValidate($item_list)) {
+            $reindex_item_list = array_values($item_list);
+            foreach ($reindex_item_list as $key => &$item) {
+                $item['row_number'] = $key + $row_number_starts;
+            }
+            return formatCommonResponse(ApiResponseStatusCode::VALIDATION_FAILED, 'Excel Row Validation Failed', $reindex_item_list);
         } else {
-            $brand_list = [];
-            $brand_names = [];
             $hsn_list = [];
             $hsn_codes = [];
             // Un Created Masters List
             foreach ($item_list as $key => $row) {
-                if (empty($row['item_brand_id']) && !in_array($row['item_brand_name'], $brand_names)) {
-                    $brand_names[] = $row['item_brand_name'];
-                    $brand_list[$key]['item_brand_name'] = $row['item_brand_name'];
-                    $brand_list[$key]['item_brand_code'] = $row['item_brand_name'];
-                }
-                if (empty($row['item_hsn_id']) && !in_array($row['item_hsn_code'], $hsn_codes)) {
+                if (empty($row['item_hsn_id']) && !empty($row['item_hsn_code']) && !in_array($row['item_hsn_code'], $hsn_codes)) {
                     $hsn_codes[] = $row['item_hsn_code'];
-                    $hsn_list[$key]['item_hsn_type'] = 'HSN';
+                    // Check if the item HSN code starts with '99'
+                    if (substr($row['item_hsn_code'], 0, 2) === '99') {
+                        $hsn_list[$key]['item_hsn_type'] = 'SAC';
+                    } else {
+                        $hsn_list[$key]['item_hsn_type'] = 'HSN';
+                    }
                     $hsn_list[$key]['item_hsn_code'] = $row['item_hsn_code'];
                     $hsn_list[$key]['item_hsn_gst'] = $row['item_hsn_gst'];
                 }
             }
-            
-            return formatCommonResponse(ApiResponseStatusCode::OK, 'Item Import Successfully');
+            if (!empty($hsn_list)) {
+                $hsnCreateResponse = $this->get_item_hsn_model()->insertBatch($hsn_list);
+            }
+            // Update Brands IDS In Rows
+            $brand_list = $this->get_item_brand_model()->findAll();
+            foreach ($brand_list as $key => $row) {
+                $this->addKeyOnSearchInRows($item_list, 'item_brand_name', $row['item_brand_name'], 'item_brand_id', $row['item_brand_id']);
+            }
+            // Update Category IDS In Rows
+            $category_list = $this->get_item_category_model()->findAll();
+            foreach ($category_list as $key => $row) {
+                $this->addKeyOnSearchInRows($item_list, 'item_category_name', $row['item_category_name'], 'item_category_id', $row['item_category_id']);
+            }
+            // Update Sub Groups IDS In Rows
+            $sub_group_list = $this->get_item_sub_group_model()->findAll();
+            foreach ($sub_group_list as $key => $row) {
+                $this->addKeyOnSearchInRows($item_list, 'item_sub_group_name', $row['item_sub_group_name'], 'item_sub_group_id', $row['item_sub_group_id']);
+            }
+            // Update Hsn IDS In Rows
+            $hsn_list = $this->get_item_hsn_model()->findAll();
+            foreach ($hsn_list as $key => $row) {
+                $this->addKeyOnSearchInRows($item_list, 'item_hsn_code', $row['item_hsn_code'], 'item_hsn_id', $row['item_hsn_id']);
+            }
+            // Update UQC IDS In Rows and Update Pack UQC IDS In Rows
+            $uqc_list = $this->get_item_uqc_model()->findAll();
+            foreach ($uqc_list as $key => $row) {
+                $this->addKeyOnSearchInRows($item_list, 'item_uqc_name', $row['item_uqc_name'], 'item_uqc_id', $row['item_uqc_id']);
+                $this->addKeyOnSearchInRows($item_list, 'item_pack_uqc_name', $row['item_uqc_name'], 'item_pack_uqc_id', $row['item_uqc_id']);
+            }
+            // Item Create 
+            foreach ($item_list as $key => &$item) {
+                $item['item_user_id'] = $_SESSION['user_id'];
+                $item['response'] = $this->get_item_model()->RecordCreate($item);
+                $item['response'] = json_encode($item['response']);
+            }
+            $reindex_item_list = array_values($item_list);
+            foreach ($reindex_item_list as $key => &$item) {
+                $item['row_number'] = $key + $row_number_starts;
+            }
+            return formatCommonResponse(ApiResponseStatusCode::OK, 'Item Import Successfully', $reindex_item_list);
         }
     }
     protected function ItemListExcelDataProcess(&$rows)
     {
-        $intFields = ["item_length_cms", "item_width_cms", "item_height_cms", "item_weight_kg", "item_is_spare_part", "item_is_expire", "item_min_order_qty", "item_min_order_pack_qty", "item_pack_conversion", "item_is_active", "item_inspection_required", 'item_hsn_gst'];
+        $intFields = ["item_length_cms", "item_width_cms", "item_height_cms", "item_weight_kg", "item_is_spare_part", "item_is_expire", "item_min_order_qty", "item_min_order_pack_qty", "item_pack_conversion", "item_is_active", "item_inspection_required"];
         $defaultDataBluePrint = [
             'item_brand_id' => null,
             'item_category_id' => null,
@@ -1217,7 +1258,7 @@ class AdminApiController extends BaseController
             }
         }
     }
-    protected function ItemListExcelValidate($rows, &$errors)
+    protected function ItemListExcelValidate(&$rows)
     {
         $validationRules = [
             'item_name'               => 'required',
@@ -1253,9 +1294,11 @@ class AdminApiController extends BaseController
         $validation = \Config\Services::validation();
         $isValid = true;
 
-        foreach ($rows as $index => $row) {
+        foreach ($rows as $index => &$row) {
             if (!$validation->setRules($validationRules)->run($row)) {
-                $errors[$index] = $validation->getErrors();
+                $errors = $validation->getErrors();
+                $row['response'] = formatCommonResponse(ApiResponseStatusCode::VALIDATION_FAILED, "Excel Row Validation Failed", [], $errors);
+                $row['response'] = json_encode($row['response']);
                 $isValid = false;
             }
         }
@@ -1266,6 +1309,14 @@ class AdminApiController extends BaseController
         foreach ($rows as $key => &$row) {
             foreach ($row as $key1 => &$value) {
                 $value = trim($value);
+            }
+        }
+    }
+    protected function addKeyOnSearchInRows(&$rows, $searchFieldName, $searchFieldValue, $addFieldName, $addFieldValue)
+    {
+        foreach ($rows as $key1 => &$row) {
+            if (isset($row[$searchFieldName]) && !empty($row[$searchFieldName]) && $row[$searchFieldName] == $searchFieldValue) {
+                $row[$addFieldName] = $addFieldValue;
             }
         }
     }
