@@ -791,6 +791,7 @@ class AdminPageController extends BaseController
             'item_is_expire',
             'item_inspection_required',
             'item_is_active',
+            'item_hsn_gst',
         ], 'A');
         $ec->addHeadings($ss, $im, 2, [
             'Item Name',
@@ -826,6 +827,7 @@ class AdminPageController extends BaseController
             'Expirable',
             'Inspection Required',
             'Is Active',
+            'Gst %'
         ], 'A');
         $item_structure = [
             'item_name'               => 'required|is_unique[items.item_name,item_id,{item_id}]|max_length[255]',
@@ -1029,7 +1031,7 @@ class AdminPageController extends BaseController
         // Define file path in public folder
 
         // Table Styled
-        $ec->createStyledTable($im,'A2:AG3','ImportItemTable');
+        $ec->createStyledTable($im, 'A2:AH3', 'ImportItemTable');
         $filePath = WRITEPATH . 'exports/';  // 'exports' is a subdirectory in 'writable'
         $fileName = 'ImportItemTemplate.xlsx';
         return $ec->saveAndExport($this->response, $ss, $filePath, $fileName);

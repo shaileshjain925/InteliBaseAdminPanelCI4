@@ -1057,14 +1057,6 @@ class AdminApiController extends BaseController
             return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::BAD_REQUEST, $e->getMessage(), []);
         }
     }
-    protected function ExcelDataTrim(&$rows)
-    {
-        foreach ($rows as $key => &$row) {
-            foreach ($row as $key1 => &$value) {
-                $value = trim($value);
-            }
-        }
-    }
     protected function PriceListExcelDataProcess(&$rows)
     {
         $intFields = ["PL Rate"];
@@ -1120,5 +1112,161 @@ class AdminApiController extends BaseController
             }
         }
         return $isValid;
+    }
+    public function ImportItemListByExcel()
+    {
+        try {
+            helper(['form', 'excel']);
+            $data = getRequestData($this->request, 'ARRAY');
+            $file = $data['_files']['csv'];
+            if ($file->isValid() && !$file->hasMoved()) {
+                $filePath = $file->getTempName();
+                $excelData = getExcelDataInArrayHeaderKeyWise($filePath, 1);
+                if (empty($excelData) && count($excelData) < 2) {
+                    return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::BAD_REQUEST, 'Record Not Found For Import');
+                } else {
+                    unset($excelData[0]);
+                    $errors = [];
+                    $result = $this->ImportItemProcess($excelData, $errors);
+                }
+            } else {
+                return formatCommonResponse(ApiResponseStatusCode::BAD_REQUEST, 'Invalid file or file has already been moved', []);
+            }
+        } catch (Exception $e) {
+            return formatApiResponse($this->request, $this->response, ApiResponseStatusCode::BAD_REQUEST, $e->getMessage(), []);
+        }
+    }
+    protected function ImportItemProcess(array $item_list = [], &$errors = [])
+    {
+        $this->ExcelDataTrim($item_list);
+        // Process Data to Default Values
+        $this->ItemListExcelDataProcess($item_list);
+        // Validate Excel File
+        if (!$this->ItemListExcelValidate($item_list, $errors)) {
+            return formatCommonResponse(ApiResponseStatusCode::VALIDATION_FAILED, "Excel File Validation Failed", [], $errors);
+        } else {
+            $brand_list = [];
+            $brand_names = [];
+            $hsn_list = [];
+            $hsn_codes = [];
+            // Un Created Masters List
+            foreach ($item_list as $key => $row) {
+                if (empty($row['item_brand_id']) && !in_array($row['item_brand_name'], $brand_names)) {
+                    $brand_names[] = $row['item_brand_name'];
+                    $brand_list[$key]['item_brand_name'] = $row['item_brand_name'];
+                    $brand_list[$key]['item_brand_code'] = $row['item_brand_name'];
+                }
+                if (empty($row['item_hsn_id']) && !in_array($row['item_hsn_code'], $hsn_codes)) {
+                    $hsn_codes[] = $row['item_hsn_code'];
+                    $hsn_list[$key]['item_hsn_type'] = 'HSN';
+                    $hsn_list[$key]['item_hsn_code'] = $row['item_hsn_code'];
+                    $hsn_list[$key]['item_hsn_gst'] = $row['item_hsn_gst'];
+                }
+            }
+            
+            return formatCommonResponse(ApiResponseStatusCode::OK, 'Item Import Successfully');
+        }
+    }
+    protected function ItemListExcelDataProcess(&$rows)
+    {
+        $intFields = ["item_length_cms", "item_width_cms", "item_height_cms", "item_weight_kg", "item_is_spare_part", "item_is_expire", "item_min_order_qty", "item_min_order_pack_qty", "item_pack_conversion", "item_is_active", "item_inspection_required", 'item_hsn_gst'];
+        $defaultDataBluePrint = [
+            'item_brand_id' => null,
+            'item_category_id' => null,
+            'item_sub_group_id' => null,
+            'item_hsn_id' => null,
+            'item_class' => "not-assign",
+            'item_code' => "",
+            'item_name' => "",
+            'item_description' => "",
+            'item_supplier_description' => "",
+            'item_nature' => "Saleable",
+            'item_manufacturing_type' => "FinishedProduct",
+            'item_is_spare_part' => 0,
+            'item_is_expire' => 0,
+            'item_min_order_qty' => 1,
+            'item_min_order_pack_qty' => 1,
+            'item_length_cms' => 0.00,
+            'item_width_cms' => 0.00,
+            'item_height_cms' => 0.00,
+            'item_weight_kg' => 0.00,
+            'item_drawing_no' => "",
+            'item_remark' => "",
+            'item_uqc_id' => "NOS",
+            'item_pack_uqc_id' => "NOS",
+            'item_pack_conversion' => 1,
+            'item_is_active' => 1,
+            'item_quality_check_link' => "",
+            'item_inspection_required' => 0,
+            'item_hsn_gst' => 0.00,
+        ];
+        foreach ($rows as $key => &$row) {
+            foreach ($row as $key1 => &$value) {
+                if (empty($value)) {
+                    if (array_key_exists($key1, $defaultDataBluePrint)) {
+                        $value = $defaultDataBluePrint[$key1];
+                    }
+                }
+            }
+        }
+        foreach ($rows as $key => &$row) {
+            foreach ($row as $key1 => &$value) {
+                if (in_array($key1, $intFields)) {
+                    $value = floatval($value);
+                }
+            }
+        }
+    }
+    protected function ItemListExcelValidate($rows, &$errors)
+    {
+        $validationRules = [
+            'item_name'               => 'required',
+            'item_code'               => 'permit_empty',
+            'item_class'              => 'required|in_list[listed,non-listed,not-assign]',
+            'item_nature'             => 'required|in_list[Capex,Packaging,Services,Saleable,Consumable,MRO,NoBuy,NoStock]',
+            'item_manufacturing_type'  => 'required|in_list[FinishedProduct,RawMaterial,SemiFinished,Other]',
+            'item_brand_id'           => 'permit_empty',
+            'item_category_id'        => 'permit_empty',
+            'item_sub_group_id'       => 'required',
+            'item_hsn_id'             => 'permit_empty',
+            'item_uqc_id'             => 'required',
+            'item_pack_uqc_id'        => 'permit_empty',
+            'item_description'        => 'permit_empty',
+            'item_supplier_description' => 'permit_empty',
+            'item_quality_check_link' => 'permit_empty',
+            'item_drawing_no'         => 'permit_empty',
+            'item_remark'             => 'permit_empty',
+            'item_min_order_qty'      => 'permit_empty',
+            'item_min_order_pack_qty' => 'permit_empty',
+            'item_length_cms'         => 'permit_empty',
+            'item_width_cms'          => 'permit_empty',
+            'item_height_cms'         => 'permit_empty',
+            'item_weight_kg'          => 'permit_empty',
+            'item_pack_conversion'    => 'permit_empty',
+            'item_is_spare_part'      => 'permit_empty',
+            'item_is_expire'          => 'permit_empty',
+            'item_inspection_required' => 'permit_empty',
+            'item_is_active'          => 'permit_empty',
+            'item_hsn_gst' => 'permit_empty|in_list[0.00,0.10,0.25,1.00,1.50,3.00,5.00,6.00,7.50,12.00,18.00,28.00]'
+        ];
+
+        $validation = \Config\Services::validation();
+        $isValid = true;
+
+        foreach ($rows as $index => $row) {
+            if (!$validation->setRules($validationRules)->run($row)) {
+                $errors[$index] = $validation->getErrors();
+                $isValid = false;
+            }
+        }
+        return $isValid;
+    }
+    protected function ExcelDataTrim(&$rows)
+    {
+        foreach ($rows as $key => &$row) {
+            foreach ($row as $key1 => &$value) {
+                $value = trim($value);
+            }
+        }
     }
 }
