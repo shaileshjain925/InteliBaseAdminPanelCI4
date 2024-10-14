@@ -1,3 +1,26 @@
+<style>
+    .modal-fullsize {
+        width: 100vw;
+        /* Full viewport width */
+        max-width: 100vw;
+        /* No restriction on width */
+        height: 100vh;
+        /* Full viewport height */
+        max-height: 100vh;
+        /* No restriction on height */
+        margin: 0;
+        /* Remove default margins */
+        padding: 0;
+        /* Remove default padding */
+    }
+
+    .modal-fullsize>.modal-content {
+        height: 100vh;
+        /* Ensure the modal content fills the height */
+        border-radius: 0;
+        /* Remove rounded corners */
+    }
+</style>
 <!-- -----------main page start----------- -->
 <div class="offcanvas offcanvas-end  vendor-offcanvas" style="overflow: scroll; width:850px!important" tabindex="-1" id="right_floating_div">
 </div>
@@ -14,9 +37,10 @@
                 <?php if (check_menu_access('ITEM', 'create')): ?>
                     <button onclick="item_create_update()" class="btn add_form_btn" data-bs-toggle="offcanvas" data-bs-target="#right_floating_div" aria-controls="right_floating_div"><i class="bx bx-plus me-2"></i>Add Item</button>
                     <a href="<?= base_url(route_to('export_item_import_template')) ?>" class="btn btn-success"><i class="bx bx-plus me-2"></i>Export Item Import Template</a>
-                    <button class="btn btn-secondary text-white" type="button" data-bs-toggle="modal" data-bs-target="#importPriceList">
-                        <i class="bx bx-import"></i> Import Price List
+                    <button class="btn btn-secondary text-white" type="button" data-bs-toggle="modal" data-bs-target="#importItemList">
+                        <i class="bx bx-import"></i> Import Product List
                     </button>
+                    <button class="d-none" id="item_import_response_table_show_btn" type="button" data-bs-toggle="modal" data-bs-target="#importItemTableList"></button>
                 <?php endif; ?>
             </div>
             <div class="table-responsive">
@@ -27,11 +51,11 @@
 </div>
 
 <!-- Import Product Modal -->
-<div class="modal fade" id="importPriceList" tabindex="-1" aria-labelledby="importPriceListLabel" aria-hidden="true">
+<div class="modal fade" id="importItemList" tabindex="-1" aria-labelledby="importItemListLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="importPriceListLabel">Import Price List</h5>
+                <h5 class="modal-title" id="importItemListLabel">Import Item</h5>
                 <button id='md-close' type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -42,6 +66,22 @@
                     </div>
                     <button type="submit" class="btn btn-primary">Import</button>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Item Import Response -->
+<div class="modal fade" id="importItemTableList" tabindex="-1" aria-labelledby="importItemTableListLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullsize">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="importItemTableListLabel">Item Import Response</h5>
+                <button id='imm-close' type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table id="item_import_response_table" class="table table-striped table-bordered dt-responsive nowrap table-nowrap align-middle w-100"></table>
+                </div>
             </div>
         </div>
     </div>
@@ -337,6 +377,7 @@
                 }
             }
         ];
+        console.log(JSON.parse(response.data));
         if (response.status == 200) {
             return {
                 "status": response.status,
@@ -369,30 +410,109 @@
         var formData = new FormData(this); // Create FormData from the form
 
         $.ajax({
-            url: '<?= route_to('ImportItemListByExcel') ?>',
+            url: '<?= route_to('ImportItemListByExcel') ?>', // Your route to import items
             type: "POST",
             data: formData,
             dataType: "json",
             contentType: false,
             processData: false,
             success: function(response) {
-                fetchTableData();
+                fetchTableData(); // Assuming this reloads the main table or does necessary post-import actions
                 if (response.status === 200) {
-                    toastr.success(response.message);
-                    $('#md-close').click();
-                } else if (response.status === 422) {
-                    toastr.error(response.message);
-                    $.each(response.errors[0], function(key, value) {
-                        toastr.error(value);
-                    });
+                    toastr.success(response.message); // Show success notification
                 } else {
-                    toastr.error(response.message);
+                    toastr.error(response.message); // Show success notification
                 }
+                debugger;
+                $('#md-close').click(); // Close the modal
+                $('#item_import_response_table_show_btn').click(); // Show response table
+
+                var item_import_response_table_columns = [{
+                        title: "Row Number",
+                        data: "row_number",
+                        visible: true
+                    },
+                    {
+                        title: "Item Name",
+                        data: "item_name",
+                        visible: true
+                    },
+                    {
+                        title: "Response Message",
+                        data: "response",
+                        render: function(data, type, row) {
+                            var temp_data = JSON.parse(data);
+                            var response_message = temp_data.message;
+                            return `${response_message}`;
+                        }
+                    },
+                    {
+                        title: "Response Errors",
+                        data: "response",
+                        render: function(data, type, row) {
+                            // Parse the JSON string into an object
+                            var temp_data = JSON.parse(data);
+                            var response_errors = temp_data.errors; // Object {field_name: "error_message"}
+
+                            // Check if response_errors is not empty
+                            if (response_errors && Object.keys(response_errors).length > 0) {
+                                // Create an array to hold error messages
+                                var errorMessages = [];
+
+                                // Loop through each error and format it
+                                for (var field in response_errors) {
+                                    if (response_errors.hasOwnProperty(field)) {
+                                        errorMessages.push(`${field}: ${response_errors[field]}`);
+                                    }
+                                }
+
+                                // Join the messages into a string with line breaks for better display
+                                return errorMessages.join('<br>'); // Use <br> for line breaks in HTML
+                            } else {
+                                // Return a message indicating no errors
+                                return 'No errors';
+                            }
+                        }
+                    }
+                ];
+
+                // If response.data is already an object, no need to parse it
+                var response_data = Array.isArray(response.data) ? response.data : JSON.parse(response.data);
+                console.log(response_data)
+                // Destroy existing DataTable if initialized, then reinitialize
+                if ($.fn.DataTable.isDataTable('#item_import_response_table')) {
+                    $('#item_import_response_table').DataTable().clear().destroy(); // Destroy if table is already initialized
+                }
+                var buttonsArray = ["colvis", "csv", "pdf", "print"];
+                buttonsArray.push({
+                    extend: "excel",
+                    exportOptions: {
+                        columns: function(idx, data, node) {
+                            // Check if exportable key exists and if it's false
+                            var columnSettings = dataTable.settings().init().columns[idx];
+                            return (
+                                !("exportable" in columnSettings) || columnSettings.exportable !== false
+                            );
+                        }
+                    }
+                });
+                var dataTable = $("#item_import_response_table").DataTable({
+                    data: response_data,
+                    columns: item_import_response_table_columns,
+                    dom: "Bfrtip",
+                    buttons: buttonsArray,
+                    initComplete: function() {
+                        if (typeof afterTableViewCallbackFunction === "function") {
+                            afterTableViewCallbackFunction(data);
+                        }
+                    },
+                });
             },
             error: function(xhr, status, error) {
                 toastr.error('An error occurred while importing the product.');
             }
         });
+
     });
     $(document).ready(function() {
         fetchTableData();
