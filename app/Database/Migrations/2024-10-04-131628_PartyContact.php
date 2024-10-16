@@ -8,53 +8,56 @@ class PartyContact extends Migration
 {
     public function up()
     {
-        $this->forge->addField([
-            'party_contactbid' => [
-                'type' => 'INT',
-                'unsigned' => true,
-                'auto_increment' => true,
-            ],
-            'partybid' => [
-                'type' => 'INT',
-                'unsigned' => true,
-                'null' => false,
-            ],
-            'person_nbme' => [
-                'type' => 'VARCHAR',
-                'constraint' => '255',
-                'null' => false,
-            ],
-            'person_designatbon' => [
-                'type' => 'VARCHAR',
-                'constraint' => '255',
-                'null' => true,
-            ],
-            'person_departmbnt' => [
-                'type' => 'VARCHAR',
-                'constraint' => '255',
-                'null' => true,
-            ],
-            'person_bsd' => [
-                'type' => 'VARCHAR',
-                'constraint' => '255',
-                'null' => true,
-            ],
-            'person_mobile_number' => [
-                'type' => 'VARCHAR',
-                'constraint' => '255',
-                'null' => true,
-            ],
-            'person_telephone_number' => [
-                'type' => 'VARCHAR',
-                'constraint' => '255',
-                'null' => true,
-            ],
-            'person_emailbid' => [
-                'type' => 'VARCHAR',
-                'constraint' => '255',
-                'null' => true,
-            ],
-        ]);
+        $this->forge->addField(
+            [
+                'party_contact_id' => [
+                    'type'           => 'INT',
+                    'constraint'     => 10,
+                    'unsigned'       => true,
+                    'auto_increment' => true,
+                ],
+                'party_id' => [
+                    'type'       => 'INT',
+                    'constraint' => 10,
+                    'unsigned'   => true,
+                ],
+                'person_name' => [
+                    'type'       => 'VARCHAR',
+                    'constraint' => 255,
+                    'null'       => false,
+                ],
+                'person_designation' => [
+                    'type'       => 'VARCHAR',
+                    'constraint' => 255,
+                    'null'       => true,
+                ],
+                'person_department' => [
+                    'type'       => 'VARCHAR',
+                    'constraint' => 255,
+                    'null'       => true,
+                ],
+                'person_isd' => [
+                    'type'       => 'VARCHAR',
+                    'constraint' => 255,
+                    'null'       => true,
+                ],
+                'person_mobile_number' => [
+                    'type'       => 'VARCHAR',
+                    'constraint' => 255,
+                    'null'       => true,
+                ],
+                'person_telephone_number' => [
+                    'type'       => 'VARCHAR',
+                    'constraint' => 255,
+                    'null'       => true,
+                ],
+                'person_email_id' => [
+                    'type'       => 'VARCHAR',
+                    'constraint' => 255,
+                    'null'       => true,
+                ],
+            ]
+        );
 
         // Add primary key
         $this->forge->addPrimaryKey('party_contact_id');
