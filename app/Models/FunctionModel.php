@@ -526,6 +526,23 @@ class FunctionModel extends Model
         return $data;
     }
 
+    public function convert_to_upper($data)
+    {
+        $convert_to_upper = $this->convert_to_upper ?? null;
+
+        if (!isset($data['data']) || !is_array($data['data'])) {
+            return $data; // Handle edge case where 'data' is not set or not an array
+        }
+
+        foreach ($convert_to_upper as $key => &$field) {
+            // Check if the field exists in the data and if its value indicates it's checked
+            if (isset($data['data'][$field])) {
+                $data['data'][$field] = strtoupper($data['data'][$field]);
+            }
+        }
+        return $data;
+    }
+
 
     public function ConvertDateDMY(array $data)
     {

@@ -156,10 +156,15 @@ class ItemModel extends FunctionModel
         "item_pack_uqc_id",
         "item_user_id",
     ];
+    protected $convert_to_upper = [
+        'item_name',
+        'item_description',
+        'item_supplier_description',
+    ];
     protected $allowCallbacks = true;
-    protected $beforeInsert   = ['updateBooleanFields', 'nullSetIfEmpty'];
+    protected $beforeInsert   = ['updateBooleanFields', 'nullSetIfEmpty', 'convert_to_upper'];
     protected $afterInsert    = [];
-    protected $beforeUpdate   = ['updateBooleanFields', 'nullSetIfEmpty'];
+    protected $beforeUpdate   = ['updateBooleanFields', 'nullSetIfEmpty', 'convert_to_upper'];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
