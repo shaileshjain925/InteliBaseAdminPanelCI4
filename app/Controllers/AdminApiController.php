@@ -1142,6 +1142,52 @@ class AdminApiController extends BaseController
         $this->ExcelDataTrim($item_list);
         // Process Data to Default Values
         $this->ItemListExcelDataProcess($item_list);
+
+        // Update Hsn IDS In Rows
+        $hsn_list = $this->get_item_hsn_model()->findAll();
+        foreach ($hsn_list as $key => $row) {
+            $this->addKeyOnSearchInRows($item_list, 'item_hsn_code', $row['item_hsn_code'], 'item_hsn_id', $row['item_hsn_id']);
+        }
+        $hsn_list = [];
+        $hsn_codes = [];
+        // Un Created Masters List
+        foreach ($item_list as $key => $row) {
+            if (empty($row['item_hsn_id']) && !empty($row['item_hsn_code']) && !in_array($row['item_hsn_code'], $hsn_codes)) {
+                $hsn_codes[] = $row['item_hsn_code'];
+                // Check if the item HSN code starts with '99'
+                if (substr($row['item_hsn_code'], 0, 2) === '99') {
+                    $hsn_list[$key]['item_hsn_type'] = 'SAC';
+                } else {
+                    $hsn_list[$key]['item_hsn_type'] = 'HSN';
+                }
+                $hsn_list[$key]['item_hsn_code'] = $row['item_hsn_code'];
+                $hsn_list[$key]['item_hsn_gst'] = $row['item_hsn_gst'];
+            }
+        }
+        if (!empty($hsn_list)) {
+            $hsnCreateResponse = $this->get_item_hsn_model()->insertBatch($hsn_list);
+        }
+        // Update Brands IDS In Rows
+        $brand_list = $this->get_item_brand_model()->findAll();
+        foreach ($brand_list as $key => $row) {
+            $this->addKeyOnSearchInRows($item_list, 'item_brand_name', $row['item_brand_name'], 'item_brand_id', $row['item_brand_id']);
+        }
+        // Update Category IDS In Rows
+        $category_list = $this->get_item_category_model()->findAll();
+        foreach ($category_list as $key => $row) {
+            $this->addKeyOnSearchInRows($item_list, 'item_category_name', $row['item_category_name'], 'item_category_id', $row['item_category_id']);
+        }
+        // Update Sub Groups IDS In Rows
+        $sub_group_list = $this->get_item_sub_group_model()->findAll();
+        foreach ($sub_group_list as $key => $row) {
+            $this->addKeyOnSearchInRows($item_list, 'item_sub_group_name', $row['item_sub_group_name'], 'item_sub_group_id', $row['item_sub_group_id']);
+        }
+        // Update UQC IDS In Rows and Update Pack UQC IDS In Rows
+        $uqc_list = $this->get_item_uqc_model()->findAll();
+        foreach ($uqc_list as $key => $row) {
+            $this->addKeyOnSearchInRows($item_list, 'item_uqc_name', $row['item_uqc_name'], 'item_uqc_id', $row['item_uqc_id']);
+            $this->addKeyOnSearchInRows($item_list, 'item_pack_uqc_name', $row['item_uqc_name'], 'item_pack_uqc_id', $row['item_uqc_id']);
+        }
         // Validate Excel File
         if (!$this->ItemListExcelValidate($item_list)) {
             $reindex_item_list = array_values($item_list);
@@ -1150,54 +1196,12 @@ class AdminApiController extends BaseController
             }
             return formatCommonResponse(ApiResponseStatusCode::VALIDATION_FAILED, 'Excel Row Validation Failed', $reindex_item_list);
         } else {
-            $hsn_list = [];
-            $hsn_codes = [];
-            // Un Created Masters List
-            foreach ($item_list as $key => $row) {
-                if (empty($row['item_hsn_id']) && !empty($row['item_hsn_code']) && !in_array($row['item_hsn_code'], $hsn_codes)) {
-                    $hsn_codes[] = $row['item_hsn_code'];
-                    // Check if the item HSN code starts with '99'
-                    if (substr($row['item_hsn_code'], 0, 2) === '99') {
-                        $hsn_list[$key]['item_hsn_type'] = 'SAC';
-                    } else {
-                        $hsn_list[$key]['item_hsn_type'] = 'HSN';
-                    }
-                    $hsn_list[$key]['item_hsn_code'] = $row['item_hsn_code'];
-                    $hsn_list[$key]['item_hsn_gst'] = $row['item_hsn_gst'];
-                }
-            }
-            if (!empty($hsn_list)) {
-                $hsnCreateResponse = $this->get_item_hsn_model()->insertBatch($hsn_list);
-            }
-            // Update Brands IDS In Rows
-            $brand_list = $this->get_item_brand_model()->findAll();
-            foreach ($brand_list as $key => $row) {
-                $this->addKeyOnSearchInRows($item_list, 'item_brand_name', $row['item_brand_name'], 'item_brand_id', $row['item_brand_id']);
-            }
-            // Update Category IDS In Rows
-            $category_list = $this->get_item_category_model()->findAll();
-            foreach ($category_list as $key => $row) {
-                $this->addKeyOnSearchInRows($item_list, 'item_category_name', $row['item_category_name'], 'item_category_id', $row['item_category_id']);
-            }
-            // Update Sub Groups IDS In Rows
-            $sub_group_list = $this->get_item_sub_group_model()->findAll();
-            foreach ($sub_group_list as $key => $row) {
-                $this->addKeyOnSearchInRows($item_list, 'item_sub_group_name', $row['item_sub_group_name'], 'item_sub_group_id', $row['item_sub_group_id']);
-            }
-            // Update Hsn IDS In Rows
-            $hsn_list = $this->get_item_hsn_model()->findAll();
-            foreach ($hsn_list as $key => $row) {
-                $this->addKeyOnSearchInRows($item_list, 'item_hsn_code', $row['item_hsn_code'], 'item_hsn_id', $row['item_hsn_id']);
-            }
-            // Update UQC IDS In Rows and Update Pack UQC IDS In Rows
-            $uqc_list = $this->get_item_uqc_model()->findAll();
-            foreach ($uqc_list as $key => $row) {
-                $this->addKeyOnSearchInRows($item_list, 'item_uqc_name', $row['item_uqc_name'], 'item_uqc_id', $row['item_uqc_id']);
-                $this->addKeyOnSearchInRows($item_list, 'item_pack_uqc_name', $row['item_uqc_name'], 'item_pack_uqc_id', $row['item_uqc_id']);
-            }
             // Item Create 
             foreach ($item_list as $key => &$item) {
                 $item['item_user_id'] = $_SESSION['user_id'];
+                if (!empty($item['item_brand_name'])) {
+                    $item['item_name'] = $item['item_name'] . "-" . $item['item_brand_name'];
+                }
                 $item['response'] = $this->get_item_model()->RecordCreate($item);
                 $item['response'] = json_encode($item['response']);
             }
@@ -1239,7 +1243,7 @@ class AdminApiController extends BaseController
             'item_is_active' => 1,
             'item_quality_check_link' => "",
             'item_inspection_required' => 0,
-            'item_hsn_gst' => 0.00,
+            'item_hsn_gst' => "0.00",
         ];
         foreach ($rows as $key => &$row) {
             foreach ($row as $key1 => &$value) {
